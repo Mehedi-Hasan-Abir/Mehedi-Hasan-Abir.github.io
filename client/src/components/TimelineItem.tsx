@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { TechCard } from "./TechCard";
 import type { Experience } from "@shared/schema";
 
 interface TimelineItemProps {
@@ -7,6 +8,19 @@ interface TimelineItemProps {
 }
 
 export function TimelineItem({ experience, index }: TimelineItemProps) {
+  // Extract tech stacks from description
+  const techStacks: string[] = [];
+  const descriptiveItems: string[] = [];
+  
+  experience.description.forEach((item) => {
+    if (item.startsWith("Tech:")) {
+      const techs = item.replace("Tech:", "").split(",").map(t => t.trim());
+      techStacks.push(...techs);
+    } else {
+      descriptiveItems.push(item);
+    }
+  });
+
   return (
     <div className="relative pl-8 md:pl-0">
       {/* Timeline Line (Desktop) */}
@@ -45,14 +59,26 @@ export function TimelineItem({ experience, index }: TimelineItemProps) {
             <h3 className="text-xl font-bold mb-1">{experience.title}</h3>
             <h4 className="text-muted-foreground font-medium mb-4">{experience.company}</h4>
             
-            <ul className="space-y-2">
-              {experience.description.map((item, i) => (
-                <li key={i} className="text-sm text-muted-foreground leading-relaxed flex items-start">
-                  <span className="mr-2 mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+            {/* Descriptive items */}
+            {descriptiveItems.length > 0 && (
+              <ul className="space-y-2 mb-4">
+                {descriptiveItems.map((item, i) => (
+                  <li key={i} className="text-sm text-muted-foreground leading-relaxed flex items-start">
+                    <span className="mr-2 mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+            
+            {/* Tech Stack Cards */}
+            {techStacks.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {techStacks.map((tech, i) => (
+                  <TechCard key={`${tech}-${i}`} tech={tech} index={i} />
+                ))}
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

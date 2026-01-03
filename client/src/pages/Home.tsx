@@ -3,6 +3,11 @@ import { useExperiences, useProjects, useSkills, usePersonalInfo } from "@/hooks
 import { TimelineItem } from "@/components/TimelineItem";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SectionHeading } from "@/components/SectionHeading";
+import { MemoryFlipCards } from "@/components/MemoryFlipCards";
+import { TechAnimation } from "@/components/TechAnimation";
+import { EducationItem } from "@/components/EducationItem";
+import { ResearchItem } from "@/components/ResearchItem";
+import { SocialLinks } from "@/components/SocialLinks";
 import { motion } from "framer-motion";
 import { 
   Github, 
@@ -41,7 +46,8 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section id="hero" className="min-h-screen flex items-center justify-center relative pt-20">
+      <section id="hero" className="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
+        <TechAnimation />
         <div className="absolute inset-0 z-0 opacity-20">
           <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-[100px]" />
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px]" />
@@ -186,11 +192,11 @@ export default function Home() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-24 md:py-32">
+      <section id="skills" className="py-24 md:py-32 bg-secondary/10">
         <div className="container mx-auto px-4">
           <SectionHeading title="Skills" subtitle="Technologies I work with" />
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-12">
             {skills?.map((skillGroup, index) => (
               <motion.div
                 key={skillGroup.id}
@@ -198,16 +204,18 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-card p-8 rounded-2xl border border-border hover:border-primary/30 transition-colors"
+                className="group relative bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg hover:shadow-primary/10"
               >
-                <h3 className="text-xl font-bold mb-6 text-center text-primary font-mono">
+                <div className="absolute top-0 left-0 h-full w-1 bg-primary rounded-l-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                <h3 className="text-lg font-bold mb-4 text-primary font-mono">
                   {skillGroup.category}
                 </h3>
-                <div className="flex flex-wrap gap-3 justify-center">
+                <div className="flex flex-wrap gap-2">
                   {skillGroup.items.map((item) => (
                     <span
                       key={item}
-                      className="px-4 py-2 bg-secondary rounded-lg text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-all cursor-default"
+                      className="px-3 py-1 bg-secondary/50 hover:bg-primary hover:text-primary-foreground text-xs font-medium rounded-full transition-all cursor-default border border-border/30"
                     >
                       {item}
                     </span>
@@ -215,6 +223,169 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Education Section */}
+      <section id="education" className="py-24 md:py-32 bg-secondary/10">
+        <div className="container mx-auto px-4">
+          <SectionHeading title="Education" subtitle="My academic journey" />
+          
+          <div className="max-w-4xl mx-auto mt-16 space-y-8">
+            {[
+              { institution: "Ahsanullah University of Science and Technology (AUST)", degree: "Bachelor of Science in Computer Science & Engineering", period: "Apr 2016 – Jan 2021" },
+              { institution: "Hermann Gmeiner School, Mirpur", degree: "Higher Secondary Certificate (HSC)", period: "2013 – 2015" },
+              { institution: "Mirpur Bangla School & College", degree: "Secondary School Certificate (SSC)", period: "2003 – 2013" }
+            ].map((edu, idx) => (
+              <EducationItem 
+                key={idx}
+                institution={edu.institution}
+                degree={edu.degree}
+                period={edu.period}
+                index={idx}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Research Experience Section */}
+      <section id="research" className="py-24 md:py-32">
+        <div className="container mx-auto px-4">
+          <SectionHeading title="Research" subtitle="Publications and academic work" />
+          
+          <div className="max-w-4xl mx-auto mt-12 space-y-6">
+            {[
+              { title: "Bengali Intent Classification with Generative Adversarial BERT", authors: "Mehedi Hasan (First Author)", venue: "IEEE Xplore", year: "2023", link: "https://github.com/Mehedi-Hasan-Abir" },
+              { title: "Design of an Arrhythmia Classification Algorithm Using 2-D Convolutional Neural Network", authors: "Mehedi Hasan (First Author)", venue: "Undergraduate Thesis, AUST", year: "2021", link: "https://github.com/Mehedi-Hasan-Abir" }
+            ].map((res, idx) => (
+              <ResearchItem
+                key={idx}
+                title={res.title}
+                authors={res.authors}
+                venue={res.venue}
+                year={res.year}
+                link={res.link}
+                index={idx}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Personal & Social Section */}
+      <section id="personal" className="py-24 md:py-32 bg-secondary/20">
+        <div className="container mx-auto px-4">
+          <SectionHeading title="Beyond Code" subtitle="Getting to know me beyond the code" />
+          
+          <div className="max-w-5xl mx-auto mt-16">
+            {/* Personal Interests Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {[
+                { icon: "⚽", title: "Football", desc: "I love watching and playing football whenever I can" },
+                { icon: "🎬", title: "Cinema & Series", desc: "A true cinefile who watches movies and series religiously" },
+                { icon: "📸", title: "Photography", desc: "Passionate about art, especially photography and visual storytelling" },
+                { icon: "✈️", title: "Travel", desc: "Always up for exploring new places and cultures" },
+                { icon: "🏆", title: "All Sports", desc: "Tennis, cricket, basketball, table tennis - I watch them all" },
+                { icon: "🎵", title: "Music", desc: "Music is a big part of my life and creative process" }
+              ].map((interest, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.08 }}
+                  className="bg-card/50 p-6 rounded-xl border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg hover:shadow-primary/10 text-center"
+                >
+                  <div className="text-4xl mb-3">{interest.icon}</div>
+                  <h3 className="text-lg font-bold text-foreground mb-2">{interest.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{interest.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Social Media Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-card/50 p-12 rounded-2xl border border-border/50 text-center"
+            >
+              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                Follow me on social media to see photos from my travels, thoughts on movies & tech, and daily life updates!
+              </p>
+              
+              <SocialLinks 
+                personalInfo={{
+                  github: personalInfo.github,
+                  linkedin: personalInfo.linkedin,
+                  email: personalInfo.email,
+                  facebook: (personalInfo as any).facebook,
+                  instagram: (personalInfo as any).instagram
+                }}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Art Gallery / Portfolio Section */}
+      <section id="gallery" className="py-24 md:py-32">
+        <div className="container mx-auto px-4">
+          <SectionHeading title="Art & Photography" subtitle="My creative visual work" />
+          
+          <div className="max-w-5xl mx-auto mt-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-card/50 p-12 rounded-2xl border border-border/50 text-center"
+            >
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                I love photography and visual arts. Below is my curated collection of edited photos capturing moments from travels, daily life, and creative experiments.
+              </p>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                {/* Gallery Grid Placeholder - User can add images */}
+                {[
+                  { title: "Travel Memories", img: "🌍" },
+                  { title: "Street Photography", img: "📍" },
+                  { title: "Nature Shots", img: "🌿" },
+                  { title: "Architecture", img: "🏢" },
+                  { title: "People & Moments", img: "👥" },
+                  { title: "Creative Edits", img: "🎨" }
+                ].map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    whileHover={{ scale: 1.05 }}
+                    className="bg-secondary/30 rounded-lg overflow-hidden border border-border/30 hover:border-primary/50 transition-all cursor-default aspect-square flex items-center justify-center group"
+                  >
+                    <div className="text-center">
+                      <div className="text-6xl mb-3 group-hover:scale-110 transition-transform">{item.img}</div>
+                      <p className="text-sm font-medium text-muted-foreground">{item.title}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <p className="text-sm text-muted-foreground mt-8 italic">
+                📸 Follow my Instagram @___abracadabra_____ for the latest photos and behind-the-scenes content!
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Memory Flip Cards Section */}
+      <section id="games" className="py-24 md:py-32 bg-background/50">
+        <div className="container mx-auto px-4">
+          <SectionHeading title="Fun & Games" subtitle="Take a break and test your memory" />
+          
+          <div className="flex justify-center mt-12">
+            <MemoryFlipCards />
           </div>
         </div>
       </section>
@@ -243,40 +414,15 @@ export default function Home() {
               Say Hello
             </a>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left border-t border-border pt-8 mt-8">
-              <div className="flex items-center gap-4 p-4 hover:bg-secondary/50 rounded-lg transition-colors">
-                <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Email</div>
-                  <a href={`mailto:${personalInfo.email}`} className="text-sm font-medium hover:text-primary transition-colors">{personalInfo.email}</a>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4 p-4 hover:bg-secondary/50 rounded-lg transition-colors">
-                <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Location</div>
-                  <div className="text-sm font-medium">{personalInfo.location}</div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-center gap-4 md:col-span-1 mt-4 md:mt-0">
-                {personalInfo.github && (
-                  <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" className="p-3 bg-secondary rounded-full hover:bg-primary hover:text-primary-foreground transition-all hover:-translate-y-1">
-                    <Github className="w-5 h-5" />
-                  </a>
-                )}
-                {personalInfo.linkedin && (
-                  <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 bg-secondary rounded-full hover:bg-primary hover:text-primary-foreground transition-all hover:-translate-y-1">
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                )}
-              </div>
-            </div>
+            <SocialLinks 
+              personalInfo={{
+                github: personalInfo.github,
+                linkedin: personalInfo.linkedin,
+                email: personalInfo.email,
+                facebook: (personalInfo as any).facebook,
+                instagram: (personalInfo as any).instagram
+              }}
+            />
           </motion.div>
         </div>
       </section>

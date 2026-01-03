@@ -3,9 +3,19 @@ import { motion } from "framer-motion";
 interface SectionHeadingProps {
   title: string;
   subtitle?: string;
+  number?: number;
 }
 
-export function SectionHeading({ title, subtitle }: SectionHeadingProps) {
+let sectionCounter = 0;
+
+export function SectionHeading({ title, subtitle, number }: SectionHeadingProps) {
+  if (number === undefined) {
+    sectionCounter++;
+  }
+  
+  const displayNumber = number !== undefined ? number : sectionCounter;
+  const formattedNumber = String(displayNumber).padStart(2, "0");
+
   return (
     <div className="mb-16 text-center">
       <motion.h2
@@ -15,7 +25,7 @@ export function SectionHeading({ title, subtitle }: SectionHeadingProps) {
         transition={{ duration: 0.5 }}
         className="text-3xl md:text-4xl font-bold mb-4"
       >
-        <span className="text-primary font-mono mr-2">01.</span>
+        <span className="text-primary font-mono mr-2">{formattedNumber}.</span>
         {title}
       </motion.h2>
       {subtitle && (

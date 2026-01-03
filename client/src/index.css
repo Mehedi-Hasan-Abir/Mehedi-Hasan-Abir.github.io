@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -37,8 +37,8 @@
 
   --radius: 0.5rem;
 
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Geist', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
 }
 
 @layer base {
@@ -56,6 +56,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-bold;
+  }
+
+  /* Ensure text is visible in dark mode */
+  p, span, a, div, li {
+    @apply text-foreground;
   }
 }
 

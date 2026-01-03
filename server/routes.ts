@@ -35,6 +35,11 @@ export async function registerRoutes(
 }
 
 async function seedDatabase() {
+  if (!process.env.DATABASE_URL) {
+    console.log("⏭️  Skipping database seed (no DATABASE_URL)");
+    return;
+  }
+
   const existingInfo = await storage.getPersonalInfo();
   if (!existingInfo) {
     console.log("Seeding database...");

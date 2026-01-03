@@ -1,0 +1,375 @@
+\documentclass[10pt,letterpaper]{article}
+% ================== BASE PACKAGES ==================
+\usepackage[margin=0.8in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage{array,tabularx,changepage} % tables + adjustwidth
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{fontawesome5}
+\usepackage[dvipsnames]{xcolor}
+
+\urlstyle{same}
+
+% ================== COLORS ==================
+\definecolor{brandblue}{RGB}{23,95,147} % single source of truth
+\definecolor{rail}{HTML}{E5E7EB}      % left rail for project boxes
+\definecolor{pillblue}{RGB}{233,244,252}
+\definecolor{textgray}{RGB}{30,30,30}
+\color{textgray}
+
+% ================== GLOBAL TYPO/SECTION STYLE ==================
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlist[itemize]{topsep=3pt,itemsep=3pt,leftmargin=2.2em,labelsep=0.6em}
+\renewcommand\labelitemi{$\triangleright$}
+
+\titleformat{\section}{\large\bfseries\color{brandblue}\uppercase}{}{0pt}{}[\vspace{2pt}\titlerule]
+\titlespacing*{\section}{0pt}{10pt}{6pt}
+
+% ================== HEADER MACROS ==================
+\newcommand{\name}[1]{\noindent{\LARGE \textbf{#1}}\par}
+\newcommand{\role}[1]{\noindent\textit{\large{#1}}\par}
+
+% Contact line: scoped font size, no leakage
+\newcommand{\contact}[1]{%
+  {\noindent\footnotesize #1\par}% <- change to \scriptsize if desired
+  \vspace{-2pt}%
+}
+% === Contact (stacked, tight, consistent) ===
+\newcommand{\contactline}[2]{%
+  \noindent\raisebox{-0.15ex}{\faIcon{#1}}\hspace{0.45em}#2\par
+}
+
+\renewcommand{\contact}[1]{%
+  \begingroup
+    \vspace{4pt}% pull up to remove gap above first icon
+    \footnotesize
+    \setlength{\parskip}{2pt}%
+    \setlength{\parindent}{0pt}%
+    #1%
+  \par\endgroup
+  \vspace{-2pt}% tighten space below
+}
+
+% Optional external-link icon helper for links
+\newcommand{\extlink}{\faIcon{external-link-alt}}
+\newcommand{\linkto}[2]{\href{#1}{#2~\extlink}}
+\newcommand{\linkicon}[1]{\href{#1}{\extlink}}
+
+% ================== TABLE COLUMN SHORTCUTS ==================
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}m{0.27\linewidth}}
+
+% ================== PILL TAGS ==================
+% Visual rounded pill (pretty, may rasterize in some viewers)
+%\tcbset{pill/.style={
+%  boxrule=0pt,arc=3pt,auto outer arc,
+%  colback=pillblue,coltext=black,
+%  left=5pt,right=5pt,top=2pt,bottom=2pt,
+%  boxsep=0pt,nobeforeafter,baseline=0.7ex}}
+%\newcommand{\pill}[1]{\tcbox[pill]{\footnotesize #1}}
+
+% ATS-safe pill (text stays selectable)
+\newcommand{\pill}[1]{%
+  \begingroup\setlength{\fboxsep}{1.2pt}%
+  \colorbox{brandblue!12}{\textcolor{brandblue}{\scriptsize #1}}%
+  \endgroup
+}
+
+% ================== PROJECT BOX + RESPONSIBILITIES ==================
+\newenvironment{project}{%
+  \begin{tcolorbox}[
+    enhanced,breakable,
+    colback=white,colframe=white,
+    borderline west={0.8pt}{0pt}{rail}, % slim left rail
+    left=10pt,right=0pt,top=2pt,bottom=2pt,
+    boxsep=0pt,arc=0pt,outer arc=0pt,
+    before skip=10pt,after skip=10pt
+  ]%
+  \setlength{\parskip}{6pt}\setlength{\parindent}{0pt}%
+}{\end{tcolorbox}}
+
+% Title line for projects
+\newcommand{\projecttitle}[2]{{\large\textbf{#1}}\hfill\textit{#2}\par}
+
+% Roomier blocks (Description/Responsibilities/Impact)
+\newenvironment{respblock}{%
+  \par\begingroup
+  \setlength{\parskip}{4pt}\setlength{\parindent}{0pt}%
+  \linespread{1.05}\selectfont
+}{\par\endgroup}
+
+% Run-in line (no bullets) if you want list-like items
+\newcommand{\runin}[1]{%
+  \noindent\hangindent=1.8em\hangafter=1%
+  \textcolor{brandblue}{—}\, #1\par
+}
+\newcommand{\ghicon}{\ifdefined\faGithub \faGithub \else \textbf{[GH]} \fi}
+\newenvironment{projlist}{\begin{itemize}[leftmargin=*,nosep,topsep=0pt]\setlength{\itemsep}{1pt}}{\end{itemize}}
+\newcommand{\ProjectHeading}[2]{\textbf{\href{#2}{#1}}\ \href{#2}{\ghicon}}
+
+\usepackage{graphicx}
+% ---- End preamble additions ----
+
+\begin{document}
+
+\begin{minipage}[c]{0.17\linewidth}
+  \includegraphics[width=\linewidth]{Mehedi_Hasan.jpg}% <-- put your file name here
+\end{minipage}\hfill
+\begin{minipage}[c]{0.80\linewidth}
+  \name{Mehedi Hasan}
+  \role{AI/ML Engineer}
+  \contact{%
+    \contactline{phone}{(+880) 1521323549}
+    \contactline{envelope}{\href{mailto:abir.aust.102@gmail.com}{abir.aust.102@gmail.com}}
+    \contactline{globe}{\href{https://mehedi-hasan-abir.github.io/}{mehedi-hasan-abir.github.io}~\extlink}
+    \contactline{linkedin}{\href{https://www.linkedin.com/in/mehedihasan102/}{linkedin.com/in/mehedihasan102}}
+    \contactline{github}{\href{https://github.com/Mehedi-Hasan-Abir}{github.com/Mehedi-Hasan-Abir}}
+    \contactline{map-marker-alt}{Dhaka, Bangladesh}
+  }
+\end{minipage}
+
+%\name{Mehedi Hasan}
+%\role{AI/ML Engineer}
+
+%\contact{%
+%  \contactline{phone}{(+880) 1521323549}
+%  \contactline{envelope}{\href{mailto:abir.aust.102@gmail.com}{abir.aust.102@gmail.com}}
+%  \contactline{linkedin}{\href{https://www.linkedin.com/in/mehedihasan102/}{linkedin.com/in/mehedihasan102}}
+%  \contactline{github}{\href{https://github.com/Mehedi-Hasan-Abir}{github.com/Mehedi-Hasan-Abir}}
+%  \contactline{map-marker-alt}{Dhaka, Bangladesh}
+%}
+
+%\contact{\faMapMarker*~ Dhaka, Bangladesh \quad \faPhone*~ (+880) 1521323549 \quad \faEnvelope*~ \href{mailto:abir.aust.102@gmail.com}{abir.aust.102@gmail.com} \quad \faLinkedin~ \href{https://www.linkedin.com/in/mehedihasan102/}{linkedin.com/in/mehedihasan102} \quad \faGithub~ \href{https://github.com/Mehedi-Hasan-Abir}{github.com/Mehedi-Hasan-Abir}}
+\section{Professional Experience}
+
+\begin{tabularx}{\linewidth}{L R}
+\fontsize{12}{10}\selectfont\textbf{Senior Software Engineer, Technonext} & \textit{Jun 2025 -- Present} \\
+\end{tabularx}
+\begin{itemize}
+  \item Working on \textbf{Ticket Parsing} for airline/passenger documents, extracting structured fields such as
+  \textbf{Passenger Data}, \textbf{Fare Data}, \textbf{Itinerary Details}, \textbf{Fare \& Baggage Rules}, and \textbf{Fare Policy}.
+  \item Building a \textbf{local LLM-powered parsing pipeline} using \textbf{vLLM} for high-throughput inference and low-latency serving.
+  \item Designed a \textbf{heuristic validation layer} (rule/consistency checks) to verify LLM outputs, reduce hallucinations,
+  and ensure schema-correct, business-safe extraction.
+  \item Developing prompts, post-processing, and evaluation workflows for rapid iteration across new ticket formats and airlines.
+  \pill{vLLM} \pill{Local LLM} \pill{RAG} \pill{Heuristic Validation} \pill{Python} \pill{FastAPI}
+\end{itemize}
+
+\vspace{5pt}
+\begin{tabularx}{\linewidth}{L R}
+\fontsize{12}{10}\selectfont\textbf{Senior AI Engineer, Next Solution Lab} & \textit{Jun 2023 -- Jun 2025} \\
+\end{tabularx}
+\begin{itemize}
+  \item Led \textbf{English DeepICR} (document understanding for contracts/invoices): built, trained, and tested \textbf{Text Detection}, \textbf{Layout Detection}, \textbf{Text Recognition}, and \textbf{Data-extraction}. Complex noise filtering (checkmarks/underlines), handwriting handling; document spell-correction via fuzzy + dictionary (Levenshtein) tuned to client lexicons.
+  \pill{Mask R-CNN} \pill{OpenCV} \pill{YOLOv7} \pill{DBNet} \pill{RCNN+Attention} \pill{LCNN} \pill{LayoutLM} \pill{BROS}
+  \item Optimized training and inference pipelines via model fine-tuning and parallel processing to improve throughput and latency. \pill{PyTorch DDP} \pill{CUDA/cuDNN} \pill{joblib}
+  \item Enabled \textbf{GPU multi-training} and \textbf{PDF batching} for large documents. \pill{Keras} \pill{PyTorch} \pill{TensorFlow}
+  \item Standardized evaluation with \textbf{automated reports} for PM/business sign-off. \pill{XlsxWriter} \pill{pandas}
+  \item Packaged services with \textbf{Docker}, integrated \textbf{modular monolith} server-side APIs with client systems, and managed deployment/version control via \textbf{AWS CodeCommit}, \textbf{S3}, \textbf{EC2}, \textbf{ECR}, \textbf{Elasticsearch}, and \textbf{CloudWatch}.
+  \pill{Node.js} \pill{React} \pill{Material-UI} \pill{AWS SDK}
+  \item Monitored Japanese DeepICR platform; supported model updates and maintained routine regression tests.
+  \item Implemented LoRA/PEFT-based \textbf{LLM} fine-tuning workflows and optimized inference acceleration pipelines for efficient model adaptation and deployment. \pill{HuggingFace Transformers/TRL} \pill{BitsAndBytes} \pill{ONNX}
+  \item Built a \textbf{RAG} search system for Japanese legal documents with memory and inference caching, enabling low-latency conversational Q\&A. \pill{LangChain} \pill{ChromaDB} \pill{Elasticsearch} \pill{FastAPI}
+\end{itemize}
+
+\vspace{5pt}
+\begin{tabularx}{\linewidth}{L R}
+\fontsize{12}{10}\selectfont\textbf{AI Engineer, Next Solution Lab} & \textit{Jun 2022 -- Jun 2023} \\
+\end{tabularx}
+\begin{itemize}
+  \item Built the \textbf{Japanese Text-recognition} training pipeline with augmentation/evaluation and \textasciitilde5{,}000-character coverage; created an \textbf{automated data-engineering \& reporting} flow; maintained for new-data sprints. \pill{RCNN+CTC}
+  \item \textbf{English DeepICR:} trained/tested models for new datasets every sprint; standardized onboarding \& regression tests.
+  \item \textbf{DocQA (pre-LLM):} Q\&A for contracts/invoices documents; \pill{BERT/RoBERTa} \pill{Flask} \pill{Streamlit}
+  \item \textbf{Multilingual OCR:} Document OCR for (Arabic, Vietnamese, Thai, Indonesian). \pill{Google Vision API}
+  \item \textbf{Deepfake detection exploration; STT/TTS evaluations; speaker verification.} \pill{FastAPI} \pill{NVIDIA NeMo}
+\end{itemize}
+
+\vspace{5pt}
+\begin{tabularx}{\linewidth}{L R}
+\fontsize{12}{10}\selectfont\textbf{Associate AI Engineer, Next Solution Lab} & \textit{Jun 2021 -- Jun 2022} \\
+\end{tabularx}
+\begin{itemize}
+  \item \textbf{Key-Value Extraction Module:} deterministic OpenCV rule engine extracting \textbf{128 fields} on \textbf{44} document clusters; authored \textbf{SRS}, exposed \textbf{API}, and defined/tested plans; owned \textbf{text-line} \& \textbf{text-box update} integration for readability. \pill{OpenCV} \pill{REST API}
+  \item \textbf{Smart Farming (POC):} camera-only cattle monitoring under a no-RFID policy; delivered fast-deploy models and proposal. \pill{Detectron2} \pill{SORT}
+  \item \textbf{ID/OCR:} driving licence extraction. \pill{YOLOv5} \pill{FastAPI} \pill{Streamlit}
+\end{itemize}
+
+
+%\pill{Python} \pill{PyTorch} \pill{OpenCV} \pill{YOLOv7} \pill{DBNet} \pill{Mask R-CNN} \pill{RCNN+CTC} \pill{LayoutLM} \pill{BROS} \pill{LangChain} \pill{ChromaDB} \pill{NVIDIA NeMo} \pill{Docker} \pill{AWS}
+%\section{Technical Skills}
+%\begin{tabularx}{\linewidth}{>{\bfseries}l X}
+%Document AI \& CV & OpenCV; YOLOv7; DBNet; Mask R-CNN (box-only); RCNN+CTC; LCNN; SORT; pose estimation; handwriting; noise filtering. \\
+%NLP \& Extraction & LayoutLM (table-entity \& KV linking); BROS (benchmarking); BERT/RoBERTa (DocQA); Levenshtein spell-correction. \\
+%RAG & Conversational search for Japanese legal texts; LangChain Memory; inference caching; ChromaDB. \\
+%Speech/Media & Deepfake detection (exploration); STT/TTS; NVIDIA NeMo (speaker verification). \\
+%MLOps (Training \& Eval) & End-to-end training/eval pipelines; GPU multi-training; PDF batching; dataset onboarding; automated reports; regression suites. \\
+%DevOps/Cloud (AWS) & ECS, EC2, ALB, SQS, CloudWatch, OpenSearch/Elasticsearch, Lambda, S3; Docker; CI/CD; AWS CodeCommit/ECR. \\
+%Backend/Integration & Modular monolith; REST APIs (Node.js/JS); SQL (MySQL/MSSQL); centralized logging/metrics. \\
+%\end{tabularx}
+
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.15}
+
+\section{Technical Skills}
+\begin{adjustwidth}{-14pt}{0pt} % pull section slightly left to align with header
+\begin{tabularx}{\linewidth}{
+  >{\raggedleft\arraybackslash}p{5cm}
+  >{\raggedright\arraybackslash}X
+}
+\textbf{Programming} & \textbf{Python}, JavaScript, Node.js, C\#, Java \\
+\textbf{Frameworks \& Libraries} & \textbf{PyTorch}, \textbf{TensorFlow}, Keras, \textbf{Transformers}, \textbf{FastAPI}, Streamlit, scikit-learn, OpenCV, \textbf{LangChain}, Spacy \\
+\textbf{ML \& Data Tools} & \textbf{pandas}, \textbf{NumPy}, joblib, XlsxWriter, matplotlib, seaborn, Selenium, Playwright \\
+\textbf{Cloud \& DevOps} & \textbf{AWS (EC2, ECS, S3, Lambda, CloudWatch, CodeCommit/ECR)}, Docker, CI/CD \\
+\textbf{Database \& Search} & \textbf{MySQL}, MSSQL, Elasticsearch, OpenSearch, \textbf{ChromaDB} \\
+\textbf{Frontend} & \textbf{React}, Material-UI, React Router \\
+\textbf{GPU \& Parallelization} & \textbf{CUDA}, cuDNN, PyTorch DDP \\
+\textbf{Version Control} & \textbf{Git}, Agile/Scrum \\
+\end{tabularx}
+\end{adjustwidth}
+
+%\section{AI Models \& Architectures}
+%\begin{adjustwidth}{-14pt}{0pt}
+%\begin{tabularx}{\linewidth}{
+%  >{\raggedleft\arraybackslash}p{5cm}
+%  >{\raggedright\arraybackslash}X
+%}
+%\textbf{Models \& Architectures} & YOLOv7/YOLOv5, DBNet, Mask R-CNN, RCNN+CTC, LCNN, LayoutLM, BERT, RoBERTa, Transformers, LoRA/PEFT, DPO \\
+%\end{tabularx}
+%\end{adjustwidth}
+
+\section{AI Models \& Architectures}
+\begin{adjustwidth}{-8pt}{0pt}
+\begin{tabularx}{\linewidth}{
+  >{\raggedleft\arraybackslash}p{5cm}
+  >{\raggedright\arraybackslash}X
+}
+\textbf{Computer Vision} & YOLOv7/YOLOv5, DBNet, Mask R-CNN, RCNN+CTC, LCNN \\[4pt]
+\textbf{Document \& Layout Understanding} & LayoutLM, BROS, DocFormer \\[4pt]
+\textbf{Language \& LLMs} & BERT, RoBERTa, Transformers, LoRA/PEFT, DPO \\
+\end{tabularx}
+\end{adjustwidth}
+
+% --- AI Models & Architectures ---
+%\section{AI Models \& Architectures}
+%\begin{adjustwidth}{-8pt}{0pt}
+%\begin{tabularx}{\linewidth}{
+%  >{\raggedleft\arraybackslash}p{4.2cm}
+%  >{\raggedright\arraybackslash}X
+%}
+%\textbf{Detection \& Segmentation} & \textbf{YOLOv7}, YOLOv5, \textbf{DBNet}, \textbf{Mask R-CNN}, RCNN+CTC, LCNN \\
+%\textbf{Document \& Layout Understanding} & \textbf{LayoutLM}, \textbf{BROS}, DocFormer, StrucTexT \\
+%\textbf{Language Models} & \textbf{BERT}, \textbf{RoBERTa}, Transformers, \textbf{LoRA/PEFT}, DPO \\
+%\textbf{Vision-Language Models} & BLIP, Donut, TrOCR, Pix2Struct \\
+%\textbf{Optimization \& Training} & \textbf{PyTorch DDP}, CUDA, cuDNN, mixed precision, quantization, inference acceleration \\
+%\end{tabularx}
+%\end{adjustwidth}
+
+
+%\section{Technical Skills}
+%\begin{tabular}{p{5cm} p{11cm}}
+%\textbf{Programming} & Python, JavaScript, Node.js, C\#, Java \\
+%\textbf{Frameworks \& Libraries} & PyTorch, TensorFlow, Keras, Transformers, FastAPI, Streamlit, scikit-learn, OpenCV, LangChain \\
+%\textbf{ML \& Data Tools} & pandas, NumPy, joblib, XlsxWriter, matplotlib, seaborn \\
+%\textbf{Cloud \& DevOps} & AWS (EC2, ECS, S3, Lambda, CloudWatch, CodeCommit/ECR), Docker, CI/CD \\
+%\textbf{Database \& Search} & MySQL, MSSQL, Elasticsearch, OpenSearch, ChromaDB \\
+%\textbf{Frontend} & React, Material-UI, React Router, i18next \\
+%\textbf{GPU \& Parallelization} & CUDA, cuDNN, PyTorch DDP \\
+%\textbf{Version Control \& Workflow} & Git, Agile/Scrum \\
+%\end{tabular}
+
+%\vspace{4pt}
+
+\section{Education}
+
+\begin{tabularx}{\linewidth}{@{}X r@{}}
+\textbf{Ahsanullah University of Science and Technology (AUST)} & \textit{Dhaka, Bangladesh} \\
+\textit{Bachelor of Science in Computer Science and Engineering — \textbf{CGPA: 3.59}} & \textit{Apr.\ 2016 -- Jan.\ 2021} \\
+[6pt]
+\textbf{SOS Hermann Gmeiner School and College} & \textit{Dhaka, Bangladesh} \\
+\textit{Higher Secondary Certificate — \textbf{GPA: 5.00}} & \textit{2013 -- 2015} \\
+[6pt]
+\textbf{Mirpur Bangla High School and College} & \textit{Dhaka, Bangladesh} \\
+\textit{Secondary School Certificate — \textbf{GPA: 5.00}} & \textit{2003 -- 2013} \\
+\end{tabularx}
+
+
+\section{Projects}
+
+\begin{project}
+  \ProjectHeading{Shorol Notes — AI-Powered Note-Taking}{https://github.com/Mehedi-Hasan-Abir/Shorol-Notes-AI-Powered}
+  \begin{projlist}
+    \item Voice notes with AI transcription/summarization; calendar sync; Bangla-first UX.
+    \item Pluggable backends (OpenAI/Ollama/Hugging Face); responsive, offline-friendly.
+  \end{projlist}
+  {\footnotesize \textbf{Tech:} \pill{React}, \pill{TypeScript}, \pill{Vite}, \pill{Node.js/Express}, \pill{Tailwind CSS}, \pill{OpenAI API}, \pill{Hugging Face}, \pill{Ollama}}
+\end{project}
+
+\begin{project}
+  \ProjectHeading{AI-Powered Research Agent (RAG + LLM)}{https://github.com/Mehedi-Hasan-Abir/AI_Powered_Research_Agent-LLM-}
+  \begin{projlist}
+    \item ReAct-style tool-using agent with PubMed, Wikipedia, ArXiv, and web search.
+    \item FastAPI UI + terminal; configurable prompts/models for experiments.
+  \end{projlist}
+  {\footnotesize \textbf{Tech:} \pill{Python}, \pill{FastAPI}, \pill{LangChain}, \pill{Transformers}, \pill{Hugging Face}, \pill{SerpAPI}}
+\end{project}
+
+\begin{project}
+  \ProjectHeading{Japanese Lawyer Assistant}{https://github.com/Mehedi-Hasan-Abir/Japanese-Lawyer-Assistant-Langchain-LLM}
+  \begin{projlist}
+    \item Legal Q\&A over Japanese corpus using RAG (retriever + FAISS) with instruct LLM.
+    \item Knowledge-base pipeline; concise answers with custom prompts.
+  \end{projlist}
+  {\footnotesize \textbf{Tech:} \pill{Python}, \pill{LangChain}, \pill{FAISS}, \pill{FastAPI}, \pill{ELYZA LLaMA-2}, \pill{Hugging Face}}
+\end{project}
+
+
+\section{Research Experience}
+
+\textbf{\href{https://ieeexplore.ieee.org/document/10440989}{Bengali Intent Classification with Generative Adversarial BERT}} \faIcon{external-link-alt}\\
+\textit{First Author, IEEE Xplore, 2023} \\
+Developed \textbf{GAN-BnBERT}, a generative adversarial \pill{BERT}-based model for Bengali intent classification. Introduced the \textbf{BNIntent30} dataset with 30 intent classes, demonstrating superior performance over \pill{Bi-LSTM} and baseline \pill{BERT} models.
+
+\medskip
+
+\textbf{\href{https://github.com/Mehedi-Hasan-Abir/ECG-Arrythmia-Classification}{Design of an Arrhythmia Classification Algorithm Using 2-D Convolutional Neural Network}} \faIcon{external-link-alt}\\
+\textit{First Author, Undergraduate Thesis, AUST, 2021} \\
+Proposed a \pill{CNN}-based arrhythmia detection algorithm from \pill{ECG} signals, comparing performance with \pill{VGGNet} for improved beat classification accuracy.
+
+
+\section{Academic Projects}
+
+\textbf{\href{https://github.com/Mehedi-Hasan-Abir/HospitalManagement}{Hospital Management}} \faIcon{external-link-alt} \textbar{} \textit{Web Application} \\
+Developed a full-stack hospital management system using \pill{ASP.NET MVC}, \pill{C\#}, \pill{Razor}. \medskip
+
+\textbf{\href{https://github.com/Mehedi-Hasan-Abir/Tolet-Dhaka}{Tolet-Dhaka}} \faIcon{external-link-alt} \textbar{} \textit{Web Application} \\
+Built a flat-renting website with \pill{HTML5}, \pill{CSS}, \pill{PHP}; enhanced interactivity with \pill{JavaScript}. \medskip
+
+\textbf{\href{https://github.com/Mehedi-Hasan-Abir/Bank-Management-Sysytem}{Bank Management System}} \faIcon{external-link-alt} \textbar{} \textit{Database Application} \\
+Implemented transactional features with \pill{Java}, \pill{Java GUI}, \pill{MySQL}. \medskip
+
+\textbf{\href{https://github.com/Mehedi-Hasan-Abir/-Dhaka-City-Bus-Routes-}{Dhaka City Bus Routes}} \faIcon{external-link-alt} \textbar{} \textit{Android Application} \\
+Created a route-finder app using \pill{Java}, \pill{Google Maps API}, \pill{JSON}. \medskip
+
+\textbf{\href{https://github.com/Mehedi-Hasan-Abir/Railway-Station-Management-System}{Railway Management System}} \faIcon{external-link-alt} \textbar{} \textit{Database Application} \\
+Developed client–server components in \pill{PL/SQL}.
+
+\section{Non-Technical Skills}
+\begin{itemize}[leftmargin=1.5em]
+  \item Stakeholder communication (PM/business)
+  \item Agile/Scrum
+  \item Work Breakdown Structure (WBS)
+  \item SRS \& documentation
+  \item Versioned runbooks
+%  \item Cross-functional collaboration
+  \item Technical presentations
+\end{itemize}
+
+\section{Language Skills}
+Bangla (Native); English (Professional Working Proficiency).
+\end{document}
