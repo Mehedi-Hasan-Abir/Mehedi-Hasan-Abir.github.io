@@ -10,7 +10,7 @@
     "start": "cross-env NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
     "db:push": "drizzle-kit push",
-    "deploy": "npm run build && gh-pages -d dist/public --branch main",
+    "deploy": "npm run build && gh-pages -d dist/public --branch gh-pages",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --ci --coverage --maxWorkers=2",
