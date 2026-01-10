@@ -2,6 +2,9 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { initSentry, sentryErrorHandler } from "./sentry.config";
+// Initialize Sentry
+initSentry();
 
 const app = express();
 const httpServer = createServer(app);
@@ -11,6 +14,26 @@ declare module "http" {
     rawBody: unknown;
   }
 }
+
+// Security middleware
+app.use((req, res, next) => {
+  // Remove fingerprinting headers
+  res.removeHeader('X-Powered-By');
+  
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  
+  next();
+});
+
+// Rate limiting middleware - DISABLED for development
+// Only enable in production if needed
+// if (process.env.NODE_ENV === 'production') {
+//   const { apiLimiter } = require('./rate-limit');
+//   app.use(apiLimiter);
+// }
 
 app.use(
   express.json({
@@ -62,12 +85,17 @@ app.use((req, res, next) => {
 (async () => {
   await registerRoutes(httpServer, app);
 
+  // Sentry error handler (must be before other error handlers)
+  app.use(sentryErrorHandler());
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
     res.status(status).json({ message });
-    throw err;
+    
+    // Log error but don't throw to avoid unhandled rejection
+    console.error("Server error:", err);
   });
 
   // importantly only setup vite in development and after

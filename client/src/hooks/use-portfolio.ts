@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@shared/routes";
 import { portfolioData } from "@/data/portfolio-data";
 
 // ============================================
@@ -8,64 +7,50 @@ import { portfolioData } from "@/data/portfolio-data";
 
 export function useExperiences() {
   return useQuery({
-    queryKey: [api.experiences.list.path],
+    queryKey: ["experiences"],
     queryFn: async () => {
-      try {
-        const res = await fetch(api.experiences.list.path, { credentials: "include" });
-        if (!res.ok) throw new Error("Failed to fetch experiences");
-        return api.experiences.list.responses[200].parse(await res.json());
-      } catch {
-        // Fallback to static data for GitHub Pages
-        return portfolioData.experiences;
-      }
+      // Use static data only for GitHub Pages deployment
+      return portfolioData.experiences;
     },
   });
 }
 
 export function useProjects() {
   return useQuery({
-    queryKey: [api.projects.list.path],
+    queryKey: ["projects"],
     queryFn: async () => {
-      try {
-        const res = await fetch(api.projects.list.path, { credentials: "include" });
-        if (!res.ok) throw new Error("Failed to fetch projects");
-        return api.projects.list.responses[200].parse(await res.json());
-      } catch {
-        // Fallback to static data for GitHub Pages
-        return portfolioData.projects;
-      }
+      // Use static data only for GitHub Pages deployment
+      return portfolioData.projects;
     },
   });
 }
 
 export function useSkills() {
   return useQuery({
-    queryKey: [api.skills.list.path],
+    queryKey: ["skills"],
     queryFn: async () => {
-      try {
-        const res = await fetch(api.skills.list.path, { credentials: "include" });
-        if (!res.ok) throw new Error("Failed to fetch skills");
-        return api.skills.list.responses[200].parse(await res.json());
-      } catch {
-        // Fallback to static data for GitHub Pages
-        return portfolioData.skills;
-      }
+      // Use static data only for GitHub Pages deployment
+      return portfolioData.skills;
     },
   });
 }
 
 export function usePersonalInfo() {
   return useQuery({
-    queryKey: [api.personalInfo.get.path],
+    queryKey: ["personalInfo"],
     queryFn: async () => {
-      try {
-        const res = await fetch(api.personalInfo.get.path, { credentials: "include" });
-        if (!res.ok) throw new Error("Failed to fetch personal info");
-        return api.personalInfo.get.responses[200].parse(await res.json());
-      } catch {
-        // Fallback to static data for GitHub Pages
-        return portfolioData.personalInfo;
-      }
+      // Use static data only for GitHub Pages deployment
+      return portfolioData.personalInfo;
+    },
+  });
+}
+
+export function useBlogs() {
+  return useQuery({
+    queryKey: ["blogs"],
+    queryFn: async () => {
+      // Use static data only for GitHub Pages deployment
+      return portfolioData.blogs;
     },
   });
 }

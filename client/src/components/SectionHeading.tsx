@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 
 interface SectionHeadingProps {
@@ -6,18 +7,38 @@ interface SectionHeadingProps {
   number?: number;
 }
 
-let sectionCounter = 0;
+// Track section numbers based on the page/component they're used in
+// This prevents the counter from increasing when navigating between pages
+const sectionMap = new Map<string, number>();
 
 export function SectionHeading({ title, subtitle, number }: SectionHeadingProps) {
-  if (number === undefined) {
-    sectionCounter++;
+  // Use the title as a key to maintain consistent numbering
+  const sectionKey = title.toLowerCase().replace(/\s+/g, '-');
+  
+  if (!sectionMap.has(sectionKey)) {
+    // Assign a fixed number based on the section type
+    const sectionNumbers: Record<string, number> = {
+      'about-me': 1,
+      'experience': 2,
+      'projects': 3,
+      'skills': 4,
+      'blog': 5,
+      'education': 6,
+      'research': 7,
+      'beyond-code': 8,
+      'fun-games': 9,
+      'get-in-touch': 10,
+    };
+    
+    const assignedNumber = sectionNumbers[sectionKey] || sectionMap.size + 1;
+    sectionMap.set(sectionKey, assignedNumber);
   }
   
-  const displayNumber = number !== undefined ? number : sectionCounter;
-  const formattedNumber = String(displayNumber).padStart(2, "0");
+  const displayNumber = number !== undefined ? number : sectionMap.get(sectionKey)!;
+  const formattedNumber = String(displayNumber - 1).padStart(2, "0");
 
   return (
-    <div className="mb-16 text-center">
+    <div className="mb-16 text-center" data-testid="section-heading">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

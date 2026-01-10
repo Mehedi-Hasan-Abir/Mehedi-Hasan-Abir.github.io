@@ -20,10 +20,73 @@ const MOCK_PERSONAL_INFO: any = {
   linkedin: "https://linkedin.com/in/mehedihasan102",
   location: "Dhaka, Bangladesh",
   avatarUrl: "https://avatars.githubusercontent.com/u/76932315?v=4",
-  resumeUrl: "https://drive.google.com/file/d/1EnArhls8W_j5GopG_l-6Y0nijhOxnTwB/view?usp=sharing",
+  resumeUrl: "https://drive.google.com/file/d/14TMLD1N1dBliUo_6KvHrrSxjoAnI9bW1/view?usp=sharing",
   facebook: "https://www.facebook.com/mehedihasan.abir.7/",
   instagram: "https://www.instagram.com/___abracadabra_____/"
 };
+
+const MOCK_BLOGS: any[] = [
+  {
+    id: 1,
+    title: "Building AI-Powered Document Understanding Systems",
+    description: "A comprehensive guide to implementing document AI solutions using modern machine learning techniques and transformer models.",
+    thumbnail: "/images/blog-document-ai.jpg",
+    externalLink: "https://medium.com/@mehedihasan/building-ai-powered-document-understanding-systems",
+    platform: "Medium",
+    date: "2024-12-15",
+    tags: ["AI", "Document AI", "Machine Learning", "Transformers"]
+  },
+  {
+    id: 2,
+    title: "Optimizing LLM Inference for Production Workloads",
+    description: "Learn how to deploy large language models efficiently with vLLM, quantization, and optimization techniques.",
+    thumbnail: "/images/blog-llm-optimization.jpg",
+    externalLink: "https://substack.com/@mehedihasan/optimizing-llm-inference",
+    platform: "Substack",
+    date: "2024-11-20",
+    tags: ["LLM", "vLLM", "Optimization", "Production"]
+  },
+  {
+    id: 3,
+    title: "RAG Systems: From Theory to Production",
+    description: "Implementing Retrieval-Augmented Generation systems with LangChain, vector databases, and real-world considerations.",
+    thumbnail: "/images/blog-rag-systems.jpg",
+    externalLink: "https://linkedin.com/pulse/rag-systems-theory-production-mehedi-hasan",
+    platform: "LinkedIn",
+    date: "2024-10-10",
+    tags: ["RAG", "LangChain", "Vector DB", "NLP"]
+  },
+  {
+    id: 4,
+    title: "Computer Vision in the Real World: Challenges and Solutions",
+    description: "Exploring practical applications of computer vision, from object detection to document processing.",
+    thumbnail: "/images/blog-computer-vision.jpg",
+    externalLink: "https://medium.com/@mehedihasan/computer-vision-real-world-challenges",
+    platform: "Medium",
+    date: "2024-09-05",
+    tags: ["Computer Vision", "YOLO", "OpenCV", "Deep Learning"]
+  },
+  {
+    id: 5,
+    title: "The Future of AI Engineering: Trends and Predictions",
+    description: "Thoughts on where AI engineering is headed and what skills will be most valuable in the coming years.",
+    thumbnail: "/images/blog-ai-future.jpg",
+    externalLink: "https://substack.com/@mehedihasan/future-of-ai-engineering",
+    platform: "Substack",
+    date: "2024-08-15",
+    tags: ["AI", "Future", "Engineering", "Trends"]
+  },
+  {
+    id: 6,
+    title: "Building Scalable ML Pipelines with Docker and Kubernetes",
+    description: "A practical guide to containerizing machine learning workflows for production deployment.",
+    thumbnail: "/images/blog-ml-pipelines.jpg",
+    externalLink: "https://linkedin.com/pulse/scalable-ml-pipelines-docker-kubernetes-mehedi-hasan",
+    platform: "LinkedIn",
+    date: "2024-07-22",
+    tags: ["ML Pipelines", "Docker", "Kubernetes", "DevOps"]
+  },
+];
 
 const MOCK_EXPERIENCES: Experience[] = [
   {
@@ -219,6 +282,12 @@ export class DatabaseStorage implements IStorage {
     if (!db) return MOCK_PERSONAL_INFO;
     const [info] = await db.select().from(personalInfo).limit(1);
     return info;
+  }
+
+  async getBlogs(): Promise<any[]> {
+    if (!db) return MOCK_BLOGS;
+    // Since there's no blogs table in the database, return mock data
+    return MOCK_BLOGS;
   }
 
   async createExperience(experience: InsertExperience): Promise<Experience> {

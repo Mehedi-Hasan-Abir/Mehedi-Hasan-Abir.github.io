@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/Navbar";
-import { useExperiences, useProjects, useSkills, usePersonalInfo } from "@/hooks/use-portfolio";
+import { useExperiences, useProjects, useSkills, usePersonalInfo, useBlogs } from "@/hooks/use-portfolio";
 import { TimelineItem } from "@/components/TimelineItem";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -8,6 +8,7 @@ import { TechAnimation } from "@/components/TechAnimation";
 import { EducationItem } from "@/components/EducationItem";
 import { ResearchItem } from "@/components/ResearchItem";
 import { SocialLinks } from "@/components/SocialLinks";
+import { BlogSection } from "@/components/BlogSection";
 import { motion } from "framer-motion";
 import { 
   Github, 
@@ -134,12 +135,14 @@ export default function Home() {
           <div className="max-w-4xl mx-auto grid md:grid-cols-5 gap-12 items-center">
              <div className="md:col-span-3 space-y-6 text-muted-foreground leading-relaxed text-lg">
                <p>
-                 I am a passionate software engineer based in <span className="text-foreground font-medium">{personalInfo.location}</span>. 
-                 I enjoy creating things that live on the internet, whether that be websites, applications, or anything in between.
+                 I’m a Software Engineer based in <span className="text-foreground font-medium">{personalInfo.location}</span> who believes that great technology is built at the intersection of rigorous logic and human empathy.
+                 I specialize in teaching computers how to read, think, and solve problems. With a deep focus on LLMs and Document AI, I build production-ready systems that transform how businesses handle information.
                </p>
                <p>
-                 My goal is to always build products that provide pixel-perfect, performant experiences. 
-                 When I'm not at the computer, I'm usually hanging out with my friends, reading, or exploring new tech.
+                 My philosophy is simple: Engineering is most powerful when it’s driven by curiosity and built with a sense of purpose.
+                </p>
+                <p>
+                 When I’m away from the terminal, I’m usually exploring the latest in tech research or enjoying the vibrant energy of Dhaka with friends.
                </p>
              </div>
              <div className="md:col-span-2">
@@ -226,6 +229,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Blog Section */}
+      <BlogSection />
 
       {/* Education Section */}
       <section id="education" className="py-24 md:py-32 bg-secondary/10">
@@ -319,19 +325,19 @@ export default function Home() {
               
               <SocialLinks 
                 personalInfo={{
-                  github: personalInfo.github,
-                  linkedin: personalInfo.linkedin,
-                  email: personalInfo.email,
-                  facebook: (personalInfo as any).facebook,
-                  instagram: (personalInfo as any).instagram
+                  github: personalInfo.github || "",
+                  linkedin: personalInfo.linkedin || "",
+                  email: personalInfo.email || "",
+                  facebook: (personalInfo as any).facebook || "",
+                  instagram: (personalInfo as any).instagram || ""
                 }}
               />
             </motion.div>
           </div>
         </div>
       </section>
-
-      {/* Art Gallery / Portfolio Section */}
+                
+      {/* Art Gallery / Portfolio Section 
       <section id="gallery" className="py-24 md:py-32">
         <div className="container mx-auto px-4">
           <SectionHeading title="Art & Photography" subtitle="My creative visual work" />
@@ -349,7 +355,7 @@ export default function Home() {
               </p>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-                {/* Gallery Grid Placeholder - User can add images */}
+                
                 {[
                   { title: "Travel Memories", img: "🌍" },
                   { title: "Street Photography", img: "📍" },
@@ -378,6 +384,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
 
       {/* Memory Flip Cards Section */}
       <section id="games" className="py-24 md:py-32 bg-background/50">
@@ -416,11 +423,11 @@ export default function Home() {
             
             <SocialLinks 
               personalInfo={{
-                github: personalInfo.github,
-                linkedin: personalInfo.linkedin,
-                email: personalInfo.email,
-                facebook: (personalInfo as any).facebook,
-                instagram: (personalInfo as any).instagram
+                github: personalInfo.github || "",
+                linkedin: personalInfo.linkedin || "",
+                email: personalInfo.email || "",
+                facebook: (personalInfo as any).facebook || "",
+                instagram: (personalInfo as any).instagram || ""
               }}
             />
           </motion.div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface Card {
@@ -27,6 +27,30 @@ export function MemoryFlipCards() {
   const [flipped, setFlipped] = useState<number[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
+  const [sessionHighScore, setSessionHighScore] = useState<number | null>(null);
+
+  // Load session high score on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = sessionStorage.getItem('memoryGameHighScore');
+      if (stored) {
+        setSessionHighScore(parseInt(stored));
+      }
+    }
+  }, []);
+
+  // Save high score when game is won
+  useEffect(() => {
+    if (matched.length === cards.length && moves > 0) {
+      const currentHigh = sessionHighScore ?? Infinity;
+      if (moves < currentHigh) {
+        setSessionHighScore(moves);
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('memoryGameHighScore', moves.toString());
+        }
+      }
+    }
+  }, [matched, cards, moves, sessionHighScore]);
 
   const handleCardClick = (id: number) => {
     if (flipped.includes(id) || matched.includes(id) || flipped.length >= 2) {
@@ -61,6 +85,13 @@ export function MemoryFlipCards() {
     setMoves(0);
   };
 
+  const resetHighScore = () => {
+    setSessionHighScore(null);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('memoryGameHighScore');
+    }
+  };
+
   const isWon = matched.length === cards.length;
 
   return (
@@ -86,6 +117,12 @@ export function MemoryFlipCards() {
             </div>
             <div className="text-xs text-muted-foreground">Matched</div>
           </div>
+          {sessionHighScore !== null && (
+            <div>
+              <div className="text-2xl font-bold text-primary">{sessionHighScore}</div>
+              <div className="text-xs text-muted-foreground">Best (Session)</div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -116,18 +153,33 @@ export function MemoryFlipCards() {
           className="text-center mb-4 p-4 bg-primary/10 rounded-lg border border-primary/30"
         >
           <p className="text-lg font-bold text-primary mb-2">🎉 You Won!</p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground mb-2">
             Completed in {moves} moves
           </p>
+          {sessionHighScore !== null && moves <= sessionHighScore && (
+            <p className="text-xs font-bold text-primary">
+              ⭐ NEW BEST SCORE! (Session)
+            </p>
+          )}
         </motion.div>
       )}
 
-      <button
-        onClick={resetGame}
-        className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all"
-      >
-        {isWon ? "Play Again" : "Reset"}
-      </button>
+      <div className="flex gap-2">
+        <button
+          onClick={resetGame}
+          className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all"
+        >
+          {isWon ? "Play Again" : "Reset"}
+        </button>
+        {sessionHighScore !== null && (
+          <button
+            onClick={resetHighScore}
+            className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/80 transition-all text-sm"
+          >
+            Reset Best
+          </button>
+        )}
+      </div>
     </motion.div>
   );
 }

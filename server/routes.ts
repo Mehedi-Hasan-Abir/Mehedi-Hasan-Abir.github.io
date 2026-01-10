@@ -2,29 +2,130 @@ import type { Express } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
+import { specs, swaggerUi } from "./swagger";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // API Endpoints
+  // Swagger API Documentation
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "Portfolio API Docs"
+  }));
+
+  // API Endpoints with Swagger documentation
+  /**
+   * @openapi
+   * /api/experiences:
+   *   get:
+   *     summary: Get all experiences
+   *     description: Returns a list of all professional experiences
+   *     tags:
+   *       - Experiences
+   *     responses:
+   *       200:
+   *         description: List of experiences
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Experience'
+   */
   app.get(api.experiences.list.path, async (_req, res) => {
     const data = await storage.getExperiences();
     res.json(data);
   });
 
+  /**
+   * @openapi
+   * /api/projects:
+   *   get:
+   *     summary: Get all projects
+   *     description: Returns a list of all projects
+   *     tags:
+   *       - Projects
+   *     responses:
+   *       200:
+   *         description: List of projects
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Project'
+   */
   app.get(api.projects.list.path, async (_req, res) => {
     const data = await storage.getProjects();
     res.json(data);
   });
 
+  /**
+   * @openapi
+   * /api/skills:
+   *   get:
+   *     summary: Get all skills
+   *     description: Returns a list of all skills by category
+   *     tags:
+   *       - Skills
+   *     responses:
+   *       200:
+   *         description: List of skills
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Skill'
+   */
   app.get(api.skills.list.path, async (_req, res) => {
     const data = await storage.getSkills();
     res.json(data);
   });
 
+  /**
+   * @openapi
+   * /api/personal-info:
+   *   get:
+   *     summary: Get personal information
+   *     description: Returns personal information and contact details
+   *     tags:
+   *       - Personal Info
+   *     responses:
+   *       200:
+   *         description: Personal information
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/PersonalInfo'
+   */
   app.get(api.personalInfo.get.path, async (_req, res) => {
     const data = await storage.getPersonalInfo();
+    res.json(data);
+  });
+
+  /**
+   * @openapi
+   * /api/blogs:
+   *   get:
+   *     summary: Get all blog posts
+   *     description: Returns a list of all blog posts
+   *     tags:
+   *       - Blog
+   *     responses:
+   *       200:
+   *         description: List of blog posts
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Blog'
+   */
+  app.get("/api/blogs", async (_req, res) => {
+    const data = await storage.getBlogs();
     res.json(data);
   });
 

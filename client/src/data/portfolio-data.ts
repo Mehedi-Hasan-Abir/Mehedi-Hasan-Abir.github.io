@@ -4,14 +4,14 @@ export const portfolioData = {
     id: 1,
     name: "Mehedi Hasan",
     role: "AI/ML Engineer",
-    bio: "AI/ML Engineer with expertise in document understanding, deep learning, and LLM applications. Experienced in building production-grade systems for text recognition, data extraction, and intelligent search.",
+    bio: "I believe that great AI shouldn't just be powerful; it should be useful. I’m passionate about building tools that save people time and make businesses smarter.",
     email: "abir.aust.102@gmail.com",
     phone: "(+880) 1521323549",
     github: "https://github.com/Mehedi-Hasan-Abir",
     linkedin: "https://linkedin.com/in/mehedihasan102",
     location: "Dhaka, Bangladesh",
-    avatarUrl: "https://avatars.githubusercontent.com/u/76932315?v=4",
-    resumeUrl: "https://drive.google.com/file/d/1EnArhls8W_j5GopG_l-6Y0nijhOxnTwB/view?usp=sharing",
+    avatarUrl: "/images/profile_re.webp",
+    resumeUrl: "https://drive.google.com/file/d/14TMLD1N1dBliUo_6KvHrrSxjoAnI9bW1/view?usp=sharing",
     facebook: "https://www.facebook.com/mehedihasan.abir.7/",
     instagram: "https://www.instagram.com/___abracadabra_____/",
   },
@@ -91,7 +91,7 @@ export const portfolioData = {
         "TailwindCSS",
         "OpenAI API",
       ],
-      link: "https://github.com/Mehedi-Hasan-Abir",
+      link: "https://github.com/Mehedi-Hasan-Abir/Shorol-Notes-AI-Powered",
     },
     {
       id: 2,
@@ -105,7 +105,7 @@ export const portfolioData = {
         "Transformers",
         "SerpAPI",
       ],
-      link: "https://github.com/Mehedi-Hasan-Abir",
+      link: "https://github.com/Mehedi-Hasan-Abir/AI_Powered_Research_Agent-LLM-",
     },
     {
       id: 3,
@@ -119,7 +119,7 @@ export const portfolioData = {
         "FastAPI",
         "HuggingFace",
       ],
-      link: "https://github.com/Mehedi-Hasan-Abir",
+      link: "https://github.com/Mehedi-Hasan-Abir/Japanese-Lawyer-Assistant-Langchain-LLM",
     },
   ],
   skills: [
@@ -192,5 +192,27 @@ export const portfolioData = {
         "CloudWatch",
       ],
     },
+  ],
+  blogs: [
+    {
+      id: 1,
+      title: "The System Design Decisions Behind Big Tech Stacks",
+      description: "System design lessons from Uber, Netflix, Stripe, and other tech giants. A practical breakdown of distributed systems, cloud-native infrastructure, high-performance backends, and the trade-offs tech leads must understand.",
+      thumbnail: "/images/blog-system-design-big-tech.jpg",
+      externalLink: "https://mhabir.substack.com/p/the-system-design-decisions-behind",
+      platform: "Substack",
+      date: "2026-01-07",
+      tags: ["System Design", "Software Architecture", "Tech Lead", "Distributed Systems", "Big Tech", "Scalability"]
+    },
+    {
+      id: 2,
+      title: "3-Part Series: LLM Latency in Production (Part 1)",
+      description: "A tech lead's playbook for reducing LLM inference latency in production. Part 1 focuses on model-level optimization: GPU bottlenecks, memory bandwidth limits, quantization (INT8/INT4), Flash Attention, and vLLM internals.",
+      thumbnail: "/images/blog-llm-latency-production.jpg",
+      externalLink: "https://mhabir.substack.com/p/3-part-series-llm-latency-in-production",
+      platform: "Substack",
+      date: "2026-01-07",
+      tags: ["LLM", "Inference", "Latency", "GPU", "Quantization", "vLLM", "Production Systems"]
+    }
   ],
 };
