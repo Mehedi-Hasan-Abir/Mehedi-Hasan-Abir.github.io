@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -6,30 +7,45 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackToTop } from "@/components/BackToTop";
 import { CursorFollower } from "@/components/CursorFollower";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ConnectionProvider, useConnection } from "@/contexts/ConnectionContext";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
-import BlogPage from "@/pages/BlogPage";
+
+const BlogPage = lazy(() => import("@/pages/BlogPage"));
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/blog" component={BlogPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/blog" component={BlogPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
+  );
+}
+
+function AppContent() {
+  const { canLoadHeavy } = useConnection();
+  return (
+    <>
+      <Toaster />
+      {canLoadHeavy && <CursorFollower />}
+      <BackToTop />
+      <ThemeProvider />
+      <Router />
+    </>
   );
 }
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <CursorFollower />
-        <BackToTop />
-        <ThemeProvider />
-        <Router />
-      </TooltipProvider>
+      <ConnectionProvider>
+        <TooltipProvider>
+          <AppContent />
+        </TooltipProvider>
+      </ConnectionProvider>
     </QueryClientProvider>
   );
 }

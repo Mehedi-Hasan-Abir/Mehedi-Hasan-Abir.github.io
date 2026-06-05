@@ -1,0 +1,29 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 10
+      name: "Basic load test - 10 users per second"
+    - duration: 30
+      arrivalRate: 25
+      name: "Moderate load - 25 users per second"
+  defaults:
+    headers:
+      User-Agent: "Portfolio-Load-Test"
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+
+scenarios:
+  - name: "Homepage Performance Test"
+    flow:
+      - get:
+          url: "/"
+          capture:
+            - json: "$.responseTime"
+            - json: "$.statusCode"
+          measure: "homepage_load_time"
+      - think: 1
+      - get:
+          url: "/src/index.css"
+      - think: 1
+      - get:
+          url: "/src/main.tsx"

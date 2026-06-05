@@ -8,49 +8,44 @@ import { portfolioData } from "@/data/portfolio-data";
 export function useExperiences() {
   return useQuery({
     queryKey: ["experiences"],
-    queryFn: async () => {
-      // Use static data only for GitHub Pages deployment
-      return portfolioData.experiences;
-    },
+    queryFn: async () => portfolioData.experiences,
+    initialData: portfolioData.experiences,
+    staleTime: Infinity,
   });
 }
 
 export function useProjects() {
   return useQuery({
     queryKey: ["projects"],
-    queryFn: async () => {
-      // Use static data only for GitHub Pages deployment
-      return portfolioData.projects;
-    },
+    queryFn: async () => portfolioData.projects,
+    initialData: portfolioData.projects,
+    staleTime: Infinity,
   });
 }
 
 export function useSkills() {
   return useQuery({
     queryKey: ["skills"],
-    queryFn: async () => {
-      // Use static data only for GitHub Pages deployment
-      return portfolioData.skills;
-    },
+    queryFn: async () => portfolioData.skills,
+    initialData: portfolioData.skills,
+    staleTime: Infinity,
   });
 }
 
 export function usePersonalInfo() {
   return useQuery({
     queryKey: ["personalInfo"],
-    queryFn: async () => {
-      // Use static data only for GitHub Pages deployment
-      return portfolioData.personalInfo;
-    },
+    queryFn: async () => portfolioData.personalInfo,
+    initialData: portfolioData.personalInfo,
+    staleTime: Infinity,
   });
 }
 
 export function useBlogs() {
   return useQuery({
     queryKey: ["blogs"],
-    queryFn: async () => {
-      // Use static data only for GitHub Pages deployment
-      return portfolioData.blogs;
-    },
+    queryFn: async () => portfolioData.blogs,
+    initialData: portfolioData.blogs,
+    staleTime: Infinity,
   });
 }

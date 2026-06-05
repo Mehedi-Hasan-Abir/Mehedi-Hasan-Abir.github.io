@@ -63,3 +63,80 @@ export const trackTiming = (name: string, value: number, label?: string) => {
     console.log(`[Analytics] Timing: ${name} | ${value}ms | ${label}`);
   }
 };
+
+/**
+ * Trade-off Game Analytics
+ */
+
+export function trackTradeoffGameView(): void {
+  trackEvent('tradeoff_game_view', 'Tradeoff Game', 'Game View');
+}
+
+export function trackTradeoffSessionStart(sessionId: string, questionCount: number): void {
+  trackEvent('tradeoff_session_start', 'Tradeoff Game', `Session: ${sessionId}`, questionCount);
+}
+
+export interface TradeoffChoiceParams {
+  questionId: string;
+  optionId: string;
+  category: string;
+  latencyDelta: number;
+  throughputDelta: number;
+  costDelta: number;
+  complexityDelta: number;
+}
+
+export function trackTradeoffChoice(params: TradeoffChoiceParams): void {
+  // Track as a custom event with parameters
+  if (import.meta.env.PROD && (window as any).gtag) {
+    (window as any).gtag('event', 'tradeoff_choice', {
+      question_id: params.questionId,
+      option_id: params.optionId,
+      category: params.category,
+      latency_delta: params.latencyDelta,
+      throughput_delta: params.throughputDelta,
+      cost_delta: params.costDelta,
+      complexity_delta: params.complexityDelta
+    });
+  } else {
+    console.log(`[Analytics] Tradeoff Choice:`, params);
+  }
+}
+
+export interface TradeoffSessionCompleteParams {
+  xpEarned: number;
+  style: string;
+  totals: {
+    latency: number;
+    throughput: number;
+    cost: number;
+    complexity: number;
+  };
+  timeSeconds: number;
+  sessionId: string;
+}
+
+export function trackTradeoffSessionComplete(params: TradeoffSessionCompleteParams): void {
+  if (import.meta.env.PROD && (window as any).gtag) {
+    (window as any).gtag('event', 'tradeoff_session_complete', {
+      xp_earned: params.xpEarned,
+      style: params.style,
+      totals: params.totals,
+      time_seconds: params.timeSeconds,
+      session_id: params.sessionId
+    });
+  } else {
+    console.log(`[Analytics] Tradeoff Session Complete:`, params);
+  }
+}
+
+export function trackTradeoffShareResult(sessionId: string, style: string): void {
+  trackEvent('tradeoff_share_result', 'Tradeoff Game', `Session: ${sessionId} | Style: ${style}`);
+}
+
+/**
+ * Utility function to generate session ID
+ */
+export function generateSessionId(): string {
+  return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import type { Project } from "@shared/schema";
@@ -7,7 +8,7 @@ interface ProjectCardProps {
   index: number;
 }
 
-export function ProjectCard({ project, index }: ProjectCardProps) {
+const ProjectCard = memo(({ project, index }: ProjectCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -27,6 +28,11 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label={
+                project.link.includes("github")
+                  ? `View ${project.title} on GitHub`
+                  : `Open external link for ${project.title}`
+              }
             >
               {project.link.includes("github") ? (
                 <Github className="w-5 h-5" />
@@ -57,4 +63,8 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </motion.div>
   );
-}
+});
+
+ProjectCard.displayName = "ProjectCard";
+
+export { ProjectCard };

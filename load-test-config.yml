@@ -1,0 +1,67 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm-up - 5 users per second"
+    - duration: 120
+      arrivalRate: 10
+      name: "Normal load - 10 users per second"
+    - duration: 60
+      arrivalRate: 20
+      name: "Peak load - 20 users per second"
+    - duration: 30
+      arrivalRate: 50
+      name: "Stress test - 50 users per second"
+  defaults:
+    headers:
+      User-Agent: "Portfolio-Load-Test"
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+      Accept-Language: "en-US,en;q=0.9"
+      Accept-Encoding: "gzip, deflate, br"
+      Connection: "keep-alive"
+
+scenarios:
+  - name: "Homepage Load Test"
+    flow:
+      - get:
+          url: "/"
+          capture:
+            - json: "$.responseTime"
+            - json: "$.statusCode"
+          measure: "homepage_load_time"
+      - think: 2
+      - get:
+          url: "/api/portfolio-data"
+          capture:
+            - json: "$.responseTime"
+            - json: "$.statusCode"
+          measure: "api_response_time"
+
+  - name: "Navigation Test"
+    flow:
+      - get:
+          url: "/"
+      - think: 1
+      - get:
+          url: "/blog"
+      - think: 1
+      - get:
+          url: "/projects"
+      - think: 1
+      - get:
+          url: "/contact"
+
+  - name: "Asset Loading Test"
+    flow:
+      - get:
+          url: "/"
+      - think: 1
+      - get:
+          url: "/public/images/"
+      - think: 1
+      - get:
+          url: "/public/css/"
+      - think: 1
+      - get:
+          url: "/public/js/"

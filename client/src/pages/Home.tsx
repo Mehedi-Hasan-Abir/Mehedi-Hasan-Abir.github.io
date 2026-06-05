@@ -1,13 +1,14 @@
+import { lazy, Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
-import { useExperiences, useProjects, useSkills, usePersonalInfo, useBlogs } from "@/hooks/use-portfolio";
+import { useExperiences, useProjects, useSkills, usePersonalInfo } from "@/hooks/use-portfolio";
+import { SectionHeading } from "@/components/SectionHeading";
+import { SocialLinks } from "@/components/SocialLinks";
+import { useConnection } from "@/contexts/ConnectionContext";
+import { TechAnimation } from "@/components/TechAnimation";
 import { TimelineItem } from "@/components/TimelineItem";
 import { ProjectCard } from "@/components/ProjectCard";
-import { SectionHeading } from "@/components/SectionHeading";
-import { MemoryFlipCards } from "@/components/MemoryFlipCards";
-import { TechAnimation } from "@/components/TechAnimation";
 import { EducationItem } from "@/components/EducationItem";
 import { ResearchItem } from "@/components/ResearchItem";
-import { SocialLinks } from "@/components/SocialLinks";
 import { BlogSection } from "@/components/BlogSection";
 import { motion } from "framer-motion";
 import { 
@@ -23,22 +24,16 @@ import {
 } from "lucide-react";
 import { Link as ScrollLink } from "react-scroll";
 
-export default function Home() {
-  const { data: experiences, isLoading: loadingExp } = useExperiences();
-  const { data: projects, isLoading: loadingProj } = useProjects();
-  const { data: skills, isLoading: loadingSkills } = useSkills();
-  const { data: personalInfo, isLoading: loadingInfo } = usePersonalInfo();
+const MemoryFlipCards = lazy(() =>
+  import("@/components/MemoryFlipCards").then((m) => ({ default: m.MemoryFlipCards }))
+);
 
-  if (loadingExp || loadingProj || loadingSkills || loadingInfo) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-          <p className="font-mono text-muted-foreground animate-pulse">Loading System...</p>
-        </div>
-      </div>
-    );
-  }
+export default function Home() {
+  const { canLoadHeavy } = useConnection();
+  const { data: experiences } = useExperiences();
+  const { data: projects } = useProjects();
+  const { data: skills } = useSkills();
+  const { data: personalInfo } = usePersonalInfo();
 
   if (!personalInfo) return null;
 
@@ -48,7 +43,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section id="hero" className="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
-        <TechAnimation />
+        {canLoadHeavy && <TechAnimation />}
         <div className="absolute inset-0 z-0 opacity-20">
           <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-[100px]" />
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px]" />
@@ -73,7 +68,8 @@ export default function Home() {
             
             <div className="flex flex-wrap gap-4">
               <ScrollLink to="projects" smooth={true} offset={-100}>
-                <button className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all hover:-translate-y-1 shadow-lg shadow-primary/25 flex items-center gap-2">
+                {/* Stronger contrast for accessibility: darker text on primary background */}
+                <button className="px-8 py-4 bg-primary text-slate-950 rounded-lg font-semibold hover:bg-primary/90 transition-all hover:-translate-y-1 shadow-lg shadow-primary/25 flex items-center gap-2">
                   View My Work <ArrowRight className="w-4 h-4" />
                 </button>
               </ScrollLink>
@@ -104,12 +100,17 @@ export default function Home() {
                   <img 
                     src={personalInfo.avatarUrl} 
                     alt={personalInfo.name} 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
+                    className={`w-full h-full object-cover transition-all duration-500 ${
+                      canLoadHeavy ? "grayscale group-hover:grayscale-0" : "blur-sm"
+                    }`}
                   />
                 ) : (
                   <div className="w-full h-full bg-secondary flex items-center justify-center">
                     <span className="text-6xl font-mono text-muted-foreground opacity-20">
-                      {personalInfo.name.substring(0, 2)}
+                      {personalInfo.name?.substring(0, 2) ?? "MH"}
                     </span>
                   </div>
                 )}
@@ -392,7 +393,9 @@ export default function Home() {
           <SectionHeading title="Fun & Games" subtitle="Take a break and test your memory" />
           
           <div className="flex justify-center mt-12">
-            <MemoryFlipCards />
+            <Suspense fallback={null}>
+              <MemoryFlipCards />
+            </Suspense>
           </div>
         </div>
       </section>
@@ -440,7 +443,8 @@ export default function Home() {
           <p className="font-mono text-sm text-muted-foreground">
             Designed & Built by {personalInfo.name}
           </p>
-          <p className="text-xs text-muted-foreground/50 mt-2">
+          {/* Increase contrast for accessibility (was text-muted-foreground/50) */}
+          <p className="text-xs text-muted-foreground mt-2">
             © {new Date().getFullYear()} All rights reserved.
           </p>
         </div>
