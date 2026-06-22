@@ -210,7 +210,7 @@ export default function BlogPage() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a 
-                href="https://medium.com/@mehedihasan" 
+                href="https://medium.com/@mhabir102" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -226,7 +226,7 @@ export default function BlogPage() {
                 Connect on LinkedIn
               </a>
               <a 
-                href="https://substack.com/@mehedihasan" 
+                href="https://mhabir.substack.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-colors"

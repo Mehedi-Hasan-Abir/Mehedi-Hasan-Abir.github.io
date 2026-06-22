@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('/fonts/SourceSerif4.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('/fonts/FiraCode.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Dark Theme Base - Minimalist Developer Aesthetic */
   --background: 222 47% 11%;
@@ -35,16 +51,27 @@
 
   --radius: 0.5rem;
 
-  --font-sans: 'Geist', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+  --font-sans: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'Fira Code', Consolas, 'Courier New', monospace;
+
+  --aura-1: 199 89% 48%;
+  --aura-2: 217 91% 60%;
+  --aura-3: 191 89% 42%;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground antialiased font-sans selection:bg-primary/30 selection:text-primary-foreground;
+    background-image:
+      radial-gradient(circle at 12% 14%, hsl(var(--aura-1) / 0.16) 0%, transparent 32%),
+      radial-gradient(circle at 82% 16%, hsl(var(--aura-2) / 0.16) 0%, transparent 35%),
+      radial-gradient(circle at 58% 85%, hsl(var(--aura-3) / 0.13) 0%, transparent 42%);
+    background-attachment: fixed;
+    transition: background-color 320ms ease, color 320ms ease;
   }
   
   /* Smooth scrolling for the whole document */
@@ -59,6 +86,81 @@
   /* Ensure text is visible in dark mode */
   p, span, a, div, li {
     @apply text-foreground;
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px
+  ),
+  linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at center, black, transparent 82%);
+  will-change: transform;
+  animation: grid-drift 18s linear infinite;
+}
+
+html[data-color-mode="light"] body {
+  background-image: linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+html[data-color-mode="light"] body::before {
+  background-image: linear-gradient(
+    rgba(2, 6, 23, 0.04) 1px,
+    transparent 1px
+  ),
+  linear-gradient(90deg, rgba(2, 6, 23, 0.03) 1px, transparent 1px);
+  animation: none;
+}
+
+.neural-mesh-canvas {
+  opacity: 0.45;
+  transition: opacity 240ms ease;
+}
+
+html[data-color-mode="light"] .neural-mesh-canvas {
+  opacity: 0.78;
+  mix-blend-mode: multiply;
+}
+
+@keyframes grid-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-42px, -42px, 0);
+  }
+}
+
+@keyframes ambient-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -18px, 0);
+  }
+}
+
+@keyframes light-aura-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-1.2%, 1.4%, 0) scale(1.02);
+  }
+
+  100% {
+    transform: translate3d(1.4%, -1.1%, 0) scale(1.01);
   }
 }
 
@@ -87,6 +189,50 @@
   
   .nav-link.active {
     @apply text-foreground;
+  }
+
+  .ambient-float {
+    animation: ambient-float 8s ease-in-out infinite;
+  }
+
+  .glow-border-hover {
+    @apply border border-border/60 transition-all duration-300;
+    box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+  }
+
+  .glow-border-hover:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.2);
+  }
+
+  .section-glow-divider {
+    position: relative;
+    height: 78px;
+    margin: 0 auto;
+    width: min(90%, 1080px);
+    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  }
+
+  .section-glow-divider::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 34px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.38), transparent);
+  }
+
+  .section-glow-divider::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 23px;
+    width: 160px;
+    height: 24px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.24), transparent 72%);
+    filter: blur(10px);
   }
 }
 

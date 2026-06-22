@@ -3,12 +3,72 @@ import { Moon, Sun, Palette } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const THEMES = {
-  cyan: { bg: "222 47% 11%", primary: "199 89% 48%", name: "Cyan" },
-  blue: { bg: "222 47% 11%", primary: "217 100% 50%", name: "Blue" },
-  purple: { bg: "222 47% 11%", primary: "280 85% 55%", name: "Purple" },
-  pink: { bg: "222 47% 11%", primary: "330 81% 60%", name: "Pink" },
-  green: { bg: "222 47% 11%", primary: "142 72% 29%", name: "Green" },
-  orange: { bg: "222 47% 11%", primary: "35 100% 55%", name: "Orange" },
+  cyan: {
+    bg: "222 47% 11%",
+    primary: "199 89% 48%",
+    auraDarkA: "199 89% 48%",
+    auraDarkB: "217 91% 60%",
+    auraDarkC: "191 89% 42%",
+    auraLightA: "193 92% 52%",
+    auraLightB: "210 96% 62%",
+    auraLightC: "186 88% 46%",
+    name: "Cyan",
+  },
+  blue: {
+    bg: "222 47% 11%",
+    primary: "217 100% 50%",
+    auraDarkA: "217 100% 56%",
+    auraDarkB: "225 90% 63%",
+    auraDarkC: "206 94% 52%",
+    auraLightA: "214 97% 57%",
+    auraLightB: "229 86% 66%",
+    auraLightC: "200 91% 50%",
+    name: "Blue",
+  },
+  purple: {
+    bg: "222 47% 11%",
+    primary: "280 85% 55%",
+    auraDarkA: "280 85% 58%",
+    auraDarkB: "262 90% 66%",
+    auraDarkC: "302 74% 55%",
+    auraLightA: "274 88% 60%",
+    auraLightB: "255 90% 70%",
+    auraLightC: "298 76% 62%",
+    name: "Purple",
+  },
+  pink: {
+    bg: "222 47% 11%",
+    primary: "330 81% 60%",
+    auraDarkA: "332 81% 62%",
+    auraDarkB: "346 83% 66%",
+    auraDarkC: "307 76% 58%",
+    auraLightA: "330 86% 66%",
+    auraLightB: "350 88% 70%",
+    auraLightC: "308 80% 63%",
+    name: "Pink",
+  },
+  green: {
+    bg: "222 47% 11%",
+    primary: "142 72% 29%",
+    auraDarkA: "152 67% 42%",
+    auraDarkB: "168 72% 40%",
+    auraDarkC: "132 63% 38%",
+    auraLightA: "152 72% 46%",
+    auraLightB: "170 76% 44%",
+    auraLightC: "136 64% 42%",
+    name: "Green",
+  },
+  orange: {
+    bg: "222 47% 11%",
+    primary: "35 100% 55%",
+    auraDarkA: "35 100% 58%",
+    auraDarkB: "22 96% 58%",
+    auraDarkC: "49 95% 56%",
+    auraLightA: "35 100% 60%",
+    auraLightB: "16 96% 62%",
+    auraLightC: "49 96% 58%",
+    name: "Orange",
+  },
 };
 
 export function ThemeProvider() {
@@ -30,6 +90,7 @@ export function ThemeProvider() {
   const applyTheme = (theme: keyof typeof THEMES, darkMode: boolean) => {
     const root = document.documentElement;
     const themeVars = THEMES[theme];
+    root.dataset.colorMode = darkMode ? "dark" : "light";
     
     if (darkMode) {
       root.style.setProperty("--background", themeVars.bg);
@@ -42,19 +103,26 @@ export function ThemeProvider() {
       root.style.setProperty("--secondary-foreground", "210 40% 98%");
       root.style.setProperty("--border", "217 33% 20%");
       root.style.setProperty("--input", "217 33% 20%");
+      root.style.setProperty("--ring", themeVars.primary);
+      root.style.setProperty("--aura-1", themeVars.auraDarkA);
+      root.style.setProperty("--aura-2", themeVars.auraDarkB);
+      root.style.setProperty("--aura-3", themeVars.auraDarkC);
       root.classList.add("dark");
     } else {
-      // Light mode background
-      root.style.setProperty("--background", "0 0% 100%");
-      root.style.setProperty("--foreground", "222 47% 11%");
-      root.style.setProperty("--card", "0 0% 98%");
-      root.style.setProperty("--card-foreground", "222 47% 11%");
-      root.style.setProperty("--muted", "0 0% 90%");
-      root.style.setProperty("--muted-foreground", "222 47% 50%");
-      root.style.setProperty("--secondary", "0 0% 93%");
-      root.style.setProperty("--secondary-foreground", "222 47% 11%");
-      root.style.setProperty("--border", "0 0% 90%");
-      root.style.setProperty("--input", "0 0% 95%");
+      root.style.setProperty("--background", "212 57% 98%");
+      root.style.setProperty("--foreground", "220 39% 16%");
+      root.style.setProperty("--card", "0 0% 100%");
+      root.style.setProperty("--card-foreground", "220 39% 16%");
+      root.style.setProperty("--muted", "210 34% 94%");
+      root.style.setProperty("--muted-foreground", "220 20% 41%");
+      root.style.setProperty("--secondary", "210 43% 96%");
+      root.style.setProperty("--secondary-foreground", "220 39% 16%");
+      root.style.setProperty("--border", "214 28% 87%");
+      root.style.setProperty("--input", "214 30% 92%");
+      root.style.setProperty("--ring", themeVars.primary);
+      root.style.setProperty("--aura-1", themeVars.auraLightA);
+      root.style.setProperty("--aura-2", themeVars.auraLightB);
+      root.style.setProperty("--aura-3", themeVars.auraLightC);
       root.classList.remove("dark");
     }
     

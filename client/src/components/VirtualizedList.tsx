@@ -1,5 +1,5 @@
-import { FixedSizeList as List } from 'react-window';
-import { memo } from 'react';
+import { List } from 'react-window';
+import type { CSSProperties } from 'react';
 import type { Project } from '@shared/schema';
 
 interface VirtualizedProjectListProps {
@@ -7,7 +7,7 @@ interface VirtualizedProjectListProps {
   height: number;
 }
 
-const ProjectRow = memo(({ index, style, data }: { index: number; style: any; data: Project[] }) => {
+function ProjectRow({ index, style, data }: { index: number; style: CSSProperties; data: Project[] }) {
   const project = data[index];
   
   return (
@@ -28,18 +28,18 @@ const ProjectRow = memo(({ index, style, data }: { index: number; style: any; da
       <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
     </div>
   );
-});
+}
 
 export function VirtualizedProjectList({ projects, height }: VirtualizedProjectListProps) {
   return (
-    <List
-      height={height}
-      itemCount={projects.length}
-      itemSize={100}
-      width="100%"
-      itemData={projects}
-    >
-      {ProjectRow}
-    </List>
+    <div style={{ height, width: '100%' }}>
+      <List<{ data: Project[] }>
+        rowCount={projects.length}
+        rowHeight={100}
+        rowComponent={ProjectRow}
+        rowProps={{ data: projects }}
+        overscanCount={2}
+      />
+    </div>
   );
 }

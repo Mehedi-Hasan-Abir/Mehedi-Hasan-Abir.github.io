@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { portfolioData } from "@/data/portfolio-data";
+import { useMemo } from "react";
+import { portfolioData, educationData, researchData, interestsData, heroPhrases } from "@/data/portfolio-data";
 
 // ============================================
 // Data Hooks for Portfolio Content
@@ -48,4 +49,35 @@ export function useBlogs() {
     initialData: portfolioData.blogs,
     staleTime: Infinity,
   });
+}
+
+export function useEducation() {
+  return useQuery({
+    queryKey: ["education"],
+    queryFn: async () => educationData,
+    initialData: educationData,
+    staleTime: Infinity,
+  });
+}
+
+export function useResearch() {
+  return useQuery({
+    queryKey: ["research"],
+    queryFn: async () => researchData,
+    initialData: researchData,
+    staleTime: Infinity,
+  });
+}
+
+export function useInterests() {
+  return useQuery({
+    queryKey: ["interests"],
+    queryFn: async () => interestsData,
+    initialData: interestsData,
+    staleTime: Infinity,
+  });
+}
+
+export function useHeroPhrases() {
+  return useMemo(() => heroPhrases, []);
 }

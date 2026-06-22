@@ -18,8 +18,7 @@ export function useSlowConnection(): boolean {
     const isSlow =
       saveData ||
       effectiveType === "slow-2g" ||
-      effectiveType === "2g" ||
-      effectiveType === "slow-3g";
+      effectiveType === "2g";
     setSlow(isSlow);
   }, []);
 

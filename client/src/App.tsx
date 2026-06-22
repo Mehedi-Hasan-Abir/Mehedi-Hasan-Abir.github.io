@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackToTop } from "@/components/BackToTop";
 import { CursorFollower } from "@/components/CursorFollower";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ConnectionProvider, useConnection } from "@/contexts/ConnectionContext";
 import NotFound from "@/pages/not-found";
@@ -29,6 +30,7 @@ function AppContent() {
   const { canLoadHeavy } = useConnection();
   return (
     <>
+      <ScrollProgress />
       <Toaster />
       {canLoadHeavy && <CursorFollower />}
       <BackToTop />

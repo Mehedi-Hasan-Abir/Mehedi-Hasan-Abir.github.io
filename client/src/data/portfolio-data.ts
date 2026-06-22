@@ -1,31 +1,65 @@
 // Static portfolio data for GitHub Pages deployment
+export const educationData = [
+  { institution: "Ahsanullah University of Science and Technology (AUST)", degree: "Bachelor of Science in Computer Science & Engineering", period: "Apr 2016 – Jan 2021" },
+  { institution: "Hermann Gmeiner School, Mirpur", degree: "Higher Secondary Certificate (HSC)", period: "2013 – 2015" },
+  { institution: "Mirpur Bangla School & College", degree: "Secondary School Certificate (SSC)", period: "2003 – 2013" }
+];
+
+export const researchData = [
+  { title: "Bengali Intent Classification with Generative Adversarial BERT", authors: "Mehedi Hasan (First Author)", venue: "IEEE Xplore", year: "2023", link: "https://github.com/Mehedi-Hasan-Abir" },
+  { title: "Design of an Arrhythmia Classification Algorithm Using 2-D Convolutional Neural Network", authors: "Mehedi Hasan (First Author)", venue: "Undergraduate Thesis, AUST", year: "2021", link: "https://github.com/Mehedi-Hasan-Abir" }
+];
+
+export const interestsData = [
+  { icon: "\u26BD", title: "Football", desc: "I love watching and playing football whenever I can" },
+  { icon: "\uD83C\uDFAC", title: "Cinema & Series", desc: "A true cinefile who watches movies and series religiously" },
+  { icon: "\uD83D\uDCF8", title: "Photography", desc: "Passionate about art, especially photography and visual storytelling" },
+  { icon: "\u2708\uFE0F", title: "Travel", desc: "Always up for exploring new places and cultures" },
+  { icon: "\uD83C\uDFC6", title: "All Sports", desc: "Tennis, cricket, basketball, table tennis - I watch them all" },
+  { icon: "\uD83C\uDFB5", title: "Music", desc: "Music is a big part of my life and creative process" }
+];
+
+export const heroPhrases = [
+  "Building production-grade LLM systems",
+  "Designing resilient AI pipelines",
+  "Turning complex documents into useful data",
+  "Shipping fast interfaces with measurable impact",
+];
+
 export const portfolioData = {
   personalInfo: {
     id: 1,
     name: "Mehedi Hasan",
     role: "AI/ML Engineer",
-    bio: "I believe that great AI shouldn't just be powerful; it should be useful. I’m passionate about building tools that save people time and make businesses smarter.",
+    bio: "I believe that great AI shouldn't just be powerful; it should be useful. I'm passionate about building tools that save people time and make businesses smarter.",
     email: "abir.aust.102@gmail.com",
     phone: "(+880) 1521323549",
     github: "https://github.com/Mehedi-Hasan-Abir",
     linkedin: "https://linkedin.com/in/mehedihasan102",
     location: "Dhaka, Bangladesh",
     avatarUrl: "/images/profile_re.webp",
-    resumeUrl: "https://drive.google.com/file/d/14TMLD1N1dBliUo_6KvHrrSxjoAnI9bW1/view?usp=sharing",
+    resumeUrl: "https://drive.google.com/file/d/1D3XEr6KhoJV9eu38J3p6DT6bGXLFHKxm/view?usp=sharing",
     facebook: "https://www.facebook.com/mehedihasan.abir.7/",
     instagram: "https://www.instagram.com/___abracadabra_____/",
+    medium: "https://medium.com/@mhabir102",
   },
   experiences: [
     {
       id: 1,
-      title: "Senior Software Engineer",
+      title: "Senior Software Engineer (AI/ML)",
       company: "Technonext",
       period: "Jun 2025 – Present",
       description: [
-        "Working on Ticket Parsing for airline/passenger documents with structured field extraction",
-        "Built local LLM-powered parsing pipeline using vLLM for high-throughput inference",
-        "Designed heuristic validation layer to reduce hallucinations and ensure schema-correct extraction",
-        "Tech: vLLM, Local LLM, RAG, Python, FastAPI",
+        "Food Delivery App — Built gRPC-based cuisine prediction microservice using Sentence Transformers + FAISS vector search; achieved 100 RPS on 2 vCPU with ONNX inference optimization and Redis-powered personalization",
+        "Tech: gRPC, Sentence Transformers, FAISS, PostgreSQL, Redis, ONNX",
+        "E-commerce — End-to-end visual product search with CLIP embeddings, FAISS retrieval, Elasticsearch ranking, and Kafka batch processing; model optimization via ONNX and OpenVINO",
+        "Tech: CLIP, FAISS, Elasticsearch, Kafka, ONNX, OpenVINO",
+        "Passport MRZ Scanner — Full ML pipeline with real-time ONNX inference, Redis Streams, custom async scheduler (Python/Golang) with micro-batching, and CPU-isolated multiprocessing worker pool",
+        "Tech: ONNX, Redis Streams, Python, Golang, Multiprocessing",
+        "Agentic AI Chatbot — LangGraph multi-step orchestration with vLLM (Gemma 12B/LLaMA 3 8B), hybrid RAG (Qdrant + Elasticsearch), BGE reranking, FastAPI + gRPC backends, LangSmith + Prometheus observability",
+        "Tech: LangGraph, vLLM, Qdrant, Elasticsearch, FastAPI, gRPC, LangSmith, Prometheus",
+        "Infrastructure — Docker, Kubernetes, CI/CD (GitHub Actions), Prometheus + Grafana monitoring across all production services",
+        "Tech: Docker, Kubernetes, GitHub Actions, Prometheus, Grafana",
       ],
     },
     {
@@ -129,10 +163,11 @@ export const portfolioData = {
       items: [
         "Python",
         "JavaScript",
+        "TypeScript",
         "Node.js",
+        "Golang",
         "C#",
         "Java",
-        "TypeScript",
       ],
     },
     {
@@ -141,54 +176,78 @@ export const portfolioData = {
       items: [
         "PyTorch",
         "TensorFlow",
-        "Transformers",
+        "HuggingFace Transformers",
+        "ONNX Runtime",
+        "OpenVINO",
         "YOLOv7",
         "Mask R-CNN",
         "LayoutLM",
-        "ONNX",
       ],
     },
     {
       id: 3,
-      category: "LLMs & NLP",
+      category: "LLMs & Agentic AI",
       items: [
-        "BERT",
-        "RoBERTa",
-        "LLM Fine-tuning",
-        "LoRA/PEFT",
-        "RAG",
+        "LangGraph",
+        "vLLM",
         "LangChain",
-        "ChromaDB",
+        "RAG (Retrieval-Augmented Generation)",
+        "BGE / E5 Embeddings",
+        "Reranking",
+        "LoRA / PEFT",
+        "DPO",
+        "LLaMA 3",
+        "Gemma",
+        "Mistral",
       ],
     },
     {
       id: 4,
-      category: "Backend & APIs",
+      category: "Vector & Search",
       items: [
-        "FastAPI",
-        "Express.js",
-        "REST API",
-        "Docker",
-        "CI/CD",
+        "Qdrant",
+        "FAISS",
+        "Elasticsearch",
+        "ChromaDB",
+        "Hybrid Search (BM25 + Vector)",
       ],
     },
     {
       id: 5,
-      category: "Frontend",
+      category: "Backend & Distributed Systems",
       items: [
-        "React",
-        "Material-UI",
-        "TailwindCSS",
-        "Vite",
+        "FastAPI",
+        "gRPC",
+        "Kafka",
+        "Redis Streams",
+        "Microservices",
+        "Asyncio",
+        "PostgreSQL",
+        "MySQL",
       ],
     },
     {
       id: 6,
-      category: "Cloud & DevOps",
+      category: "Frontend",
       items: [
-        "AWS (EC2, S3, Lambda, ECR)",
+        "React",
+        "TypeScript",
+        "TailwindCSS",
+        "Vite",
+        "Material-UI",
+      ],
+    },
+    {
+      id: 7,
+      category: "DevOps & Cloud",
+      items: [
+        "Kubernetes",
         "Docker",
-        "Elasticsearch",
+        "AWS (EC2, ECS, S3, Lambda, ECR)",
+        "Prometheus",
+        "Grafana",
+        "OpenTelemetry",
+        "CI/CD (GitHub Actions)",
         "CloudWatch",
       ],
     },
@@ -206,13 +265,43 @@ export const portfolioData = {
     },
     {
       id: 2,
-      title: "3-Part Series: LLM Latency in Production (Part 1)",
+      title: "LLM Latency in Production (Part 1) — Model-Level Optimization",
       description: "A tech lead's playbook for reducing LLM inference latency in production. Part 1 focuses on model-level optimization: GPU bottlenecks, memory bandwidth limits, quantization (INT8/INT4), Flash Attention, and vLLM internals.",
       thumbnail: "/images/blog-llm-latency-production.jpg",
       externalLink: "https://mhabir.substack.com/p/3-part-series-llm-latency-in-production",
       platform: "Substack",
       date: "2026-01-07",
       tags: ["LLM", "Inference", "Latency", "GPU", "Quantization", "vLLM", "Production Systems"]
-    }
+    },
+    {
+      id: 3,
+      title: "How to Use, Optimize and Serve an LLM in Your Production System",
+      description: "An end-to-end guide covering the full lifecycle of deploying LLMs in production: model selection, quantization and pruning strategies, inference optimization, and high-performance serving with vLLM and ONNX Runtime.",
+      thumbnail: "/images/blog-llm-latency-production.jpg",
+      externalLink: "https://medium.com/towards-artificial-intelligence/how-to-use-optimize-and-serve-an-llm-in-your-production-system-25fd40f63b6a",
+      platform: "Medium",
+      date: "2026-06-20",
+      tags: ["LLM", "Production Systems", "Optimization", "Inference", "MLOps", "vLLM", "ONNX"]
+    },
+    {
+      id: 4,
+      title: "LLM Latency in Production (Part 2) — Serve-Level Speed",
+      description: "Part 2 of the LLM latency series. Covers serve-level architecture: request batching, async queuing, load balancing, and system design patterns that stabilize P95/P99 tail latency in production LLM services.",
+      thumbnail: "/images/blog-llm-latency-production.jpg",
+      externalLink: "https://medium.com/towards-artificial-intelligence/part-2-serve-level-speed-system-design-that-stabilizes-p95-p99-61543d856588",
+      platform: "Medium",
+      date: "2026-06-20",
+      tags: ["LLM", "Latency", "P95", "P99", "System Design", "Inference Serving", "Production Systems"]
+    },
+    {
+      id: 5,
+      title: "LLM Latency in Production (Part 3) — Engine-Level Runtime Selection",
+      description: "Part 3 of the LLM latency series. A deep dive into inference engine selection — vLLM, TensorRT-LLM, ONNX Runtime — and how choosing the right runtime gives you throughput, latency, and hardware efficiency for free.",
+      thumbnail: "/images/blog-llm-latency-production.jpg",
+      externalLink: "https://medium.com/towards-artificial-intelligence/part-3-implementation-engine-level-choosing-the-runtime-that-gives-you-these-for-free-b0e9081205b0",
+      platform: "Medium",
+      date: "2026-06-20",
+      tags: ["LLM", "Runtime", "vLLM", "TensorRT", "ONNX", "Inference Engine", "Production Systems"]
+    },
   ],
 };

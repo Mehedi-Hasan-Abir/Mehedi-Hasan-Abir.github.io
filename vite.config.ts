@@ -30,12 +30,23 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // Polyfill modulepreload for iOS Safari/Chrome Mobile iOS which does not
+    // reliably support rel="modulepreload" — prevents "Importing a module
+    // script failed" TypeError on iPhone.
+    modulePreload: {
+      polyfill: true,
+    },
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          ui: ['@radix-ui/react-slot', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
-          animations: ['framer-motion'],
+          "react-core": ["react", "react-dom"],
+          "framer": ["framer-motion"],
+          "radix": [
+            "@radix-ui/react-slot",
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-tooltip",
+          ],
         },
       },
     },

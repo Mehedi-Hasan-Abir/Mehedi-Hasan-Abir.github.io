@@ -45,19 +45,18 @@ export function initSentry() {
 
 // Helper function to capture exceptions with context
 export function captureError(error: Error, context?: Record<string, any>) {
-  if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
+  if (import.meta.env.PROD) {
     Sentry.captureException(error, {
       tags: context,
     });
   } else {
-    // Development: log to console
     console.error("Error captured:", error, context);
   }
 }
 
 // Helper function to capture message
 export function captureMessage(message: string, level: "info" | "warning" | "error" = "info") {
-  if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
+  if (import.meta.env.PROD) {
     Sentry.captureMessage(message, level);
   } else {
     console.log(`[${level.toUpperCase()}] ${message}`);

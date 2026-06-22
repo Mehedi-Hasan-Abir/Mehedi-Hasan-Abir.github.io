@@ -18,16 +18,23 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
       conn &&
       (conn.saveData === true ||
         conn.effectiveType === "slow-2g" ||
-        conn.effectiveType === "2g" ||
-        conn.effectiveType === "slow-3g");
+        conn.effectiveType === "2g");
     setSlowConnection(!!slow);
 
     const enableHeavy = () => startTransition(() => setCanLoadHeavy(true));
 
     if (!slow) {
-      // Fast connection: enable heavy content after paint (avoids suspend on first paint)
-      enableHeavy();
-      return;
+      // Fast connection: wait for two animation frames so the first content paint
+      // completes before NeuralMesh canvas + CursorFollower mount (avoids burst jank).
+      let raf1: number;
+      let raf2: number;
+      raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(enableHeavy);
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      };
     }
     const useIdle = typeof window !== "undefined" && "requestIdleCallback" in window;
     const idleId = useIdle
