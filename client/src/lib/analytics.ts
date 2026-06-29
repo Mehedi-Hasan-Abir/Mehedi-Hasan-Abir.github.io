@@ -1,7 +1,6 @@
 // Google Analytics 4 integration
 export const initAnalytics = () => {
-  // Your Google Analytics ID
-  const gaId = "G-XNZ049R7NF";
+  const gaId = import.meta.env.VITE_GOOGLE_ANALYTICS_ID ?? "";
 
   if (import.meta.env.PROD) {
     // Load Google Analytics script

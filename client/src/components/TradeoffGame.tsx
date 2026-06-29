@@ -85,11 +85,12 @@ export function TradeoffGame() {
 
     // Update progress
     addXP(xpEarned);
+    const nextSessionCount = progress.sessionCount + 1;
     incrementSession();
     updateLastSession({ xp: xpEarned, style, totals });
 
-    // Check for new badges
-    const newBadges = checkBadges();
+    // Check for new badges using next session count (state not yet flushed)
+    const newBadges = checkBadges(nextSessionCount);
     newBadges.forEach(badge => addBadge(badge));
 
     // Track completion

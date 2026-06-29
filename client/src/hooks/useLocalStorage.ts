@@ -124,9 +124,9 @@ export function useGameProgress() {
     }));
   };
 
-  const checkBadges = (): string[] => {
+  const checkBadges = (overrideSessionCount?: number): string[] => {
     const newBadges: string[] = [];
-    const sessionCount = progress.sessionCount;
+    const sessionCount = overrideSessionCount ?? progress.sessionCount;
 
     if (sessionCount >= 1 && !progress.badges.includes('Bronze')) {
       newBadges.push('Bronze');

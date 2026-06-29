@@ -32,14 +32,16 @@ function ProjectRow({ index, style, data }: { index: number; style: CSSPropertie
 
 export function VirtualizedProjectList({ projects, height }: VirtualizedProjectListProps) {
   return (
-    <div style={{ height, width: '100%' }}>
-      <List<{ data: Project[] }>
-        rowCount={projects.length}
-        rowHeight={100}
-        rowComponent={ProjectRow}
-        rowProps={{ data: projects }}
-        overscanCount={2}
-      />
-    </div>
+    <List<Project[]>
+      height={height}
+      itemCount={projects.length}
+      itemSize={100}
+      itemData={projects}
+      overscanCount={2}
+    >
+      {({ index, style, data }) => (
+        <ProjectRow index={index} style={style} data={data} />
+      )}
+    </List>
   );
 }

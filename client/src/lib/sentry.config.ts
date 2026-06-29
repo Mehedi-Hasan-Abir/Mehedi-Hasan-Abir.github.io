@@ -1,8 +1,7 @@
 import * as Sentry from "@sentry/react";
 
 export function initSentry() {
-  // Your Sentry DSN
-  const sentryDSN = "https://f106d2ca34250ebfe63aea448a216933@o4510682863239168.ingest.de.sentry.io/4510682869858384";
+  const sentryDSN = import.meta.env.VITE_SENTRY_DSN ?? "";
   
   // Initialize Sentry in production
   if (import.meta.env.PROD) {

@@ -9,6 +9,7 @@ import { CursorFollower } from "@/components/CursorFollower";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ConnectionProvider, useConnection } from "@/contexts/ConnectionContext";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 
@@ -16,13 +17,19 @@ const BlogPage = lazy(() => import("@/pages/BlogPage"));
 
 function Router() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-background" />}>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/blog" component={BlogPage} />
-        <Route component={NotFound} />
-      </Switch>
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<div className="min-h-screen bg-background" />}>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/blog">
+            <ErrorBoundary>
+              <BlogPage />
+            </ErrorBoundary>
+          </Route>
+          <Route component={NotFound} />
+        </Switch>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
