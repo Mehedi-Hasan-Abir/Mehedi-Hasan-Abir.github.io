@@ -17,6 +17,9 @@ attached_assets/
 client/dist/
 
 # Environment
+.env
+.env.*
+!.env.example
 .env.local
 .env.*.local
 

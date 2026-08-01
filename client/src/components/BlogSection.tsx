@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { useBlogs } from "@/hooks/use-portfolio";
-import { Link as ScrollLink } from "react-scroll";
 import { ExternalLink, Calendar, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "wouter";
 
 interface BlogPost {
   id: number;
@@ -178,11 +176,12 @@ export function BlogSection() {
           transition={{ delay: 0.3 }}
           className="text-center mt-12"
         >
-          <Link to="/blog">
-            <button className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all hover:-translate-y-1 shadow-lg shadow-primary/25 flex items-center gap-2 mx-auto">
-              View All Blog Posts <ExternalLink className="w-4 h-4" />
-            </button>
-          </Link>
+          <a
+            href="/blog/"
+            className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all hover:-translate-y-1 shadow-lg shadow-primary/25 inline-flex items-center gap-2 mx-auto"
+          >
+            View All Blog Posts <ExternalLink className="w-4 h-4" />
+          </a>
         </motion.div>
       </div>
     </section>

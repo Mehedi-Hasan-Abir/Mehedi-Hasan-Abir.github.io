@@ -26,12 +26,14 @@ export function Navbar() {
 
   return (
     <nav
+      aria-label="Primary navigation"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "bg-background/80 backdrop-blur-md border-b border-border/40 h-16" : "bg-transparent h-20"
       }`}
     >
       <div className="container mx-auto px-4 h-full flex items-center justify-between">
         <ScrollLink
+          {...{ href: "#hero" }}
           to="hero"
           smooth={true}
           duration={500}
@@ -44,6 +46,7 @@ export function Navbar() {
         <div className="hidden md:flex space-x-8">
           {navItems.map((item) => (
             <ScrollLink
+              {...{ href: `#${item.to}` }}
               key={item.name}
               to={item.to}
               spy={true}
@@ -60,8 +63,12 @@ export function Navbar() {
 
         {/* Mobile Menu Toggle */}
         <button
+          type="button"
           className="md:hidden text-foreground p-2"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen((open) => !open)}
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-navigation"
         >
           {isOpen ? <X /> : <Menu />}
         </button>
@@ -71,6 +78,7 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -79,6 +87,7 @@ export function Navbar() {
             <div className="flex flex-col p-4 space-y-4">
               {navItems.map((item) => (
                 <ScrollLink
+                  {...{ href: `#${item.to}` }}
                   key={item.name}
                   to={item.to}
                   smooth={true}

@@ -1,63 +1,59 @@
 import * as Sentry from "@sentry/react";
 
-export function initSentry() {
-  const sentryDSN = import.meta.env.VITE_SENTRY_DSN ?? "";
-  
-  // Initialize Sentry in production
-  if (import.meta.env.PROD) {
-    Sentry.init({
-      dsn: sentryDSN,
-      environment: import.meta.env.MODE,
-      release: import.meta.env.VITE_APP_VERSION || "unknown",
-      
-      // Performance Monitoring
-      tracesSampleRate: 0.1, // 10% of transactions
-      
-      // Error Sampling
-      sampleRate: 1.0, // 100% of errors
-      
-      // Additional configuration
-      attachStacktrace: true,
-      sendDefaultPii: false, // Don't send personal data
-      
-      // Before sending event, scrub sensitive data
-      beforeSend(event) {
-        // Remove user IP if present
-        if (event.user?.ip_address) {
-          delete event.user.ip_address;
-        }
-        
-        // Remove query parameters from URLs
-        if (event.request?.url) {
-          event.request.url = event.request.url.split('?')[0];
-        }
-        
-        return event;
-      },
-    });
+let sentryInitialized = false;
 
-    console.log("✅ Sentry initialized for production monitoring");
-  } else {
-    console.log("⚠️ Sentry not initialized (development mode)");
+export function initSentry(): boolean {
+  const sentryDsn = (import.meta.env.VITE_SENTRY_DSN ?? "").trim();
+
+  if (!import.meta.env.PROD) return false;
+
+  if (!sentryDsn) {
+    console.warn("Sentry disabled: VITE_SENTRY_DSN is not configured.");
+    return false;
   }
+
+  if (sentryInitialized) return true;
+
+  Sentry.init({
+    dsn: sentryDsn,
+    environment: import.meta.env.MODE,
+    release: import.meta.env.VITE_APP_VERSION || "unknown",
+    tracesSampleRate: 0.1,
+    sampleRate: 1.0,
+    attachStacktrace: true,
+    sendDefaultPii: false,
+    beforeSend(event) {
+      if (event.user?.ip_address) {
+        delete event.user.ip_address;
+      }
+
+      if (event.request?.url) {
+        event.request.url = event.request.url.split("?")[0];
+      }
+
+      return event;
+    },
+  });
+
+  sentryInitialized = true;
+  return true;
 }
 
-// Helper function to capture exceptions with context
-export function captureError(error: Error, context?: Record<string, any>) {
-  if (import.meta.env.PROD) {
-    Sentry.captureException(error, {
-      tags: context,
-    });
-  } else {
+export function captureError(error: Error, context?: Record<string, unknown>) {
+  if (sentryInitialized) {
+    Sentry.captureException(error, { extra: context });
+  } else if (!import.meta.env.PROD) {
     console.error("Error captured:", error, context);
   }
 }
 
-// Helper function to capture message
-export function captureMessage(message: string, level: "info" | "warning" | "error" = "info") {
-  if (import.meta.env.PROD) {
+export function captureMessage(
+  message: string,
+  level: "info" | "warning" | "error" = "info",
+) {
+  if (sentryInitialized) {
     Sentry.captureMessage(message, level);
-  } else {
+  } else if (!import.meta.env.PROD) {
     console.log(`[${level.toUpperCase()}] ${message}`);
   }
 }

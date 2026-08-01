@@ -44,6 +44,7 @@ export default function Home() {
       {canLoadHeavy && <NeuralMeshBackground />}
       <div className="relative z-10">
       <Navbar />
+      <main>
 
       {/* Hero Section */}
       <section id="hero" className="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
@@ -72,14 +73,14 @@ export default function Home() {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <ScrollLink to="projects" smooth={true} offset={-100}>
-                <motion.button
-                  whileHover={{ y: -4, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-8 py-4 bg-primary text-slate-950 rounded-lg font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 flex items-center gap-2"
-                >
-                  View My Work <ArrowRight className="w-4 h-4" />
-                </motion.button>
+              <ScrollLink
+                {...{ href: "#projects" }}
+                to="projects"
+                smooth={true}
+                offset={-100}
+                className="px-8 py-4 bg-primary text-slate-950 rounded-lg font-semibold hover:bg-primary/90 hover:-translate-y-1 transition-all shadow-lg shadow-primary/25 flex items-center gap-2 cursor-pointer"
+              >
+                View My Work <ArrowRight className="w-4 h-4" />
               </ScrollLink>
               
               {personalInfo.resumeUrl && (
@@ -132,7 +133,14 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
-          <ScrollLink to="about" smooth={true} offset={-100} className="cursor-pointer text-muted-foreground hover:text-primary transition-colors">
+          <ScrollLink
+            {...{ href: "#about" }}
+            to="about"
+            smooth={true}
+            offset={-100}
+            aria-label="Scroll to About section"
+            className="cursor-pointer text-muted-foreground hover:text-primary transition-colors"
+          >
             <ArrowRight className="w-6 h-6 rotate-90" />
           </ScrollLink>
         </div>
@@ -389,6 +397,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="py-8 bg-background border-t border-border/50">
