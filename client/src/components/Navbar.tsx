@@ -6,7 +6,6 @@ import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
 import { ThemeControls } from "@/components/ThemeProvider";
 
 const navItems = [
-  { name: "About", to: "about" },
   { name: "Experience", to: "experience" },
   { name: "Projects", to: "projects" },
   { name: "Skills", to: "skills" },

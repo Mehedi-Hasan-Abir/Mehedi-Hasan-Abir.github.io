@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useConnection } from "@/contexts/ConnectionContext";
 
 export interface SkillGroup {
@@ -50,9 +50,10 @@ function columnHeight(skills: SkillGroup[]): number {
 
 export function SkillsMindMap({ skills }: SkillsMindMapProps) {
   const { canLoadHeavy } = useConnection();
-  const reduce = useReducedMotion();
   const [hovered, setHovered] = useState<number | null>(null);
-  const useMap = canLoadHeavy && !reduce;
+  // Only true low-bandwidth users (2G / saveData) get the text fallback;
+  // reduced-motion users still get the map (owner requirement).
+  const useMap = canLoadHeavy;
 
   if (!useMap) {
     return <SkillFallback skills={skills} />;
@@ -85,7 +86,7 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
               strokeWidth={active ? 1.8 : 1}
               strokeLinecap="round"
               style={{ opacity: active ? 0.75 : 0.15, transition: "opacity .25s ease" }}
-              initial={reduce ? false : { pathLength: 0 }}
+              initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -95,7 +96,7 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
 
         {/* Root node */}
         <motion.g
-          initial={reduce ? false : { opacity: 0, scale: 0.85 }}
+          initial={{ opacity: 0, scale: 0.85 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
@@ -144,7 +145,7 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
               key={group.id}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
-              initial={reduce ? false : { opacity: 0, x: 24 }}
+              initial={{ opacity: 0, x: 24 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: 0.25 + i * 0.09, ease: [0.16, 1, 0.3, 1] }}

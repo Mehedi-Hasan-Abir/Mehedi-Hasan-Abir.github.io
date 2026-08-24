@@ -9,16 +9,15 @@ interface SectionHeadingProps {
 
 // Fixed numbering per section keeps order stable across renders/pages.
 const sectionNumbers: Record<string, number> = {
-  "about-me": 1,
-  experience: 2,
-  projects: 3,
-  skills: 4,
-  blog: 5,
-  education: 6,
-  research: 7,
-  "beyond-code": 8,
-  "fun-games": 9,
-  "get-in-touch": 10,
+  experience: 1,
+  projects: 2,
+  skills: 3,
+  blog: 4,
+  education: 5,
+  research: 6,
+  "beyond-code": 7,
+  "fun-games": 8,
+  "get-in-touch": 9,
 };
 
 export function SectionHeading({ title, subtitle, number }: SectionHeadingProps) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface WordPopTickerProps {
   phrases: string[];
@@ -10,30 +10,21 @@ const HOLD_MS = 2100;
 
 /**
  * Hero phrases pop in word by word, hold, then swap to the next phrase.
- * Collapses to a static first phrase under prefers-reduced-motion.
+ * Always animates (site-owner requirement); loops indefinitely.
  */
 export function WordPopTicker({ phrases }: WordPopTickerProps) {
   const [index, setIndex] = useState(0);
-  const reduce = useReducedMotion();
 
   const words = phrases[index]?.split(" ") ?? [];
 
   useEffect(() => {
-    if (reduce || phrases.length <= 1) return;
+    if (phrases.length <= 1) return;
     const hold = HOLD_MS + words.length * WORD_STAGGER * 1000;
     const t = setTimeout(() => {
       setIndex((i) => (i + 1) % phrases.length);
     }, hold);
     return () => clearTimeout(t);
-  }, [index, phrases, reduce, words.length]);
-
-  if (reduce) {
-    return (
-      <p className="text-lg md:text-xl font-semibold text-foreground min-h-[2rem]">
-        {phrases[0]}
-      </p>
-    );
-  }
+  }, [index, phrases, words.length]);
 
   return (
     <div

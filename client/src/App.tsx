@@ -63,7 +63,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ConnectionProvider>
         <TooltipProvider>
-          <MotionConfig reducedMotion="user">
+          {/* Animations always run - explicit site-owner requirement. */}
+          <MotionConfig>
             <AppContent />
           </MotionConfig>
         </TooltipProvider>

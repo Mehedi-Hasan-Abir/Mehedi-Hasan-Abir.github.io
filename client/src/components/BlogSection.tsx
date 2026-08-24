@@ -63,7 +63,7 @@ export function BlogSection() {
           className="mb-12 md:mb-16"
         >
           <div className="flex items-baseline gap-4 md:gap-5">
-            <span className="ghost-num text-sm md:text-base shrink-0" aria-hidden="true">05</span>
+            <span className="ghost-num text-sm md:text-base shrink-0" aria-hidden="true">04</span>
             <h2 className="display-lg">Writing</h2>
           </div>
           <p className="mt-3 text-muted-foreground max-w-2xl">

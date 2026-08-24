@@ -4,9 +4,6 @@ import {
   ArrowDown,
   ArrowUpRight,
   Download,
-  Terminal,
-  Globe,
-  Cpu,
 } from "lucide-react";
 import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
 import { Link as ScrollLink } from "react-scroll";
@@ -148,58 +145,15 @@ export default function Home() {
           </div>
 
           <ScrollLink
-            {...{ href: "#about" }}
-            to="about"
+            {...{ href: "#experience" }}
+            to="experience"
             smooth={true}
             offset={-80}
-            aria-label="Scroll to About section"
+            aria-label="Scroll to Experience section"
             className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:block text-muted-foreground hover:text-accent transition-colors cursor-pointer"
           >
             <ArrowDown className="w-5 h-5 animate-bounce" />
           </ScrollLink>
-        </section>
-
-        {/* ============ ABOUT ============ */}
-        <section id="about" className="rule-t py-20 md:py-28">
-          <SectionHeading title="About Me" subtitle="Getting to know the person behind the code" />
-
-          <div className="grid md:grid-cols-5 gap-12">
-            <motion.div
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease }}
-              className="md:col-span-3 space-y-5 text-muted-foreground leading-relaxed text-base md:text-lg"
-            >
-              <p>
-                I&rsquo;m a Software Engineer based in <span className="text-foreground font-medium">{personalInfo.location}</span> who believes that great technology is built at the intersection of rigorous logic and human empathy.
-                I specialize in teaching computers how to read, think, and solve problems. With a deep focus on LLMs and Document AI, I build production-ready systems that transform how businesses handle information.
-              </p>
-              <p>
-                My philosophy is simple: Engineering is most powerful when it&rsquo;s driven by curiosity and built with a sense of purpose.
-              </p>
-              <p>
-                When I&rsquo;m away from the terminal, I&rsquo;m usually exploring the latest in tech research or enjoying the vibrant energy of Dhaka with friends.
-              </p>
-            </motion.div>
-
-            <div className="md:col-span-2 grid grid-cols-2 gap-3">
-              {[
-                { Icon: Terminal, title: "Backend", sub: "Node.js, Python", wide: false },
-                { Icon: Globe, title: "Web", sub: "React, Next.js", wide: false },
-                { Icon: Cpu, title: "AI Engineering", sub: "LLMs, PyTorch, TensorFlow", wide: true },
-              ].map(({ Icon, title, sub, wide }) => (
-                <div
-                  key={title}
-                  className={`border border-border bg-card p-5 flex flex-col items-center justify-center text-center hover:border-primary/50 transition-colors ${wide ? "col-span-2" : ""}`}
-                >
-                  <Icon className="w-6 h-6 text-accent mb-2.5" />
-                  <span className="font-bold text-sm">{title}</span>
-                  <span className="text-xs text-muted-foreground mt-1">{sub}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </section>
 
         {/* ============ EXPERIENCE ============ */}
