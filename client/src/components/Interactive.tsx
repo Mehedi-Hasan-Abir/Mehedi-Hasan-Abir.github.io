@@ -2,17 +2,17 @@ import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "re
 import { animate, stagger } from "animejs";
 import { motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
 
-/** Scroll-velocity skew on page content (subtle on mobile, stronger on desktop). */
+/** Scroll-velocity skew on page content (noticeable on mobile, stronger on desktop). */
 export function ScrollSkew({ children }: { children: ReactNode }) {
-  const [angle, setAngle] = useState(0.9);
+  const [angle, setAngle] = useState(1.5);
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
-  const smooth = useSpring(velocity, { stiffness: 220, damping: 50, mass: 0.6 });
-  const skewY = useTransform(smooth, [-2600, 0, 2600], [`${angle}deg`, "0deg", `-${angle}deg`], { clamp: true });
+  const smooth = useSpring(velocity, { stiffness: 260, damping: 55, mass: 0.5 });
+  const skewY = useTransform(smooth, [-3000, 0, 3000], [`${angle}deg`, "0deg", `-${angle}deg`], { clamp: true });
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setAngle(mq.matches ? 1.2 : 0.9);
+    const update = () => setAngle(mq.matches ? 1.2 : 1.5);
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);

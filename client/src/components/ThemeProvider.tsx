@@ -102,39 +102,53 @@ export function useTheme() {
   return ctx;
 }
 
-/** Compact control cluster for the topbar: mode toggle + accent picker. */
+/** Compact control cluster: mode toggle + accent picker. */
 export function ThemeControls() {
   const { isDark, currentTheme, toggleDark, changeTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative flex items-center gap-1">
+      {/* Mobile: fixed bottom sheet; Desktop: anchored popover */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 6, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.96 }}
-            transition={{ duration: 0.16 }}
-            role="group"
-            aria-label="Accent color"
-            className="absolute right-0 top-full mt-2 z-50 flex gap-2 p-3 bg-card rounded-lg border border-border shadow-xl"
-          >
-            {(Object.keys(ACCENTS) as AccentKey[]).map((key) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => { changeTheme(key); setIsOpen(false); }}
-                className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${
-                  currentTheme === key ? "ring-2 ring-offset-2 ring-offset-card ring-primary" : ""
-                }`}
-                style={{ backgroundColor: `hsl(${isDark ? ACCENTS[key].dark : ACCENTS[key].light})` }}
-                title={ACCENTS[key].name}
-                aria-label={ACCENTS[key].name}
-                aria-pressed={currentTheme === key}
-              />
-            ))}
-          </motion.div>
+          <>
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="fixed inset-0 z-[65] bg-background/50 backdrop-blur-[2px] md:hidden"
+              onClick={() => setIsOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.div
+              key="picker"
+              initial={{ opacity: 0, y: 14, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 14, scale: 0.96 }}
+              transition={{ duration: 0.16 }}
+              role="group"
+              aria-label="Accent color"
+              className="fixed bottom-24 left-0 right-0 z-[70] mx-auto w-fit flex gap-3 p-5 bg-card rounded-2xl border border-border shadow-2xl md:absolute md:bottom-auto md:left-auto md:right-0 md:top-full md:mt-2 md:w-auto md:gap-2 md:p-3 md:rounded-lg md:shadow-xl"
+            >
+              {(Object.keys(ACCENTS) as AccentKey[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => { changeTheme(key); setIsOpen(false); }}
+                  className={`w-9 h-9 md:w-7 md:h-7 rounded-full transition-transform hover:scale-110 active:scale-95 ${
+                    currentTheme === key ? "ring-2 ring-offset-2 ring-offset-card ring-primary" : ""
+                  }`}
+                  style={{ backgroundColor: `hsl(${isDark ? ACCENTS[key].dark : ACCENTS[key].light})` }}
+                  title={ACCENTS[key].name}
+                  aria-label={ACCENTS[key].name}
+                  aria-pressed={currentTheme === key}
+                />
+              ))}
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
