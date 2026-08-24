@@ -10,3 +10,8 @@ interface NetworkInformation {
 interface Navigator {
   readonly connection?: NetworkInformation;
 }
+
+interface Window {
+  dataLayer?: unknown[][];
+  gtag?: (...args: unknown[]) => void;
+}

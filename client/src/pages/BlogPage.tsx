@@ -3,13 +3,14 @@ import { useBlogs } from "@/hooks/use-portfolio";
 import { ExternalLink, Calendar, Tag, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
 
 interface BlogPost {
   id: number;
   title: string;
   description: string;
   thumbnail: string;
+  thumbnailWidth: number;
+  thumbnailHeight: number;
   externalLink: string;
   platform: string;
   date: string;
@@ -21,7 +22,7 @@ export default function BlogPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-24">
           <div className="text-center mb-16">
             <h1 className="text-5xl md:text-6xl font-bold mb-4">Blog</h1>
@@ -42,29 +43,29 @@ export default function BlogPage() {
             ))}
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (!blogs || blogs.length === 0) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <main className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">No Blog Posts Yet</h1>
           <p className="text-muted-foreground mb-8">Check back soon for new content!</p>
-          <Link href="/">
-            <Button variant="outline" className="flex items-center gap-2">
+          <Button asChild variant="outline" className="flex items-center gap-2">
+            <a href="/">
               <ArrowLeft className="w-4 h-4" />
               Back to Home
-            </Button>
-          </Link>
+            </a>
+          </Button>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="py-24 md:py-32 bg-gradient-to-b from-background to-secondary/20">
         <div className="container mx-auto px-4">
@@ -79,12 +80,12 @@ export default function BlogPage() {
               Sharing insights on AI, Machine Learning, and Technology. 
               Explore my thoughts on the latest developments and practical applications.
             </p>
-            <Link href="/">
-              <Button variant="outline" className="flex items-center gap-2">
+            <Button asChild variant="outline" className="flex items-center gap-2">
+              <a href="/">
                 <ArrowLeft className="w-4 h-4" />
                 Back to Home
-              </Button>
-            </Link>
+              </a>
+            </Button>
           </motion.div>
         </div>
       </section>
@@ -108,6 +109,10 @@ export default function BlogPage() {
                     <img
                       src={blog.thumbnail}
                       alt={blog.title}
+                      width={blog.thumbnailWidth}
+                      height={blog.thumbnailHeight}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
@@ -237,6 +242,6 @@ export default function BlogPage() {
           </motion.div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

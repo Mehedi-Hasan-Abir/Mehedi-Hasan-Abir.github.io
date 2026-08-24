@@ -26,6 +26,10 @@ export function NeuralMeshBackground({ intensity = 1 }: NeuralMeshBackgroundProp
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
     let animationId = 0;
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -147,18 +151,41 @@ export function NeuralMeshBackground({ intensity = 1 }: NeuralMeshBackgroundProp
       animationId = window.requestAnimationFrame(draw);
     };
 
-    draw();
+    const pauseAnimation = () => {
+      if (animationId !== 0) {
+        window.cancelAnimationFrame(animationId);
+        animationId = 0;
+      }
+    };
+
+    const resumeAnimation = () => {
+      if (animationId === 0 && !document.hidden) {
+        animationId = window.requestAnimationFrame(draw);
+      }
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        pauseAnimation();
+      } else {
+        resumeAnimation();
+      }
+    };
+
+    resumeAnimation();
 
     window.addEventListener("resize", resize);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerleave", onPointerLeave);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
-      window.cancelAnimationFrame(animationId);
+      pauseAnimation();
       observer.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerleave", onPointerLeave);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, [intensity]);
 

@@ -1,5 +1,5 @@
-import { List } from 'react-window';
-import type { CSSProperties } from 'react';
+import { List, type RowComponentProps } from "react-window";
+import type { CSSProperties } from "react";
 import type { Project } from '@shared/schema';
 
 interface VirtualizedProjectListProps {
@@ -7,8 +7,12 @@ interface VirtualizedProjectListProps {
   height: number;
 }
 
-function ProjectRow({ index, style, data }: { index: number; style: CSSProperties; data: Project[] }) {
-  const project = data[index];
+interface ProjectRowProps {
+  projects: Project[];
+}
+
+function ProjectRow({ index, style, projects }: RowComponentProps<ProjectRowProps>) {
+  const project = projects[index];
   
   return (
     <div style={style} className="p-4 border-b border-border/50 last:border-b-0">
@@ -32,16 +36,14 @@ function ProjectRow({ index, style, data }: { index: number; style: CSSPropertie
 
 export function VirtualizedProjectList({ projects, height }: VirtualizedProjectListProps) {
   return (
-    <List<Project[]>
-      height={height}
-      itemCount={projects.length}
-      itemSize={100}
-      itemData={projects}
+    <List<ProjectRowProps>
+      defaultHeight={height}
+      rowCount={projects.length}
+      rowHeight={100}
+      rowProps={{ projects }}
+      style={{ height } as CSSProperties}
+      rowComponent={ProjectRow}
       overscanCount={2}
-    >
-      {({ index, style, data }) => (
-        <ProjectRow index={index} style={style} data={data} />
-      )}
-    </List>
+    />
   );
 }

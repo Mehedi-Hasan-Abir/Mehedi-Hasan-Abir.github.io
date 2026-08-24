@@ -1,78 +1,92 @@
-// Google Analytics 4 integration
-export const initAnalytics = () => {
-  const gaId = import.meta.env.VITE_GOOGLE_ANALYTICS_ID ?? "";
+const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
+const gaId = (import.meta.env.VITE_GOOGLE_ANALYTICS_ID ?? "").trim();
+let analyticsInitialized = false;
 
-  if (import.meta.env.PROD) {
-    // Load Google Analytics script
-    const script = document.createElement('script');
+function isAnalyticsAvailable(): boolean {
+  return import.meta.env.PROD && GA_ID_PATTERN.test(gaId) && typeof window.gtag === "function";
+}
+
+export const initAnalytics = (): boolean => {
+  if (!import.meta.env.PROD) return false;
+
+  if (!GA_ID_PATTERN.test(gaId)) {
+    console.warn("Google Analytics disabled: VITE_GOOGLE_ANALYTICS_ID is missing or invalid.");
+    return false;
+  }
+
+  if (analyticsInitialized) return true;
+
+  window.dataLayer ??= [];
+  window.gtag ??= (...args: unknown[]) => {
+    window.dataLayer?.push(args);
+  };
+
+  const existingScript = document.querySelector<HTMLScriptElement>(
+    `script[data-google-analytics-id="${gaId}"]`,
+  );
+
+  if (!existingScript) {
+    const script = document.createElement("script");
     script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
     script.async = true;
+    script.dataset.googleAnalyticsId = gaId;
     document.head.appendChild(script);
-
-    // Initialize gtag
-    const gtagScript = document.createElement('script');
-    gtagScript.innerHTML = `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${gaId}');
-    `;
-    document.head.appendChild(gtagScript);
-
-    console.log("✅ Google Analytics initialized");
-  } else {
-    console.log("⚠️ Google Analytics not initialized (development mode)");
   }
+
+  window.gtag("js", new Date());
+  window.gtag("config", gaId, { send_page_view: false });
+  analyticsInitialized = true;
+  return true;
 };
 
-// Track custom events
-export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
-  if (import.meta.env.PROD && (window as any).gtag) {
-    (window as any).gtag('event', action, {
+export const trackEvent = (
+  action: string,
+  category: string,
+  label?: string,
+  value?: number,
+) => {
+  if (isAnalyticsAvailable()) {
+    window.gtag?.("event", action, {
       event_category: category,
       event_label: label,
-      value: value,
+      value,
     });
-  } else {
+  } else if (!import.meta.env.PROD) {
     console.log(`[Analytics] Event: ${action} | Category: ${category} | Label: ${label} | Value: ${value}`);
   }
 };
 
-// Track page views
 export const trackPageView = (path: string) => {
-  if (import.meta.env.PROD && (window as any).gtag) {
-    (window as any).gtag('config', import.meta.env.VITE_GOOGLE_ANALYTICS_ID, {
+  if (isAnalyticsAvailable()) {
+    window.gtag?.("event", "page_view", {
+      page_title: document.title,
+      page_location: new URL(path, window.location.origin).href,
       page_path: path,
     });
-  } else {
+  } else if (!import.meta.env.PROD) {
     console.log(`[Analytics] Page View: ${path}`);
   }
 };
 
-// Track timing
 export const trackTiming = (name: string, value: number, label?: string) => {
-  if (import.meta.env.PROD && (window as any).gtag) {
-    (window as any).gtag('event', 'timing_complete', {
-      name: name,
-      value: value,
-      event_category: 'Timing',
+  if (isAnalyticsAvailable()) {
+    window.gtag?.("event", "timing_complete", {
+      name,
+      value,
+      event_category: "Timing",
       event_label: label,
     });
-  } else {
+  } else if (!import.meta.env.PROD) {
     console.log(`[Analytics] Timing: ${name} | ${value}ms | ${label}`);
   }
 };
 
-/**
- * Trade-off Game Analytics
- */
-
 export function trackTradeoffGameView(): void {
-  trackEvent('tradeoff_game_view', 'Tradeoff Game', 'Game View');
+  trackEvent("tradeoff_game_view", "Tradeoff Game", "Game View");
 }
 
 export function trackTradeoffSessionStart(sessionId: string, questionCount: number): void {
-  trackEvent('tradeoff_session_start', 'Tradeoff Game', `Session: ${sessionId}`, questionCount);
+  trackEvent("tradeoff_session_start", "Tradeoff Game", `Session: ${sessionId}`, questionCount);
 }
 
 export interface TradeoffChoiceParams {
@@ -86,19 +100,18 @@ export interface TradeoffChoiceParams {
 }
 
 export function trackTradeoffChoice(params: TradeoffChoiceParams): void {
-  // Track as a custom event with parameters
-  if (import.meta.env.PROD && (window as any).gtag) {
-    (window as any).gtag('event', 'tradeoff_choice', {
+  if (isAnalyticsAvailable()) {
+    window.gtag?.("event", "tradeoff_choice", {
       question_id: params.questionId,
       option_id: params.optionId,
       category: params.category,
       latency_delta: params.latencyDelta,
       throughput_delta: params.throughputDelta,
       cost_delta: params.costDelta,
-      complexity_delta: params.complexityDelta
+      complexity_delta: params.complexityDelta,
     });
-  } else {
-    console.log(`[Analytics] Tradeoff Choice:`, params);
+  } else if (!import.meta.env.PROD) {
+    console.log("[Analytics] Tradeoff Choice:", params);
   }
 }
 
@@ -116,26 +129,26 @@ export interface TradeoffSessionCompleteParams {
 }
 
 export function trackTradeoffSessionComplete(params: TradeoffSessionCompleteParams): void {
-  if (import.meta.env.PROD && (window as any).gtag) {
-    (window as any).gtag('event', 'tradeoff_session_complete', {
+  if (isAnalyticsAvailable()) {
+    window.gtag?.("event", "tradeoff_session_complete", {
       xp_earned: params.xpEarned,
       style: params.style,
-      totals: params.totals,
+      latency_total: params.totals.latency,
+      throughput_total: params.totals.throughput,
+      cost_total: params.totals.cost,
+      complexity_total: params.totals.complexity,
       time_seconds: params.timeSeconds,
-      session_id: params.sessionId
+      session_id: params.sessionId,
     });
-  } else {
-    console.log(`[Analytics] Tradeoff Session Complete:`, params);
+  } else if (!import.meta.env.PROD) {
+    console.log("[Analytics] Tradeoff Session Complete:", params);
   }
 }
 
 export function trackTradeoffShareResult(sessionId: string, style: string): void {
-  trackEvent('tradeoff_share_result', 'Tradeoff Game', `Session: ${sessionId} | Style: ${style}`);
+  trackEvent("tradeoff_share_result", "Tradeoff Game", `Session: ${sessionId} | Style: ${style}`);
 }
 
-/**
- * Utility function to generate session ID
- */
 export function generateSessionId(): string {
-  return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `session_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 }

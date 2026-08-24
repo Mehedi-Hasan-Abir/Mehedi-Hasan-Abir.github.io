@@ -127,23 +127,31 @@ export function MemoryFlipCards() {
       </div>
 
       <div className="grid grid-cols-4 gap-3 mb-6">
-        {cards.map((card) => (
-          <motion.button
-            key={card.id}
-            onClick={() => handleCardClick(card.id)}
-            className={`aspect-square rounded-lg font-2xl transition-all ${
-              flipped.includes(card.id) || matched.includes(card.id)
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary hover:bg-secondary/80 text-muted-foreground"
-            } ${matched.includes(card.id) ? "ring-2 ring-primary/50" : ""}`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {flipped.includes(card.id) || matched.includes(card.id)
-              ? card.value
-              : "?"}
-          </motion.button>
-        ))}
+        {cards.map((card) => {
+          const isRevealed = flipped.includes(card.id) || matched.includes(card.id);
+          const isMatched = matched.includes(card.id);
+
+          return (
+            <motion.button
+              key={card.id}
+              type="button"
+              onClick={() => handleCardClick(card.id)}
+              aria-label={`Card ${card.id + 1}: ${
+                isRevealed ? `${card.value}${isMatched ? ", matched" : ""}` : "hidden"
+              }`}
+              aria-pressed={isRevealed}
+              className={`aspect-square rounded-lg font-2xl transition-all ${
+                isRevealed
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary hover:bg-secondary/80 text-muted-foreground"
+              } ${isMatched ? "ring-2 ring-primary/50" : ""}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isRevealed ? card.value : "?"}
+            </motion.button>
+          );
+        })}
       </div>
 
       {isWon && (
@@ -166,6 +174,7 @@ export function MemoryFlipCards() {
 
       <div className="flex gap-2">
         <button
+          type="button"
           onClick={resetGame}
           className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all"
         >
@@ -173,6 +182,7 @@ export function MemoryFlipCards() {
         </button>
         {sessionHighScore !== null && (
           <button
+            type="button"
             onClick={resetHighScore}
             className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/80 transition-all text-sm"
           >

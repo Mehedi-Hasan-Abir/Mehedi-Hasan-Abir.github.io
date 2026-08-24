@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
+import { captureError } from "@/lib/sentry.config";
 
 interface Props {
   children: ReactNode;
@@ -20,9 +21,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    if (import.meta.env.PROD) {
-      console.error("ErrorBoundary caught:", error, info.componentStack);
-    }
+    captureError(error, { componentStack: info.componentStack });
   }
 
   render() {

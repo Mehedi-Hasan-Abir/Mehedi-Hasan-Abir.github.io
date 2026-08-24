@@ -151,6 +151,9 @@ export function ThemeProvider() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="theme-picker"
+            role="group"
+            aria-label="Color theme"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 10 }}
@@ -159,6 +162,7 @@ export function ThemeProvider() {
             {Object.entries(THEMES).map(([key, value]) => (
               <button
                 key={key}
+                type="button"
                 onClick={() => changeTheme(key as keyof typeof THEMES)}
                 className={`w-10 h-10 rounded-full transition-all hover:scale-110 ${
                   currentTheme === key
@@ -170,6 +174,7 @@ export function ThemeProvider() {
                 }}
                 title={value.name}
                 aria-label={value.name}
+                aria-pressed={currentTheme === key}
               />
             ))}
           </motion.div>
@@ -179,21 +184,26 @@ export function ThemeProvider() {
       {/* Control Buttons */}
       <div className="flex gap-2">
         <motion.button
+          type="button"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={toggleDarkMode}
           className="p-3 bg-secondary rounded-full hover:bg-primary hover:text-primary-foreground transition-all shadow-lg"
           aria-label="Toggle dark mode"
+          aria-pressed={isDark}
         >
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </motion.button>
 
         <motion.button
+          type="button"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen((open) => !open)}
           className="p-3 bg-secondary rounded-full hover:bg-primary hover:text-primary-foreground transition-all shadow-lg"
           aria-label="Toggle theme picker"
+          aria-expanded={isOpen}
+          aria-controls="theme-picker"
         >
           <Palette className="w-5 h-5" />
         </motion.button>
