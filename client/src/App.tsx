@@ -6,10 +6,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackToTop } from "@/components/BackToTop";
-import { CursorFollower } from "@/components/CursorFollower";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { ConnectionProvider, useConnection } from "@/contexts/ConnectionContext";
+import { ConnectionProvider } from "@/contexts/ConnectionContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { trackPageView } from "@/lib/analytics";
 import NotFound from "@/pages/not-found";
@@ -46,16 +45,15 @@ function Router() {
 }
 
 function AppContent() {
-  const { canLoadHeavy } = useConnection();
   return (
     <>
       <AnalyticsPageView />
       <ScrollProgress />
       <Toaster />
-      {canLoadHeavy && <CursorFollower />}
+      <ThemeProvider>
+        <Router />
+      </ThemeProvider>
       <BackToTop />
-      <ThemeProvider />
-      <Router />
     </>
   );
 }

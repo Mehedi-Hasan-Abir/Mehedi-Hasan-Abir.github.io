@@ -1,30 +1,30 @@
 import { lazy, Suspense } from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  Download,
+  Terminal,
+  Globe,
+  Cpu,
+} from "lucide-react";
+import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
+import { Link as ScrollLink } from "react-scroll";
 import { Navbar } from "@/components/Navbar";
 import { useExperiences, useProjects, useSkills, usePersonalInfo, useEducation, useResearch, useInterests, useHeroPhrases } from "@/hooks/use-portfolio";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SocialLinks } from "@/components/SocialLinks";
 import { useConnection } from "@/contexts/ConnectionContext";
-import { NeuralMeshBackground } from "@/components/NeuralMeshBackground";
-import { TimelineItem } from "@/components/TimelineItem";
-import { ProjectCard } from "@/components/ProjectCard";
-import { EducationItem } from "@/components/EducationItem";
-import { ResearchItem } from "@/components/ResearchItem";
+import { WordPopTicker } from "@/components/WordPopTicker";
+import { ExperienceGrouped } from "@/components/ExperienceGrouped";
+import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { BlogSection } from "@/components/BlogSection";
-import { RoleTicker } from "@/components/RoleTicker";
-import { motion } from "framer-motion";
-import { 
-  Mail, 
-  Download, 
-  ArrowRight, 
-  Terminal,
-  Cpu,
-  Globe
-} from "lucide-react";
-import { Link as ScrollLink } from "react-scroll";
 
 const MemoryFlipCards = lazy(() =>
   import("@/components/MemoryFlipCards").then((m) => ({ default: m.MemoryFlipCards }))
 );
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function Home() {
   const { canLoadHeavy } = useConnection();
@@ -40,378 +40,405 @@ export default function Home() {
   if (!personalInfo) return null;
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden relative isolate">
-      {canLoadHeavy && <NeuralMeshBackground />}
-      <div className="relative z-10">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
-      <main>
+      <main className="max-w-6xl mx-auto px-5 md:px-8">
 
-      {/* Hero Section */}
-      <section id="hero" className="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-20">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-[100px] ambient-float" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] ambient-float [animation-delay:0.6s]" />
-          <div className="absolute top-1/3 right-1/4 w-56 h-56 rounded-full bg-cyan-300/15 blur-[120px] ambient-float [animation-delay:1.1s]" />
-        </div>
+        {/* ============ HERO ============ */}
+        <section id="hero" className="relative min-h-[92dvh] flex items-center pt-28 pb-16">
+          <div className="w-full grid lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 26 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease }}
+            >
+              <p className="mono-label text-accent mb-5 tracking-wide">
+                AI/ML ENGINEER &middot; DHAKA, BANGLADESH
+              </p>
+              <h1 className="display-xl">
+                Mehedi<br />Hasan<span className="text-accent">.</span>
+              </h1>
 
-        <div className="container mx-auto px-4 z-10 grid md:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="font-mono text-primary mb-4 block text-lg">Hi, my name is</span>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-              {personalInfo.name}
-            </h1>
-            <h2 className="text-3xl md:text-5xl font-bold text-muted-foreground mb-8">
-              {personalInfo.role}
-            </h2>
-            {canLoadHeavy && <RoleTicker phrases={heroPhrases} />}
-            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
-              {personalInfo.bio}
-            </p>
-            
-            <div className="flex flex-wrap gap-4">
-              <ScrollLink
-                {...{ href: "#projects" }}
-                to="projects"
-                smooth={true}
-                offset={-100}
-                className="px-8 py-4 bg-primary text-slate-950 rounded-lg font-semibold hover:bg-primary/90 hover:-translate-y-1 transition-all shadow-lg shadow-primary/25 flex items-center gap-2 cursor-pointer"
-              >
-                View My Work <ArrowRight className="w-4 h-4" />
-              </ScrollLink>
-              
-              {personalInfo.resumeUrl && (
+              <div className="mt-6 min-h-[2.2rem]">
+                {canLoadHeavy ? (
+                  <WordPopTicker phrases={heroPhrases} />
+                ) : (
+                  <p className="text-lg md:text-xl font-semibold">{heroPhrases[0]}</p>
+                )}
+              </div>
+
+              <p className="mt-5 text-muted-foreground text-base md:text-lg max-w-[58ch] leading-relaxed">
+                {personalInfo.bio}
+              </p>
+
+              <div className="flex flex-wrap gap-3 mt-9">
+                <ScrollLink
+                  {...{ href: "#projects" }}
+                  to="projects"
+                  smooth={true}
+                  offset={-80}
+                  className="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer"
+                >
+                  View my work <ArrowDown className="w-4 h-4" />
+                </ScrollLink>
                 <motion.a
                   href={personalInfo.resumeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ y: -4, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-8 py-4 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/80 transition-all flex items-center gap-2 border border-white/5"
+                  className="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm hover:border-foreground transition-colors"
                 >
-                  <Download className="w-4 h-4" /> Resume
+                  Resume <Download className="w-4 h-4" />
                 </motion.a>
-              )}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex justify-center"
-          >
-            <div className="relative w-72 h-72 md:w-96 md:h-96 group">
-              <div className="absolute inset-0 border-2 border-primary rounded-lg translate-x-4 translate-y-4 transition-transform group-hover:translate-x-2 group-hover:translate-y-2" />
-              <div className="absolute inset-0 bg-card rounded-lg overflow-hidden shadow-2xl">
-                {personalInfo.avatarUrl ? (
-                  <img 
-                    src={personalInfo.avatarUrl} 
-                    alt={personalInfo.name} 
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
-                    className={`w-full h-full object-cover transition-all duration-500 ${
-                      canLoadHeavy ? "grayscale group-hover:grayscale-0" : "blur-sm"
-                    }`}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-secondary flex items-center justify-center">
-                    <span className="text-6xl font-mono text-muted-foreground opacity-20">
-                      {personalInfo.name?.substring(0, 2) ?? "MH"}
-                    </span>
-                  </div>
-                )}
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-primary/20 mix-blend-multiply group-hover:bg-transparent transition-colors duration-500" />
               </div>
-            </div>
-          </motion.div>
-        </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+              <div className="flex items-center gap-1 mt-8">
+                {[
+                  { href: personalInfo.github, label: "GitHub", Icon: SiGithub },
+                  { href: personalInfo.linkedin, label: "LinkedIn", Icon: SiLinkedin },
+                  { href: personalInfo.medium, label: "Medium", Icon: SiMedium },
+                ].map(({ href, label, Icon }) => (
+                  <a
+                    key={label}
+                    href={href ?? "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="p-2.5 rounded-md text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    <Icon className="w-[18px] h-[18px]" />
+                  </a>
+                ))}
+                <span className="w-px h-5 bg-border mx-2" aria-hidden="true" />
+                <a
+                  href={`mailto:${personalInfo.email}`}
+                  aria-label="Email"
+                  className="p-2.5 rounded-md text-muted-foreground hover:text-accent transition-colors"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Portrait */}
+            <motion.figure
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.15, ease }}
+              className="hidden lg:block justify-self-end w-full max-w-[360px]"
+            >
+              <div className="relative group">
+                <span aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 border border-primary/40 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2" />
+                <img
+                  src={personalInfo.avatarUrl}
+                  alt={personalInfo.name}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
+                  width={1328}
+                  height={1328}
+                  className="relative w-full aspect-square object-cover grayscale contrast-[1.04] group-hover:grayscale-0 transition-all duration-700"
+                />
+              </div>
+              <figcaption className="mono-label text-muted-foreground mt-4 flex justify-between">
+                <span>DHAKA &middot; UTC+6</span>
+                <span>EST. 2021</span>
+              </figcaption>
+            </motion.figure>
+          </div>
+
           <ScrollLink
             {...{ href: "#about" }}
             to="about"
             smooth={true}
-            offset={-100}
+            offset={-80}
             aria-label="Scroll to About section"
-            className="cursor-pointer text-muted-foreground hover:text-primary transition-colors"
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:block text-muted-foreground hover:text-accent transition-colors cursor-pointer"
           >
-            <ArrowRight className="w-6 h-6 rotate-90" />
+            <ArrowDown className="w-5 h-5 animate-bounce" />
           </ScrollLink>
-        </div>
-      </section>
+        </section>
 
-      <div className="section-glow-divider" aria-hidden="true" />
-
-      {/* About Section */}
-      <section id="about" className="py-24 md:py-32 bg-background/50">
-        <div className="container mx-auto px-4">
+        {/* ============ ABOUT ============ */}
+        <section id="about" className="rule-t py-20 md:py-28">
           <SectionHeading title="About Me" subtitle="Getting to know the person behind the code" />
-          
-          <div className="max-w-4xl mx-auto grid md:grid-cols-5 gap-12 items-center">
-             <div className="md:col-span-3 space-y-6 text-muted-foreground leading-relaxed text-lg">
-               <p>
-                 I’m a Software Engineer based in <span className="text-foreground font-medium">{personalInfo.location}</span> who believes that great technology is built at the intersection of rigorous logic and human empathy.
-                 I specialize in teaching computers how to read, think, and solve problems. With a deep focus on LLMs and Document AI, I build production-ready systems that transform how businesses handle information.
-               </p>
-               <p>
-                 My philosophy is simple: Engineering is most powerful when it’s driven by curiosity and built with a sense of purpose.
-                </p>
-                <p>
-                 When I’m away from the terminal, I’m usually exploring the latest in tech research or enjoying the vibrant energy of Dhaka with friends.
-               </p>
-             </div>
-             <div className="md:col-span-2">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-card p-6 rounded-xl border border-border/50 flex flex-col items-center justify-center text-center aspect-square hover:border-primary/50 transition-colors">
-                    <Terminal className="w-8 h-8 text-primary mb-3" />
-                    <span className="font-bold text-foreground">Backend</span>
-                    <span className="text-xs text-muted-foreground mt-1">Node.js, Python</span>
-                  </div>
-                  <div className="bg-card p-6 rounded-xl border border-border/50 flex flex-col items-center justify-center text-center aspect-square hover:border-primary/50 transition-colors">
-                    <Globe className="w-8 h-8 text-primary mb-3" />
-                    <span className="font-bold text-foreground">Web</span>
-                    <span className="text-xs text-muted-foreground mt-1">React, Next.js</span>
-                  </div>
-                  <div className="bg-card p-6 rounded-xl border border-border/50 flex flex-col items-center justify-center text-center aspect-square hover:border-primary/50 transition-colors col-span-2 md:col-span-2">
-                    <Cpu className="w-8 h-8 text-primary mb-3" />
-                    <span className="font-bold text-foreground">AI Engineering</span>
-                    <span className="text-xs text-muted-foreground mt-1">LLMs, PyTorch, TensorFlow</span>
-                  </div>
+
+          <div className="grid md:grid-cols-5 gap-12">
+            <motion.div
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease }}
+              className="md:col-span-3 space-y-5 text-muted-foreground leading-relaxed text-base md:text-lg"
+            >
+              <p>
+                I&rsquo;m a Software Engineer based in <span className="text-foreground font-medium">{personalInfo.location}</span> who believes that great technology is built at the intersection of rigorous logic and human empathy.
+                I specialize in teaching computers how to read, think, and solve problems. With a deep focus on LLMs and Document AI, I build production-ready systems that transform how businesses handle information.
+              </p>
+              <p>
+                My philosophy is simple: Engineering is most powerful when it&rsquo;s driven by curiosity and built with a sense of purpose.
+              </p>
+              <p>
+                When I&rsquo;m away from the terminal, I&rsquo;m usually exploring the latest in tech research or enjoying the vibrant energy of Dhaka with friends.
+              </p>
+            </motion.div>
+
+            <div className="md:col-span-2 grid grid-cols-2 gap-3">
+              {[
+                { Icon: Terminal, title: "Backend", sub: "Node.js, Python", wide: false },
+                { Icon: Globe, title: "Web", sub: "React, Next.js", wide: false },
+                { Icon: Cpu, title: "AI Engineering", sub: "LLMs, PyTorch, TensorFlow", wide: true },
+              ].map(({ Icon, title, sub, wide }) => (
+                <div
+                  key={title}
+                  className={`border border-border bg-card p-5 flex flex-col items-center justify-center text-center hover:border-primary/50 transition-colors ${wide ? "col-span-2" : ""}`}
+                >
+                  <Icon className="w-6 h-6 text-accent mb-2.5" />
+                  <span className="font-bold text-sm">{title}</span>
+                  <span className="text-xs text-muted-foreground mt-1">{sub}</span>
                 </div>
-             </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <div className="section-glow-divider" aria-hidden="true" />
-
-      {/* Experience Section */}
-      <section id="experience" className="py-24 md:py-32">
-        <div className="container mx-auto px-4">
+        {/* ============ EXPERIENCE ============ */}
+        <section id="experience" className="rule-t py-20 md:py-28">
           <SectionHeading title="Experience" subtitle="My professional journey" />
-          
-          <div className="max-w-4xl mx-auto mt-16 space-y-12 md:space-y-0">
-            {experiences?.map((exp, index) => (
-              <TimelineItem key={exp.id} experience={exp} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
+          {experiences && experiences.length > 0 && (
+            <ExperienceGrouped experiences={experiences} />
+          )}
+        </section>
 
-      <div className="section-glow-divider" aria-hidden="true" />
+        {/* ============ PROJECTS ============ */}
+        <section id="projects" className="rule-t py-20 md:py-28">
+          <SectionHeading title="Selected Work" subtitle="Some things I've built" />
 
-      {/* Projects Section */}
-      <section id="projects" className="py-24 md:py-32 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Projects" subtitle="Some things I've built" />
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {projects?.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
+          {projects && projects.length > 0 && (
+            <div className="grid lg:grid-cols-12 gap-4">
+              {/* Lead project */}
+              <ProjectCell project={projects[0]} index={0} className="lg:col-span-7" lead />
+              <div className="lg:col-span-5 grid gap-4 content-start">
+                {projects.slice(1).map((project, index) => (
+                  <ProjectCell key={project.id} project={project} index={index + 1} />
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-24 md:py-32 bg-secondary/10">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Skills" subtitle="Technologies I work with" />
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-12">
-            {skills?.map((skillGroup, index) => (
-              <motion.div
-                key={skillGroup.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg hover:shadow-primary/10"
-              >
-                <div className="absolute top-0 left-0 h-full w-1 bg-primary rounded-l-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                
-                <h3 className="text-lg font-bold mb-4 text-primary font-mono">
-                  {skillGroup.category}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {skillGroup.items.map((item) => (
-                    <span
-                      key={item}
-                      className="px-3 py-1 bg-secondary/50 hover:bg-primary hover:text-primary-foreground text-xs font-medium rounded-full transition-all cursor-default border border-border/30"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+        {/* ============ SKILLS ============ */}
+        <section id="skills" className="rule-t py-20 md:py-28">
+          <SectionHeading
+            title="Capabilities"
+            subtitle="The production stack behind seven years of shipped AI systems"
+          />
+          {skills && skills.length > 0 && <SkillsMindMap skills={skills} />}
+        </section>
 
-      {/* Blog Section */}
-      <BlogSection />
+        {/* ============ BLOG ============ */}
+        <BlogSection />
 
-      {/* Education Section */}
-      <section id="education" className="py-24 md:py-32 bg-secondary/10">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Education" subtitle="My academic journey" />
-          
-          <div className="max-w-4xl mx-auto mt-16 space-y-8">
-            {education?.map((edu, idx) => (
-              <EducationItem 
-                key={idx}
-                institution={edu.institution}
-                degree={edu.degree}
-                period={edu.period}
-                index={idx}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Research Experience Section */}
-      <section id="research" className="py-24 md:py-32">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Research" subtitle="Publications and academic work" />
-          
-          <div className="max-w-4xl mx-auto mt-12 space-y-6">
-            {research?.map((res, idx) => (
-              <ResearchItem
-                key={idx}
-                title={res.title}
-                authors={res.authors}
-                venue={res.venue}
-                year={res.year}
-                link={res.link}
-                index={idx}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Personal & Social Section */}
-      <section id="personal" className="py-24 md:py-32 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Beyond Code" subtitle="Getting to know me beyond the code" />
-          
-          <div className="max-w-5xl mx-auto mt-16">
-            {/* Personal Interests Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {interests?.map((interest, idx) => (
+        {/* ============ EDUCATION + RESEARCH ============ */}
+        <section id="education" className="rule-t py-20 md:py-28">
+          <SectionHeading title="Background" subtitle="Education and academic work" />
+          <div className="grid md:grid-cols-2 gap-10 md:gap-16">
+            <div>
+              <h3 className="text-xl font-extrabold tracking-tight mb-6" style={{ fontStretch: "108%" }}>Education</h3>
+              {education?.map((edu, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.08 }}
-                  className="bg-card/50 p-6 rounded-xl border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg hover:shadow-primary/10 text-center"
+                  transition={{ duration: 0.45, delay: idx * 0.06 }}
+                  className={`rule-t py-4 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
                 >
-                  <div className="text-4xl mb-3">{interest.icon}</div>
-                  <h3 className="text-lg font-bold text-foreground mb-2">{interest.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{interest.desc}</p>
+                  <div className="font-bold text-[15px] leading-snug">{edu.degree}</div>
+                  <div className="text-sm text-muted-foreground mt-1">{edu.institution}</div>
+                  <div className="mono-label text-accent mt-1.5">{edu.period.toUpperCase()}</div>
                 </motion.div>
               ))}
             </div>
-
-            {/* Social Media Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-card/50 p-12 rounded-2xl border border-border/50 text-center"
-            >
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Follow me on social media to see photos from my travels, thoughts on movies & tech, and daily life updates!
-              </p>
-              
-              <SocialLinks 
-                personalInfo={{
-                  github: personalInfo.github || "",
-                  linkedin: personalInfo.linkedin || "",
-                  email: personalInfo.email || "",
-                  facebook: personalInfo.facebook || "",
-                  instagram: personalInfo.instagram || ""
-                }}
-              />
-            </motion.div>
+            <div>
+              <h3 className="text-xl font-extrabold tracking-tight mb-6" style={{ fontStretch: "108%" }}>Research</h3>
+              {research?.map((res, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: idx * 0.06 }}
+                  className={`rule-t py-4 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
+                >
+                  <div className="font-bold text-[15px] leading-snug">{res.title}</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {res.authors} &middot; {res.venue} &middot; {res.year}
+                  </div>
+                  <a
+                    href={res.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-accent text-[13px] font-semibold mt-2 hover:underline underline-offset-4"
+                  >
+                    View <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Memory Flip Cards Section */}
-      <section id="games" className="py-24 md:py-32 bg-background/50">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Fun & Games" subtitle="Take a break and test your memory" />
-          
-          <div className="flex justify-center mt-12">
-            <Suspense fallback={null}>
-              <MemoryFlipCards />
-            </Suspense>
+        {/* ============ BEYOND CODE ============ */}
+        <section id="personal" className="rule-t py-20 md:py-28">
+          <SectionHeading title="Beyond Code" subtitle="Getting to know me beyond the code" />
+          <div className="flex flex-wrap gap-2.5">
+            {interests?.map((interest, idx) => (
+              <motion.span
+                key={idx}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                className="inline-flex items-center gap-2.5 border border-border rounded-full pl-3 pr-4 py-2 text-sm hover:border-foreground transition-colors"
+                title={interest.desc}
+              >
+                <i className="not-italic text-base" aria-hidden="true">{interest.icon}</i>
+                <b className="font-semibold">{interest.title}</b>
+              </motion.span>
+            ))}
           </div>
-        </div>
-      </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-24 md:py-32 bg-gradient-to-b from-background to-secondary/20">
-        <div className="container mx-auto px-4 text-center">
-          <SectionHeading title="Get In Touch" />
-          
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="max-w-2xl mx-auto bg-card p-10 rounded-2xl border border-border shadow-2xl"
+            transition={{ duration: 0.55 }}
+            className="border border-border bg-card p-8 md:p-12 mt-10 text-center"
           >
-            <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
-              I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+            <p className="text-muted-foreground mb-7 max-w-xl mx-auto leading-relaxed">
+              Follow me on social media to see photos from my travels, thoughts on movies &amp; tech, and daily life updates!
             </p>
-            
-            <a
-              href={`mailto:${personalInfo.email}`}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-bold text-lg hover:bg-primary/90 hover:-translate-y-1 transition-all shadow-lg shadow-primary/25 mb-12"
-            >
-              <Mail className="w-5 h-5" />
-              Say Hello
-            </a>
-            
-            <SocialLinks 
+            <SocialLinks
               personalInfo={{
                 github: personalInfo.github || "",
                 linkedin: personalInfo.linkedin || "",
                 email: personalInfo.email || "",
                 facebook: personalInfo.facebook || "",
-                instagram: personalInfo.instagram || ""
+                instagram: personalInfo.instagram || "",
               }}
             />
           </motion.div>
-        </div>
-      </section>
+        </section>
+
+        {/* ============ FUN & GAMES ============ */}
+        <section id="games" className="rule-t py-20 md:py-28">
+          <SectionHeading title="Fun & Games" subtitle="Take a break and test your memory" />
+          <div className="flex justify-center">
+            <Suspense fallback={null}>
+              <MemoryFlipCards />
+            </Suspense>
+          </div>
+        </section>
+
+        {/* ============ CONTACT ============ */}
+        <section id="contact" className="rule-t py-20 md:py-28">
+          <SectionHeading title="Get In Touch" />
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease }}
+          >
+            <h3 className="display-lg max-w-[14ch]">
+              Have an idea?<br />Let&rsquo;s <span className="text-accent">build it</span>.
+            </h3>
+            <p className="mt-6 text-muted-foreground max-w-xl leading-relaxed">
+              I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+            </p>
+            <a
+              href={`mailto:${personalInfo.email}`}
+              className="btn-push inline-flex items-center gap-2.5 mt-8 px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
+            >
+              Say Hello
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            </a>
+
+            <div className="rule-t pt-8 mt-12">
+              <SocialLinks
+                personalInfo={{
+                  github: personalInfo.github || "",
+                  linkedin: personalInfo.linkedin || "",
+                  email: personalInfo.email || "",
+                  facebook: personalInfo.facebook || "",
+                  instagram: personalInfo.instagram || "",
+                }}
+              />
+            </div>
+          </motion.div>
+        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="py-8 bg-background border-t border-border/50">
-        <div className="container mx-auto px-4 text-center">
-          <p className="font-mono text-sm text-muted-foreground">
-            Designed & Built by {personalInfo.name}
-          </p>
-          {/* Increase contrast for accessibility (was text-muted-foreground/50) */}
-          <p className="text-xs text-muted-foreground mt-2">
-            © {new Date().getFullYear()} All rights reserved.
-          </p>
+      {/* ============ FOOTER ============ */}
+      <footer className="rule-t py-8">
+        <div className="max-w-6xl mx-auto px-5 md:px-8 flex flex-wrap justify-between gap-3 mono-label text-muted-foreground">
+          <span>Designed &amp; Built by {personalInfo.name}</span>
+          <span>&copy; {new Date().getFullYear()} &middot; All rights reserved</span>
         </div>
       </footer>
-      </div>
     </div>
+  );
+}
+
+/* ---------- Project cell ---------- */
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  techStack: string[];
+  link: string;
+}
+
+function ProjectCell({
+  project,
+  index,
+  className = "",
+  lead = false,
+}: {
+  project: Project;
+  index: number;
+  className?: string;
+  lead?: boolean;
+}) {
+  return (
+    <motion.a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease }}
+      className={`group border border-border bg-card p-7 md:p-9 flex flex-col hover:border-primary/60 transition-colors ${className}`}
+    >
+      <span className="mono-label text-accent">P&middot;{String(index + 1).padStart(2, "0")}</span>
+      <h3 className={`font-extrabold tracking-tight mt-3 ${lead ? "text-2xl md:text-[2rem]" : "text-xl"}`} style={{ fontStretch: "106%" }}>
+        {project.title}
+      </h3>
+      <p className="text-sm text-muted-foreground mt-3 leading-relaxed flex-1 max-w-[64ch]">
+        {project.description}
+      </p>
+      <div className="flex flex-wrap gap-1.5 mt-5">
+        {project.techStack.map((tech) => (
+          <span key={tech} className="mono-label text-muted-foreground border border-border px-2.5 py-1 rounded-md">
+            {tech}
+          </span>
+        ))}
+      </div>
+      <span className="inline-flex items-center gap-1.5 text-accent text-sm font-semibold mt-6">
+        View on GitHub <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </span>
+    </motion.a>
   );
 }
