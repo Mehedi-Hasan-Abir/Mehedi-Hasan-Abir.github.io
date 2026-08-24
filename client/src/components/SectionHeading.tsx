@@ -60,6 +60,44 @@ function PenStroke() {
   );
 }
 
+/** Big outlined section number; a filled copy wipes over it on scroll. */
+function GhostNumber({ label }: { label: string }) {
+  const canAnimate = useCanAnimate();
+
+  const fillRef = useAnimeOnView<HTMLSpanElement>(
+    (el) => {
+      animate(el, {
+        clipPath: ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
+        duration: 900,
+        ease: "outExpo",
+        delay: 200,
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  return (
+    <span className="relative inline-block shrink-0 select-none" aria-hidden="true">
+      <span
+        className="block text-5xl md:text-6xl font-extrabold leading-none text-transparent"
+        style={{ WebkitTextStroke: "1.5px hsl(var(--primary) / 0.55)", fontStretch: "110%" }}
+      >
+        {label}
+      </span>
+      <span
+        ref={fillRef}
+        className="absolute inset-0 block text-5xl md:text-6xl font-extrabold leading-none text-primary"
+        style={{
+          fontStretch: "110%",
+          ...(canAnimate ? { clipPath: "inset(0 100% 0 0)" } : {}),
+        }}
+      >
+        {label}
+      </span>
+    </span>
+  );
+}
+
 export function SectionHeading({ title, subtitle, number }: SectionHeadingProps) {
   const sectionKey = title.toLowerCase().replace(/\s+/g, "-");
   const displayNumber = number !== undefined ? number : sectionNumbers[sectionKey] ?? 0;
@@ -67,10 +105,8 @@ export function SectionHeading({ title, subtitle, number }: SectionHeadingProps)
 
   return (
     <div className="mb-12 md:mb-16" data-testid="section-heading">
-      <div className="flex items-baseline gap-4 md:gap-5">
-        <span className="ghost-num text-sm md:text-base shrink-0" aria-hidden="true">
-          {formattedNumber}
-        </span>
+      <div className="flex items-center gap-4 md:gap-6">
+        <GhostNumber label={formattedNumber} />
         <div>
           <h2 className="display-lg">{title}</h2>
           <PenStroke />

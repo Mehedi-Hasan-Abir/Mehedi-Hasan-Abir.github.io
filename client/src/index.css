@@ -168,6 +168,30 @@ html[data-color-mode="light"] {
   }
 }
 
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes rail-pulse {
+  0%   { top: 0%; opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { top: calc(100% - 6px); opacity: 0; }
+}
+
+@keyframes edge-pulse {
+  0%   { offset-distance: 0%; opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
 /* Custom scrollbar - minimal */
 ::-webkit-scrollbar {
   width: 10px;

@@ -78,12 +78,21 @@ export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
           if (existing) existing.roles.push(exp);
           else groups.push({ company: exp.company, roles: [exp] });
         }
-        return groups.map((group, gi) => {
+        return groups.map((group) => {
           const span = `${periodStart(group.roles[group.roles.length - 1].period)} – ${periodEnd(group.roles[0].period)}`;
           return (
-            <article key={group.company} className={`rule-t py-10 md:py-12 ${gi === 0 ? "border-t-0 pt-0" : ""}`}>
+            <article key={group.company} className="relative rule-t py-10 md:py-12 overflow-hidden">
+              {/* Giant outlined company name drifting behind the masthead */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-1 left-0 whitespace-nowrap text-[13vw] md:text-[7vw] font-extrabold uppercase leading-none text-transparent opacity-[0.05] select-none"
+                style={{ WebkitTextStroke: "1px hsl(var(--foreground))", fontStretch: "115%" }}
+              >
+                {group.company}&nbsp;·&nbsp;{group.company}&nbsp;·&nbsp;
+              </span>
+
               {/* Company masthead */}
-              <div className="flex flex-wrap items-baseline justify-between gap-2 mb-8">
+              <div className="relative flex flex-wrap items-baseline justify-between gap-2 mb-8">
                 <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight" style={{ fontStretch: "108%" }}>
                   {group.company}
                 </h3>
@@ -98,6 +107,13 @@ export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
                   className="absolute left-[5px] top-2 bottom-2 w-px bg-border origin-top"
                   style={hidden}
                 />
+                {canAnimate && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-[2px] w-[7px] h-[7px] rounded-full bg-primary"
+                    style={{ animation: "rail-pulse 3.2s ease-in-out infinite" }}
+                  />
+                )}
                 {group.roles.map((role, ri) => (
                   <div key={role.id} className={`relative ${ri > 0 ? "mt-10" : ""}`}>
                     <span

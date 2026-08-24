@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { animate, stagger } from "animejs";
+import { motion } from "framer-motion";
 import { useBlogs } from "@/hooks/use-portfolio";
 import { ExternalLink, Calendar } from "lucide-react";
 import { useCanAnimate, useInView } from "@/lib/use-anime";
@@ -28,14 +29,20 @@ export function BlogSection() {
   useEffect(() => {
     if (!canAnimate || !inView || played.current || !gridRef.current) return;
     played.current = true;
-    const anim = animate(gridRef.current.querySelectorAll("[data-card]"), {
-      opacity: [0, 1],
-      translateY: [26, 0],
-      duration: 600,
+    // Diagonal clip-wipe reveal per card, then content settles upward
+    const cards = gridRef.current.querySelectorAll("[data-card]");
+    animate(cards, {
+      clipPath: ["inset(0% 100% 0% 0%)", "inset(0% 0% 0% 0%)"],
+      duration: 850,
       ease: "outExpo",
-      delay: stagger(120),
+      delay: stagger(130),
     });
-    return () => { anim.pause(); };
+    animate(gridRef.current.querySelectorAll("[data-thumb]"), {
+      scale: [1.15, 1],
+      duration: 1100,
+      ease: "outExpo",
+      delay: stagger(130),
+    });
   }, [canAnimate, inView, gridRef]);
 
   if (isLoading) {
@@ -86,11 +93,11 @@ export function BlogSection() {
 
         <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {featuredBlogs.map((blog: BlogPost, index: number) => (
-            <article
+            <motion.article
               key={blog.id}
               data-card
+              initial={canAnimate ? { clipPath: "inset(0% 100% 0% 0%)" } : false}
               className="group border border-border bg-card hover:border-primary/60 transition-colors flex flex-col cursor-pointer overflow-hidden"
-              style={canAnimate ? { opacity: 0 } : undefined}
               onClick={() => window.open(blog.externalLink, "_blank", "noopener,noreferrer")}
             >
               {/* Thumbnail */}
@@ -103,6 +110,7 @@ export function BlogSection() {
                     height={blog.thumbnailHeight}
                     loading="lazy"
                     decoding="async"
+                    data-thumb
                     className="w-full h-full object-cover grayscale-[35%] group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-500"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
@@ -158,7 +166,7 @@ export function BlogSection() {
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
 

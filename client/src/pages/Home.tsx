@@ -13,8 +13,11 @@ import { useExperiences, useProjects, useSkills, usePersonalInfo, useEducation, 
 import { SectionHeading } from "@/components/SectionHeading";
 import { SocialLinks } from "@/components/SocialLinks";
 import { useConnection } from "@/contexts/ConnectionContext";
-import { LetterCascade, WordReveal } from "@/components/LetterCascade";
+import { LetterCascade } from "@/components/LetterCascade";
+import { DrawnName } from "@/components/DrawnName";
+import { SmoothTicker } from "@/components/SmoothTicker";
 import { StatsStrip } from "@/components/StatsStrip";
+import { Magnetic, Marquee } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { BlogSection } from "@/components/BlogSection";
@@ -62,16 +65,12 @@ export default function Home() {
               <p className="mono-label text-accent mb-5 tracking-wide">
                 AI/ML ENGINEER &middot; DHAKA, BANGLADESH
               </p>
-              <h1 className="display-xl">
-                <LetterCascade as="span" text="Mehedi" className="block" />
-                <LetterCascade as="span" text="Hasan." className="block" delay={260} />
-              </h1>
+              <DrawnName />
 
               <div className="mt-6 min-h-[2.2rem]">
-                <WordReveal
-                  text={heroPhrases[0] ?? ""}
-                  className="text-lg md:text-xl font-semibold text-foreground"
-                  delay={700}
+                <SmoothTicker
+                  phrases={heroPhrases}
+                  className="text-sm md:text-base text-muted-foreground"
                 />
               </div>
 
@@ -80,24 +79,28 @@ export default function Home() {
               </p>
 
               <div className="flex flex-wrap gap-3 mt-9">
-                <ScrollLink
-                  {...{ href: "#projects" }}
-                  to="projects"
-                  smooth={true}
-                  offset={-80}
-                  className="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer"
-                >
-                  View my work <ArrowDown className="w-4 h-4" />
-                </ScrollLink>
-                <motion.a
-                  href={personalInfo.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileTap={{ scale: 0.98 }}
-                  className="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm hover:border-foreground transition-colors"
-                >
-                  Resume <Download className="w-4 h-4" />
-                </motion.a>
+                <Magnetic>
+                  <ScrollLink
+                    {...{ href: "#projects" }}
+                    to="projects"
+                    smooth={true}
+                    offset={-80}
+                    className="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer"
+                  >
+                    View my work <ArrowDown className="w-4 h-4" />
+                  </ScrollLink>
+                </Magnetic>
+                <Magnetic>
+                  <motion.a
+                    href={personalInfo.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileTap={{ scale: 0.98 }}
+                    className="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm hover:border-foreground transition-colors"
+                  >
+                    Resume <Download className="w-4 h-4" />
+                  </motion.a>
+                </Magnetic>
               </div>
 
               <div className="flex items-center gap-1 mt-8">
@@ -136,6 +139,19 @@ export default function Home() {
               className="hidden lg:block justify-self-end w-full max-w-[360px]"
             >
               <div className="relative group">
+                {/* Orbiting dashed rings */}
+                {canAnimate && (
+                  <>
+                    <svg aria-hidden="true" className="absolute -inset-7 w-[calc(100%+56px)] h-[calc(100%+56px)] animate-[spin-slow_28s_linear_infinite]" viewBox="0 0 100 100" fill="none">
+                      <circle cx="50" cy="50" r="48.5" stroke="hsl(var(--primary) / 0.4)" strokeWidth="0.4" strokeDasharray="2 3" />
+                      <circle cx="50" cy="1.5" r="1.4" fill="hsl(var(--primary))" />
+                    </svg>
+                    <svg aria-hidden="true" className="absolute -inset-3 w-[calc(100%+24px)] h-[calc(100%+24px)] animate-[spin-slow_18s_linear_infinite_reverse]" viewBox="0 0 100 100" fill="none">
+                      <circle cx="50" cy="50" r="48.8" stroke="hsl(var(--border))" strokeWidth="0.35" strokeDasharray="0.8 2.4" />
+                      <circle cx="98.5" cy="50" r="1" fill="hsl(var(--primary) / 0.8)" />
+                    </svg>
+                  </>
+                )}
                 <span aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 border border-primary/40 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2" />
                 <img
                   src={personalInfo.avatarUrl}
@@ -319,20 +335,22 @@ export default function Home() {
             <p className="mt-6 text-muted-foreground max-w-xl leading-relaxed">
               I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
             </p>
-            <a
-              href={`mailto:${personalInfo.email}`}
-              className="btn-push relative inline-flex items-center gap-2.5 mt-8 px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
-            >
-              {canAnimate && (
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30"
-                  style={{ animationDuration: "2.4s" }}
-                />
-              )}
-              Say Hello
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-            </a>
+            <Magnetic strength={0.25}>
+              <a
+                href={`mailto:${personalInfo.email}`}
+                className="btn-push relative inline-flex items-center gap-2.5 mt-8 px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
+              >
+                {canAnimate && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30"
+                    style={{ animationDuration: "2.4s" }}
+                  />
+                )}
+                Say Hello
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+              </a>
+            </Magnetic>
 
             <div className="rule-t pt-8 mt-12">
               <SocialLinks
@@ -348,6 +366,9 @@ export default function Home() {
           </motion.div>
         </section>
       </main>
+
+      {/* ============ MARQUEE ============ */}
+      <Marquee text="Let's build something useful" />
 
       {/* ============ FOOTER ============ */}
       <footer className="rule-t py-8">
@@ -445,17 +466,46 @@ function ProjectCell({
     { threshold: 0.4 }
   );
 
+  const traceRef = useRef<SVGRectElement | null>(null);
+
+  const traceBorder = (draw: boolean) => {
+    const rect = traceRef.current;
+    if (!canAnimate || !rect) return;
+    const len = rect.getTotalLength();
+    rect.style.strokeDasharray = String(len);
+    animate(rect, {
+      strokeDashoffset: draw ? [len, 0] : [0, len],
+      opacity: draw ? [0, 1] : [1, 0],
+      duration: draw ? 700 : 400,
+      ease: draw ? "outQuad" : "inQuad",
+    });
+  };
+
   return (
     <motion.a
       href={project.link}
       target="_blank"
       rel="noopener noreferrer"
+      onMouseEnter={() => traceBorder(true)}
+      onMouseLeave={() => traceBorder(false)}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.55, delay: index * 0.08, ease }}
-      className={`group border border-border bg-card p-7 md:p-9 flex flex-col hover:border-primary/60 transition-colors ${className}`}
+      className={`group relative border border-border bg-card p-7 md:p-9 flex flex-col hover:border-primary/60 transition-colors overflow-hidden ${className}`}
     >
+      {canAnimate && (
+        <svg aria-hidden="true" className="pointer-events-none absolute inset-0 w-full h-full">
+          <rect
+            ref={traceRef}
+            x="0.5" y="0.5" width="99.6%" height="99.6%"
+            fill="none"
+            stroke="hsl(var(--primary))"
+            strokeWidth="2"
+            style={{ opacity: 0 }}
+          />
+        </svg>
+      )}
       <span className="mono-label text-accent">P&middot;{String(index + 1).padStart(2, "0")}</span>
       <h3 className={`font-extrabold tracking-tight mt-3 ${lead ? "text-2xl md:text-[2rem]" : "text-xl"}`} style={{ fontStretch: "106%" }}>
         {project.title}

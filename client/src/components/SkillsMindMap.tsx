@@ -214,6 +214,27 @@ function SkillsMapDesktop({ skills }: { skills: SkillGroup[] }) {
           );
         })}
 
+        {/* Data pulses traveling along each edge */}
+        {skills.map((group, i) => {
+          const y2 = pts[i].y - 8;
+          const d = `M ${ROOT.x + ROOT.w} ${rootY + ROOT.h / 2}
+                     C ${ROOT.x + ROOT.w + 90} ${rootY + ROOT.h / 2},
+                     ${pts[i].x - 90} ${y2},
+                     ${pts[i].x - 10} ${y2}`;
+          return (
+            <circle
+              key={`pulse-${group.id}`}
+              r={3.2}
+              fill="hsl(var(--primary))"
+              style={{
+                offsetPath: `path('${d.replace(/\s+/g, " ")}')`,
+                animation: `edge-pulse 2.8s linear infinite`,
+                animationDelay: `${i * 0.4}s`,
+              }}
+            />
+          );
+        })}
+
         {/* Root node */}
         <g data-root>
           <rect
