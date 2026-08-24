@@ -9,16 +9,18 @@ interface SectionHeadingProps {
 }
 
 // Fixed numbering per section keeps order stable across renders/pages.
+// Keys are the lowercased, space-dashed section titles used in Home.
 const sectionNumbers: Record<string, number> = {
   experience: 1,
-  projects: 2,
+  "selected-work": 2,
   skills: 3,
+  writing: 4,
   blog: 4,
-  education: 5,
-  research: 6,
-  "beyond-code": 7,
-  "fun-games": 8,
-  "get-in-touch": 9,
+  background: 5,
+  "beyond-code": 6,
+  "fun-&-games": 7,
+  "fun-games": 7,
+  "get-in-touch": 8,
 };
 
 /** Hand-drawn accent stroke that sketches itself under the title on scroll. */

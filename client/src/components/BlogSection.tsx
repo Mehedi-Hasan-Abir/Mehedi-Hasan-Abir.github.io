@@ -3,6 +3,7 @@ import { animate, stagger } from "animejs";
 import { motion } from "framer-motion";
 import { useBlogs } from "@/hooks/use-portfolio";
 import { ExternalLink, Calendar } from "lucide-react";
+import { SectionHeading } from "@/components/SectionHeading";
 import { useCanAnimate, useInView } from "@/lib/use-anime";
 
 interface BlogPost {
@@ -24,11 +25,10 @@ export function BlogSection() {
   const { data: blogs, isLoading } = useBlogs();
   const canAnimate = useCanAnimate();
   const { ref: gridRef, inView } = useInView<HTMLDivElement>(0.08);
-  const played = useRef(false);
 
   useEffect(() => {
-    if (!canAnimate || !inView || played.current || !gridRef.current) return;
-    played.current = true;
+    if (!canAnimate || !inView || !gridRef.current) return;
+    // Replays on every viewport entry (owner preference)
     // Diagonal clip-wipe reveal per card, then content settles upward
     const cards = gridRef.current.querySelectorAll("[data-card]");
     animate(cards, {
@@ -80,16 +80,7 @@ export function BlogSection() {
   return (
     <section id="blog" className="rule-t py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
-        <div className="mb-12 md:mb-16">
-          <div className="flex items-baseline gap-4 md:gap-5">
-            <span className="ghost-num text-sm md:text-base shrink-0" aria-hidden="true">04</span>
-            <h2 className="display-lg">Writing</h2>
-          </div>
-          <p className="mt-3 text-muted-foreground max-w-2xl">
-            Thoughts on AI, Machine Learning, and Technology
-          </p>
-          <div className="h-px bg-border mt-6" aria-hidden="true" />
-        </div>
+        <SectionHeading title="Writing" subtitle="Thoughts on AI, Machine Learning, and Technology" />
 
         <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {featuredBlogs.map((blog: BlogPost, index: number) => (

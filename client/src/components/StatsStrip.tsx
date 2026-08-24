@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { animate, stagger } from "animejs";
-import { useAnimeOnView, useCanAnimate } from "@/lib/use-anime";
+import { useAnimeOnView, useCanAnimate, useInView } from "@/lib/use-anime";
 
 interface CountUpProps {
   to: number;
@@ -53,14 +53,14 @@ interface StatsStripProps {
   stats: StatItem[];
 }
 
-/** Editorial stats band - hairline top/bottom, big mono numbers, count-up on scroll. */
+/** Editorial stats band - hairline top/bottom, big mono numbers, count-up replays on view. */
 export function StatsStrip({ stats }: StatsStripProps) {
   const canAnimate = useCanAnimate();
-  const ref = useRef<HTMLDivElement | null>(null);
+  const { ref, inView } = useInView<HTMLDivElement>(0.3);
 
   useEffect(() => {
     const el = ref.current;
-    if (!canAnimate || !el) return;
+    if (!canAnimate || !inView || !el) return;
     const cells = el.querySelectorAll("[data-stat]");
     const anim = animate(cells, {
       opacity: [0, 1],
@@ -70,7 +70,7 @@ export function StatsStrip({ stats }: StatsStripProps) {
       delay: stagger(90),
     });
     return () => { anim.pause(); };
-  }, [canAnimate]);
+  }, [canAnimate, inView, ref]);
 
   return (
     <div ref={ref} className="rule-t rule-b grid grid-cols-2 md:grid-cols-4">

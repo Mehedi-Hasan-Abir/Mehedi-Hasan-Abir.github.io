@@ -17,11 +17,11 @@ import { LetterCascade } from "@/components/LetterCascade";
 import { DrawnName } from "@/components/DrawnName";
 import { SmoothTicker } from "@/components/SmoothTicker";
 import { StatsStrip } from "@/components/StatsStrip";
-import { Magnetic, Marquee } from "@/components/Interactive";
+import { Magnetic, Marquee, PulseRing } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { BlogSection } from "@/components/BlogSection";
-import { useCanAnimate, useAnimeOnView } from "@/lib/use-anime";
+import { useCanAnimate, useAnimeOnView, useInView } from "@/lib/use-anime";
 
 const MemoryFlipCards = lazy(() =>
   import("@/components/MemoryFlipCards").then((m) => ({ default: m.MemoryFlipCards }))
@@ -62,7 +62,8 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease }}
             >
-              <p className="mono-label text-accent mb-5 tracking-wide">
+              <p className="inline-flex items-center gap-2.5 mono-label !text-[13px] md:!text-sm font-semibold text-accent border border-primary/50 bg-primary/10 rounded-full px-5 py-2.5 mb-6 tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-accent animate-pulse" aria-hidden="true" />
                 AI/ML ENGINEER &middot; DHAKA, BANGLADESH
               </p>
               <DrawnName />
@@ -85,8 +86,9 @@ export default function Home() {
                     to="projects"
                     smooth={true}
                     offset={-80}
-                    className="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer"
+                    className="btn-push relative inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer"
                   >
+                    <PulseRing enabled={canAnimate} />
                     View my work <ArrowDown className="w-4 h-4" />
                   </ScrollLink>
                 </Magnetic>
@@ -135,8 +137,8 @@ export default function Home() {
             <motion.figure
               initial={canAnimate ? { clipPath: "inset(0 100% 0 0)" } : false}
               animate={canAnimate ? { clipPath: "inset(0 0% 0 0)" } : undefined}
-              transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="hidden lg:block justify-self-end w-full max-w-[360px]"
+              transition={{ duration: 1, delay: 0.5, ease }}
+              className="justify-self-center lg:justify-self-end w-full max-w-[280px] lg:max-w-[360px] mt-4 lg:mt-0"
             >
               <div className="relative group">
                 {/* Orbiting dashed rings */}
@@ -241,7 +243,7 @@ export default function Home() {
                   key={idx}
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.45, delay: idx * 0.06 }}
                   className={`rule-t py-4 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
                 >
@@ -258,7 +260,7 @@ export default function Home() {
                   key={idx}
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.45, delay: idx * 0.06 }}
                   className={`rule-t py-4 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
                 >
@@ -288,7 +290,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.55 }}
             className="border border-border bg-card p-8 md:p-12 mt-10 text-center"
           >
@@ -323,7 +325,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.6, ease }}
           >
             <h3 className="display-lg max-w-[16ch]">
@@ -340,13 +342,7 @@ export default function Home() {
                 href={`mailto:${personalInfo.email}`}
                 className="btn-push relative inline-flex items-center gap-2.5 mt-8 px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
               >
-                {canAnimate && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30"
-                    style={{ animationDuration: "2.4s" }}
-                  />
-                )}
+                <PulseRing enabled={canAnimate} />
                 Say Hello
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
               </a>
@@ -391,12 +387,10 @@ interface Interest {
 
 function InterestWave({ interests }: { interests: Interest[] }) {
   const canAnimate = useCanAnimate();
-  const ref = useRef<HTMLDivElement | null>(null);
-  const played = useRef(false);
+  const { ref, inView } = useInView<HTMLDivElement>(0.3);
 
   useEffect(() => {
-    if (!canAnimate || played.current || !ref.current) return;
-    played.current = true;
+    if (!canAnimate || !inView || !ref.current) return;
     const chips = ref.current.querySelectorAll("[data-chip]");
     if (!chips.length) return;
     const anim = animate(chips, {
@@ -408,7 +402,7 @@ function InterestWave({ interests }: { interests: Interest[] }) {
       delay: stagger(70, { from: "center" }),
     });
     return () => { anim.pause(); };
-  }, [canAnimate]);
+  }, [canAnimate, inView, ref]);
 
   return (
     <div ref={ref} className="flex flex-wrap gap-2.5">
@@ -490,7 +484,7 @@ function ProjectCell({
       onMouseLeave={() => traceBorder(false)}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: false, amount: 0.2 }}
       transition={{ duration: 0.55, delay: index * 0.08, ease }}
       className={`group relative border border-border bg-card p-7 md:p-9 flex flex-col hover:border-primary/60 transition-colors overflow-hidden ${className}`}
     >

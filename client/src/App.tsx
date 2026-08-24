@@ -17,24 +17,24 @@ import Home from "@/pages/Home";
 
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
 
-/** Subtle scroll-velocity skew on the whole page (desktop only). */
+/** Scroll-velocity skew on the whole page (subtle on mobile, stronger on desktop). */
 function ScrollSkew({ children }: { children: React.ReactNode }) {
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [angle, setAngle] = useState(0.8);
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
   const smooth = useSpring(velocity, { stiffness: 220, damping: 50, mass: 0.6 });
-  const skewY = useTransform(smooth, [-2400, 0, 2400], ["1.1deg", "0deg", "-1.1deg"], { clamp: true });
+  const skewY = useTransform(smooth, [-2400, 0, 2400], [`${angle}deg`, "0deg", `-${angle}deg`], { clamp: true });
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setIsDesktop(mq.matches);
+    const update = () => setAngle(mq.matches ? 1.1 : 0.7);
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
 
   return (
-    <motion.div style={{ skewY: isDesktop ? skewY : "0deg", willChange: "transform" }}>
+    <motion.div style={{ skewY, willChange: "transform" }}>
       {children}
     </motion.div>
   );

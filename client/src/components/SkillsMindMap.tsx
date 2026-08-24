@@ -77,11 +77,9 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
 function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
   const { ref, inView } = useInView<HTMLDivElement>(0.08);
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const played = useRef(false);
 
   useEffect(() => {
-    if (!inView || played.current || !ref.current) return;
-    played.current = true;
+    if (!inView || !ref.current) return;
     const host = ref.current;
     const rootEl = rootRef.current;
     if (!rootEl) return;
@@ -145,11 +143,9 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
 
 function SkillsMapDesktop({ skills }: { skills: SkillGroup[] }) {
   const { ref: containerRef, inView } = useInView<HTMLDivElement>(0.15);
-  const played = useRef(false);
 
   useEffect(() => {
-    if (!inView || played.current || !containerRef.current) return;
-    played.current = true;
+    if (!inView || !containerRef.current) return;
     const svg = containerRef.current.querySelector("svg");
     if (!svg) return;
 
@@ -184,6 +180,27 @@ function SkillsMapDesktop({ skills }: { skills: SkillGroup[] }) {
       ease: "outExpo",
       delay: stagger(100, { start: 320 }),
     });
+
+    // Pulses travel root -> branch along each edge, looping
+    svg.querySelectorAll<SVGCircleElement>("[data-pulse]").forEach((circle, i) => {
+      const edge = svg.querySelectorAll<SVGPathElement>("[data-edge]")[i];
+      if (!edge) return;
+      const len = edge.getTotalLength();
+      const state = { t: 0 };
+      animate(state, {
+        t: 1,
+        duration: 2400,
+        ease: "inOutQuad",
+        delay: 900 + i * 350,
+        loop: true,
+        onUpdate: () => {
+          const pt = edge.getPointAtLength(state.t * len);
+          circle.setAttribute("cx", String(pt.x));
+          circle.setAttribute("cy", String(pt.y));
+          circle.setAttribute("opacity", state.t > 0.04 && state.t < 0.96 ? "1" : "0");
+        },
+      });
+    });
   }, [inView, containerRef]);
 
   const VIEW_H = columnHeight(skills);
@@ -214,26 +231,16 @@ function SkillsMapDesktop({ skills }: { skills: SkillGroup[] }) {
           );
         })}
 
-        {/* Data pulses traveling along each edge */}
-        {skills.map((group, i) => {
-          const y2 = pts[i].y - 8;
-          const d = `M ${ROOT.x + ROOT.w} ${rootY + ROOT.h / 2}
-                     C ${ROOT.x + ROOT.w + 90} ${rootY + ROOT.h / 2},
-                     ${pts[i].x - 90} ${y2},
-                     ${pts[i].x - 10} ${y2}`;
-          return (
-            <circle
-              key={`pulse-${group.id}`}
-              r={3.2}
-              fill="hsl(var(--primary))"
-              style={{
-                offsetPath: `path('${d.replace(/\s+/g, " ")}')`,
-                animation: `edge-pulse 2.8s linear infinite`,
-                animationDelay: `${i * 0.4}s`,
-              }}
-            />
-          );
-        })}
+        {/* Data pulses traveling along each edge (anime drives cx/cy via getPointAtLength) */}
+        {skills.map((group) => (
+          <circle
+            key={`pulse-${group.id}`}
+            data-pulse
+            r={3.4}
+            fill="hsl(var(--primary))"
+            opacity={0}
+          />
+        ))}
 
         {/* Root node */}
         <g data-root>

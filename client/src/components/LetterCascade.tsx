@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { animate, stagger } from "animejs";
-import { useCanAnimate } from "@/lib/use-anime";
+import { useCanAnimate, useInView } from "@/lib/use-anime";
 
 interface LetterCascadeProps {
   text: string;
@@ -11,15 +11,16 @@ interface LetterCascadeProps {
 
 /**
  * Splits text into characters that cascade in with an anime.js stagger.
- * Full text stays in the DOM for screen readers / SEO (sr-only + aria-hidden chars).
+ * Replays on every viewport entry. Full text stays in the DOM for
+ * screen readers / SEO (sr-only + aria-hidden chars).
  */
 export function LetterCascade({ text, as: Tag = "span", className, delay = 0 }: LetterCascadeProps) {
   const canAnimate = useCanAnimate();
-  const ref = useRef<HTMLElement | null>(null);
+  const { ref, inView } = useInView<HTMLElement>(0.4);
 
   useEffect(() => {
     const el = ref.current;
-    if (!canAnimate || !el) return;
+    if (!canAnimate || !inView || !el) return;
     const chars = el.querySelectorAll("[data-char]");
     if (!chars.length) return;
 
@@ -33,7 +34,7 @@ export function LetterCascade({ text, as: Tag = "span", className, delay = 0 }: 
     });
 
     return () => { anim.pause(); };
-  }, [canAnimate, text, delay]);
+  }, [canAnimate, inView, ref, text, delay]);
 
   const chars = (
     <span aria-hidden="true" className="inline">
@@ -59,55 +60,5 @@ export function LetterCascade({ text, as: Tag = "span", className, delay = 0 }: 
       <span className="sr-only">{text}</span>
       {chars}
     </Tag>
-  );
-}
-
-interface WordRevealProps {
-  text: string;
-  className?: string;
-  delay?: number;
-}
-
-/**
- * One-time word-by-word fade-up reveal (no looping).
- * Used for the hero tagline - static after the entrance.
- */
-export function WordReveal({ text, className, delay = 0 }: WordRevealProps) {
-  const canAnimate = useCanAnimate();
-  const ref = useRef<HTMLParagraphElement | null>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!canAnimate || !el) return;
-    const words = el.querySelectorAll("[data-word]");
-    if (!words.length) return;
-
-    const anim = animate(words, {
-      opacity: [0, 1],
-      translateY: ["0.6em", "0em"],
-      duration: 650,
-      ease: "outExpo",
-      delay: stagger(70, { start: delay }),
-    });
-
-    return () => { anim.pause(); };
-  }, [canAnimate, text, delay]);
-
-  return (
-    <p ref={ref} className={className}>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
-        {text.split(" ").map((word, i) => (
-          <span
-            key={i}
-            data-word
-            className="inline-block will-change-transform mr-[0.28em]"
-            style={canAnimate ? { opacity: 0 } : undefined}
-          >
-            {word}
-          </span>
-        ))}
-      </span>
-    </p>
   );
 }

@@ -124,7 +124,7 @@ export function ThemeControls() {
               <button
                 key={key}
                 type="button"
-                onClick={() => changeTheme(key)}
+                onClick={() => { changeTheme(key); setIsOpen(false); }}
                 className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${
                   currentTheme === key ? "ring-2 ring-offset-2 ring-offset-card ring-primary" : ""
                 }`}

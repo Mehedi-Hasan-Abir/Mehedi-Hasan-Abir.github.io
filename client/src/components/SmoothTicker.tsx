@@ -15,8 +15,8 @@ export function SmoothTicker({ phrases, className }: { phrases: string[]; classN
 
   useEffect(() => {
     if (phrases.length <= 1) return;
-    const HOLD = 3200;
-    const SCRAMBLE = 700;
+    const HOLD = 1700;
+    const SCRAMBLE = 520;
 
     const id = window.setTimeout(() => {
       const next = phrases[(index + 1) % phrases.length];

@@ -1,5 +1,5 @@
-import { useRef, type ReactNode, type MouseEvent } from "react";
-import { animate } from "animejs";
+import { useEffect, useRef, type ReactNode, type MouseEvent } from "react";
+import { animate, stagger } from "animejs";
 
 /** Pulls its child toward the cursor while hovered; springs back on leave. */
 export function Magnetic({ children, strength = 0.35 }: { children: ReactNode; strength?: number }) {
@@ -43,12 +43,15 @@ interface MarqueeProps {
   duration?: number;
 }
 
-/** Continuous outlined-text marquee strip. Pauses under reduced-motion CSS. */
-export function Marquee({ text, repeat = 6, duration = 22 }: MarqueeProps) {
+/** Continuous outlined-text marquee strip (inline-style animation - no Tailwind class dependency). */
+export function Marquee({ text, repeat = 6, duration = 20 }: MarqueeProps) {
   const items = Array.from({ length: repeat });
   return (
     <div className="overflow-hidden py-6 rule-t select-none" aria-hidden="true">
-      <div className="flex w-max animate-[marquee_var(--marquee-dur)_linear_infinite]" style={{ "--marquee-dur": `${duration}s` } as React.CSSProperties}>
+      <div
+        className="flex w-max"
+        style={{ animation: `marquee ${duration}s linear infinite` }}
+      >
         {items.map((_, i) => (
           <span
             key={i}
@@ -60,5 +63,43 @@ export function Marquee({ text, repeat = 6, duration = 22 }: MarqueeProps) {
         ))}
       </div>
     </div>
+  );
+}
+
+interface PulseRingProps {
+  enabled: boolean;
+}
+
+/**
+ * Expanding sonar rings behind a button (anime.js transform loop - works on
+ * every browser/viewport, unlike CSS ping which was unreliable here).
+ * Place inside a `relative` button as the first child.
+ */
+export function PulseRing({ enabled }: PulseRingProps) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!enabled || !el) return;
+    const rings = el.querySelectorAll("[data-ring]");
+    if (!rings.length) return;
+    const anim = animate(rings, {
+      scale: [1, 1.55],
+      opacity: [0.55, 0],
+      duration: 1800,
+      ease: "outQuad",
+      delay: stagger(900),
+      loop: true,
+    });
+    return () => { anim.pause(); };
+  }, [enabled]);
+
+  if (!enabled) return null;
+
+  return (
+    <span ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-0">
+      <span data-ring className="absolute inset-0 rounded-full border-2 border-current" />
+      <span data-ring className="absolute inset-0 rounded-full border-2 border-current" />
+    </span>
   );
 }

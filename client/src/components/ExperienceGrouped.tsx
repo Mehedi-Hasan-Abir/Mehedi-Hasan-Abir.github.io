@@ -32,11 +32,9 @@ function periodStart(period: string): string {
 export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
   const canAnimate = useCanAnimate();
   const { ref: hostRef, inView } = useInView<HTMLDivElement>(0.05);
-  const played = useRef(false);
 
   useEffect(() => {
-    if (!canAnimate || !inView || played.current || !hostRef.current) return;
-    played.current = true;
+    if (!canAnimate || !inView || !hostRef.current) return;
     const host = hostRef.current;
 
     animate(host.querySelectorAll("[data-xp-rail]"), {
@@ -65,6 +63,20 @@ export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
       ease: "outExpo",
       delay: stagger(26, { start: 450 }),
     });
+
+    // Signal pulse traveling down the first rail (anime-driven - reliable everywhere)
+    const rail = host.querySelector<HTMLElement>("[data-xp-rail]");
+    const pulse = host.querySelector<HTMLElement>("[data-rail-pulse]");
+    if (rail && pulse) {
+      const distance = rail.offsetHeight - 8;
+      animate(pulse, {
+        translateY: [0, distance],
+        opacity: [0, 1, 1, 0],
+        duration: 3000,
+        ease: "inOutQuad",
+        loop: true,
+      });
+    }
   }, [canAnimate, inView, hostRef]);
 
   const hidden = canAnimate ? { opacity: 0 } : undefined;
@@ -91,12 +103,20 @@ export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
                 {group.company}&nbsp;·&nbsp;{group.company}&nbsp;·&nbsp;
               </span>
 
-              {/* Company masthead */}
-              <div className="relative flex flex-wrap items-baseline justify-between gap-2 mb-8">
-                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight" style={{ fontStretch: "108%" }}>
-                  {group.company}
-                </h3>
-                <span className="mono-label text-accent">{span.toUpperCase()}</span>
+              {/* Company masthead - high contrast, accent identity */}
+              <div className="relative flex flex-wrap items-center justify-between gap-3 mb-9">
+                <div>
+                  <p className="mono-label text-muted-foreground mb-1.5">COMPANY</p>
+                  <h3
+                    className="text-3xl md:text-[2.6rem] font-extrabold tracking-tight text-accent leading-none"
+                    style={{ fontStretch: "110%" }}
+                  >
+                    {group.company}
+                  </h3>
+                </div>
+                <span className="mono-label text-sm border border-primary/50 text-accent px-4 py-2 rounded-full bg-primary/10">
+                  {span.toUpperCase()}
+                </span>
               </div>
 
               {/* Progression rail */}
@@ -109,9 +129,10 @@ export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
                 />
                 {canAnimate && (
                   <span
+                    data-rail-pulse
                     aria-hidden="true"
-                    className="absolute left-[2px] w-[7px] h-[7px] rounded-full bg-primary"
-                    style={{ animation: "rail-pulse 3.2s ease-in-out infinite" }}
+                    className="absolute left-[2px] top-[4px] w-[7px] h-[7px] rounded-full bg-primary"
+                    style={{ opacity: 0 }}
                   />
                 )}
                 {group.roles.map((role, ri) => (

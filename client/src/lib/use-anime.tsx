@@ -5,9 +5,10 @@ import { useConnection } from "@/contexts/ConnectionContext";
  * Shared anime.js integration helpers.
  * Animations always run for capable connections (site-owner requirement);
  * only genuine low-bandwidth users (2G / saveData) skip decorative motion.
+ * Scroll-triggered effects REPLAY on every viewport entry (owner preference).
  */
 
-export function useInView<T extends HTMLElement>(threshold = 0.25, once = true) {
+export function useInView<T extends HTMLElement>(threshold = 0.25, once = false) {
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
 
@@ -17,12 +18,8 @@ export function useInView<T extends HTMLElement>(threshold = 0.25, once = true) 
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setInView(true);
-            if (once) io.disconnect();
-          } else if (!once) {
-            setInView(false);
-          }
+          setInView(entry.isIntersecting);
+          if (entry.isIntersecting && once) io.disconnect();
         });
       },
       { threshold }
@@ -41,9 +38,9 @@ export function useCanAnimate(): boolean {
 }
 
 /**
- * Runs a callback once when the host element enters the viewport
- * and animation is allowed. Re-arms when `enabled` flips to true
- * (e.g. canLoadHeavy resolving after first paint).
+ * Runs a callback every time the host element enters the viewport
+ * (animations replay on each scroll entry). Re-arms when `enabled`
+ * flips to true (e.g. canLoadHeavy resolving after first paint).
  */
 export function useAnimeOnView<T extends Element>(
   run: (el: T) => void,
@@ -51,27 +48,26 @@ export function useAnimeOnView<T extends Element>(
 ) {
   const { threshold = 0.25, enabled = true } = options ?? {};
   const ref = useRef<T | null>(null);
-  const ran = useRef(false);
   const runRef = useRef(run);
   runRef.current = run;
 
   useEffect(() => {
-    if (!enabled || ran.current) return;
-    const node = ref.current;
-    if (!node) return;
+    if (!enabled) return;
+    let running = false;
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !ran.current) {
-            ran.current = true;
-            runRef.current(node);
-            io.disconnect();
+          if (entry.isIntersecting && !running && ref.current) {
+            running = true;
+            runRef.current(ref.current);
+            // small cooldown so fast scroll jitter doesn't double-fire
+            setTimeout(() => { running = false; }, 600);
           }
         });
       },
       { threshold }
     );
-    io.observe(node);
+    if (ref.current) io.observe(ref.current);
     return () => io.disconnect();
   }, [enabled, threshold]);
 
