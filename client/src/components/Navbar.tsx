@@ -108,6 +108,11 @@ export function Navbar() {
             <ThemeControls />
           </div>
 
+          {/* Compact theme controls always visible on mobile */}
+          <div className="md:hidden">
+            <ThemeControls />
+          </div>
+
           {/* Mobile menu toggle */}
           <button
             type="button"

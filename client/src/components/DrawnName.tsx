@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { animate, svg, stagger } from "animejs";
 import { MEHEDI_LINE, HASAN_LINE } from "./drawn-name-paths";
 import { useCanAnimate, useInView } from "@/lib/use-anime";
@@ -6,11 +6,10 @@ import { useCanAnimate, useInView } from "@/lib/use-anime";
 interface LineProps {
   line: { w: number; h: number; paths: string[] };
   accentLast?: boolean;
-  shineId: string;
-  animate: boolean;
+  animated: boolean;
 }
 
-function Line({ line, accentLast = false, shineId, animate: canAnimate }: LineProps) {
+function Line({ line, accentLast = false, animated }: LineProps) {
   return (
     <svg
       viewBox={`0 0 ${line.w} ${line.h}`}
@@ -18,31 +17,6 @@ function Line({ line, accentLast = false, shineId, animate: canAnimate }: LinePr
       fill="none"
       aria-hidden="true"
     >
-      <defs>
-        <linearGradient
-          id={shineId}
-          gradientUnits="userSpaceOnUse"
-          x1={0}
-          y1={0}
-          x2={line.w}
-          y2={0}
-        >
-          <stop offset="0" stopColor="transparent" />
-          <stop offset="0.5" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
-          <stop offset="1" stopColor="transparent" />
-          {canAnimate && (
-            <animateTransform
-              attributeName="gradientTransform"
-              type="translate"
-              from={`-${line.w} 0`}
-              to={`${line.w} 0`}
-              dur="4.2s"
-              repeatCount="indefinite"
-            />
-          )}
-        </linearGradient>
-      </defs>
-
       {/* Base strokes */}
       {line.paths.map((d, i) => (
         <path
@@ -56,14 +30,19 @@ function Line({ line, accentLast = false, shineId, animate: canAnimate }: LinePr
         />
       ))}
 
-      {/* Fluid shine passing through constantly */}
-      {canAnimate && (
-        <g opacity={0.9}>
-          {line.paths.map((d, i) => (
-            <path key={`s-${i}`} d={d} stroke={`url(#${shineId})`} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
-          ))}
-        </g>
-      )}
+      {/* Comet shine sweeping along the letters (anime-driven, works everywhere) */}
+      {animated &&
+        line.paths.map((d, i) => (
+          <path
+            key={`s-${i}`}
+            d={d}
+            stroke="hsl(var(--primary))"
+            strokeWidth={5.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            data-shine
+          />
+        ))}
     </svg>
   );
 }
@@ -71,19 +50,20 @@ function Line({ line, accentLast = false, shineId, animate: canAnimate }: LinePr
 /**
  * Hand-drawn hero name: real letter paths (Caveat, OFL) that draw themselves
  * in via anime.js svg.createDrawable - replays on every viewport entry.
- * A fluid shine sweeps through the strokes continuously.
+ * A comet of accent light sweeps through the strokes continuously.
  */
 export function DrawnName() {
   const canAnimate = useCanAnimate();
-  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const { ref, inView } = useInView<HTMLDivElement>(0.3);
+  const { ref, inView } = useInView<HTMLDivElement>(0.25);
+  const shineAnims = useRef<ReturnType<typeof animate>[]>([]);
 
+  // Draw-in: replays on every viewport entry
   useEffect(() => {
     if (!canAnimate || !inView || !ref.current) return;
     const paths = ref.current.querySelectorAll<SVGPathElement>("path[data-drawn]");
     if (!paths.length) return;
 
-    const drawables = svg.createDrawable(paths);
+    const drawables = svg.createDrawable(Array.from(paths));
     const anim = animate(drawables, {
       draw: ["0 0", "0 1"],
       duration: 900,
@@ -93,11 +73,42 @@ export function DrawnName() {
     return () => { anim.pause(); };
   }, [canAnimate, inView, ref]);
 
+  // Comet shine: a short dash travels along each stroke, forever
+  useEffect(() => {
+    const host = ref.current;
+    if (!canAnimate || !host) return;
+    const shines = Array.from(host.querySelectorAll<SVGPathElement>("path[data-shine]"));
+    if (!shines.length) return;
+
+    const anims: ReturnType<typeof animate>[] = [];
+    shines.forEach((path, i) => {
+      const len = path.getTotalLength();
+      const comet = Math.min(80, len * 0.35);
+      path.style.strokeDasharray = `${comet} ${len + comet}`;
+      path.style.opacity = "0";
+      const state = { o: -1 };
+      const a = animate(state, {
+        o: 1,
+        duration: 2600,
+        ease: "inOutQuad",
+        delay: 1500 + i * 240,
+        loop: true,
+        onUpdate: () => {
+          path.style.opacity = state.o > -0.7 && state.o < 0.7 ? "0.95" : "0";
+          path.style.strokeDashoffset = String(-state.o * (len + comet));
+        },
+      });
+      anims.push(a);
+    });
+    shineAnims.current = anims;
+    return () => { anims.forEach((a) => a.pause()); };
+  }, [canAnimate, ref]);
+
   return (
     <div ref={ref} role="img" aria-label="Mehedi Hasan" className="py-1">
       <span className="sr-only">Mehedi Hasan</span>
-      <Line line={MEHEDI_LINE} shineId={`${uid}-m`} animate={canAnimate} />
-      <Line line={HASAN_LINE} accentLast shineId={`${uid}-h`} animate={canAnimate} />
+      <Line line={MEHEDI_LINE} animated={canAnimate} />
+      <Line line={HASAN_LINE} accentLast animated={canAnimate} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { Suspense, lazy, useEffect, useState } from "react";
-import { motion, MotionConfig, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
+import { Suspense, lazy, useEffect } from "react";
+import { MotionConfig } from "framer-motion";
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -16,29 +16,6 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
-
-/** Scroll-velocity skew on the whole page (subtle on mobile, stronger on desktop). */
-function ScrollSkew({ children }: { children: React.ReactNode }) {
-  const [angle, setAngle] = useState(0.8);
-  const { scrollY } = useScroll();
-  const velocity = useVelocity(scrollY);
-  const smooth = useSpring(velocity, { stiffness: 220, damping: 50, mass: 0.6 });
-  const skewY = useTransform(smooth, [-2400, 0, 2400], [`${angle}deg`, "0deg", `-${angle}deg`], { clamp: true });
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setAngle(mq.matches ? 1.1 : 0.7);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
-  return (
-    <motion.div style={{ skewY, willChange: "transform" }}>
-      {children}
-    </motion.div>
-  );
-}
 
 function AnalyticsPageView() {
   const [location] = useLocation();
@@ -76,9 +53,7 @@ function AppContent() {
       <Toaster />
       <CustomCursor />
       <ThemeProvider>
-        <ScrollSkew>
-          <Router />
-        </ScrollSkew>
+        <Router />
       </ThemeProvider>
       <BackToTop />
     </>

@@ -1,5 +1,29 @@
-import { useEffect, useRef, type ReactNode, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import { animate, stagger } from "animejs";
+import { motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
+
+/** Scroll-velocity skew on page content (subtle on mobile, stronger on desktop). */
+export function ScrollSkew({ children }: { children: ReactNode }) {
+  const [angle, setAngle] = useState(0.9);
+  const { scrollY } = useScroll();
+  const velocity = useVelocity(scrollY);
+  const smooth = useSpring(velocity, { stiffness: 220, damping: 50, mass: 0.6 });
+  const skewY = useTransform(smooth, [-2600, 0, 2600], [`${angle}deg`, "0deg", `-${angle}deg`], { clamp: true });
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setAngle(mq.matches ? 1.2 : 0.9);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return (
+    <motion.div style={{ skewY, willChange: "transform" }}>
+      {children}
+    </motion.div>
+  );
+}
 
 /** Pulls its child toward the cursor while hovered; springs back on leave. */
 export function Magnetic({ children, strength = 0.35 }: { children: ReactNode; strength?: number }) {
@@ -81,14 +105,14 @@ export function PulseRing({ enabled }: PulseRingProps) {
   useEffect(() => {
     const el = ref.current;
     if (!enabled || !el) return;
-    const rings = el.querySelectorAll("[data-ring]");
+    const rings = Array.from(el.querySelectorAll("[data-ring]"));
     if (!rings.length) return;
     const anim = animate(rings, {
-      scale: [1, 1.55],
-      opacity: [0.55, 0],
-      duration: 1800,
+      scale: [1, 1.6],
+      opacity: [0.6, 0],
+      duration: 1700,
       ease: "outQuad",
-      delay: stagger(900),
+      delay: stagger(850),
       loop: true,
     });
     return () => { anim.pause(); };
@@ -98,8 +122,8 @@ export function PulseRing({ enabled }: PulseRingProps) {
 
   return (
     <span ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-0">
-      <span data-ring className="absolute inset-0 rounded-full border-2 border-current" />
-      <span data-ring className="absolute inset-0 rounded-full border-2 border-current" />
+      <span data-ring className="absolute inset-0 rounded-full border-2 border-white/80" />
+      <span data-ring className="absolute inset-0 rounded-full border-2 border-white/80" />
     </span>
   );
 }

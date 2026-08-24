@@ -17,7 +17,7 @@ import { LetterCascade } from "@/components/LetterCascade";
 import { DrawnName } from "@/components/DrawnName";
 import { SmoothTicker } from "@/components/SmoothTicker";
 import { StatsStrip } from "@/components/StatsStrip";
-import { Magnetic, Marquee, PulseRing } from "@/components/Interactive";
+import { Magnetic, Marquee, PulseRing, ScrollSkew } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { BlogSection } from "@/components/BlogSection";
@@ -52,6 +52,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
+      {/* Scroll-skew wraps page content only - never the fixed navbar */}
+      <ScrollSkew>
       <main className="max-w-6xl mx-auto px-5 md:px-8">
 
         {/* ============ HERO ============ */}
@@ -144,13 +146,25 @@ export default function Home() {
                 {/* Orbiting dashed rings */}
                 {canAnimate && (
                   <>
-                    <svg aria-hidden="true" className="absolute -inset-7 w-[calc(100%+56px)] h-[calc(100%+56px)] animate-[spin-slow_28s_linear_infinite]" viewBox="0 0 100 100" fill="none">
-                      <circle cx="50" cy="50" r="48.5" stroke="hsl(var(--primary) / 0.4)" strokeWidth="0.4" strokeDasharray="2 3" />
-                      <circle cx="50" cy="1.5" r="1.4" fill="hsl(var(--primary))" />
+                    <svg
+                      aria-hidden="true"
+                      className="absolute -inset-7 w-[calc(100%+56px)] h-[calc(100%+56px)] pointer-events-none"
+                      style={{ animation: "spin-slow 26s linear infinite" }}
+                      viewBox="0 0 100 100"
+                      fill="none"
+                    >
+                      <circle cx="50" cy="50" r="48.5" stroke="hsl(var(--primary) / 0.55)" strokeWidth="0.5" strokeDasharray="1.6 2.6" />
+                      <circle cx="50" cy="1.5" r="1.5" fill="hsl(var(--primary))" />
                     </svg>
-                    <svg aria-hidden="true" className="absolute -inset-3 w-[calc(100%+24px)] h-[calc(100%+24px)] animate-[spin-slow_18s_linear_infinite_reverse]" viewBox="0 0 100 100" fill="none">
-                      <circle cx="50" cy="50" r="48.8" stroke="hsl(var(--border))" strokeWidth="0.35" strokeDasharray="0.8 2.4" />
-                      <circle cx="98.5" cy="50" r="1" fill="hsl(var(--primary) / 0.8)" />
+                    <svg
+                      aria-hidden="true"
+                      className="absolute -inset-3 w-[calc(100%+24px)] h-[calc(100%+24px)] pointer-events-none"
+                      style={{ animation: "spin-slow 16s linear infinite reverse" }}
+                      viewBox="0 0 100 100"
+                      fill="none"
+                    >
+                      <circle cx="50" cy="50" r="48.8" stroke="hsl(var(--primary) / 0.35)" strokeWidth="0.4" strokeDasharray="0.7 2.2" />
+                      <circle cx="98.5" cy="50" r="1.1" fill="hsl(var(--primary) / 0.9)" />
                     </svg>
                   </>
                 )}
@@ -373,6 +387,7 @@ export default function Home() {
           <span>&copy; {new Date().getFullYear()} &middot; All rights reserved</span>
         </div>
       </footer>
+      </ScrollSkew>
     </div>
   );
 }

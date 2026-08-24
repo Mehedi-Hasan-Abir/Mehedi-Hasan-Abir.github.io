@@ -86,20 +86,34 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
 
     const rail = host.querySelector("[data-rail]");
     if (rail) {
-      animate(rail, { scaleY: [0, 1], duration: 800, ease: "outQuad" });
+      animate(rail, { scaleY: [0, 1], duration: 900, ease: "outQuad" });
     }
-    animate(host.querySelectorAll("[data-branch]"), {
-      opacity: [0, 1],
-      translateX: [24, 0],
-      duration: 550,
-      ease: "outExpo",
-      delay: stagger(110, { start: 200 }),
-    });
     animate(rootEl, {
       opacity: [0, 1],
-      scale: [0.9, 1],
-      duration: 500,
+      scale: [0.85, 1],
+      rotate: [-4, 0],
+      duration: 550,
       ease: "outBack",
+    });
+    animate(host.querySelectorAll("[data-branch]"), {
+      opacity: [0, 1],
+      translateX: [32, 0],
+      duration: 600,
+      ease: "outExpo",
+      delay: stagger(130, { start: 220 }),
+    });
+    // Chips ripple in per branch - more fluid, more noticeable
+    host.querySelectorAll("[data-branch]").forEach((branch, bi) => {
+      const chips = branch.querySelectorAll("[data-chip]");
+      if (!chips.length) return;
+      animate(chips, {
+        opacity: [0, 1],
+        translateY: [12, 0],
+        scale: [0.85, 1],
+        duration: 480,
+        ease: "outBack",
+        delay: stagger(38, { start: 420 + bi * 130 }),
+      });
     });
   }, [inView, ref]);
 
@@ -127,7 +141,12 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
             </h3>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {group.items.map((item) => (
-                <span key={item} className="mono-label text-[11px] text-muted-foreground border border-border bg-card px-2.5 py-1 rounded-md">
+                <span
+                  key={item}
+                  data-chip
+                  className="mono-label text-[11px] text-muted-foreground border border-border bg-card px-2.5 py-1 rounded-md will-change-transform"
+                  style={{ opacity: 0 }}
+                >
                   {item}
                 </span>
               ))}
