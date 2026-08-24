@@ -8,6 +8,8 @@ interface BlogPost {
   title: string;
   description: string;
   thumbnail: string;
+  thumbnailWidth: number;
+  thumbnailHeight: number;
   externalLink: string;
   platform: string;
   date: string;
@@ -90,6 +92,8 @@ export function BlogSection() {
                   <img
                     src={blog.thumbnail}
                     alt={blog.title}
+                    width={blog.thumbnailWidth}
+                    height={blog.thumbnailHeight}
                     loading="lazy"
                     decoding="async"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
