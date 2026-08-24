@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { animate, stagger } from "animejs";
 import { useConnection } from "@/contexts/ConnectionContext";
+import { useInView } from "@/lib/use-anime";
 
 export interface SkillGroup {
   id: number;
@@ -50,58 +51,171 @@ function columnHeight(skills: SkillGroup[]): number {
 
 export function SkillsMindMap({ skills }: SkillsMindMapProps) {
   const { canLoadHeavy } = useConnection();
-  const [hovered, setHovered] = useState<number | null>(null);
-  // Only true low-bandwidth users (2G / saveData) get the text fallback;
-  // reduced-motion users still get the map (owner requirement).
-  const useMap = canLoadHeavy;
+  // Only genuine low-bandwidth users (2G / saveData) get the static text list.
+  const useVisual = canLoadHeavy;
 
-  if (!useMap) {
+  if (!useVisual) {
     return <SkillFallback skills={skills} />;
   }
+
+  return (
+    <>
+      {/* Mobile: vertical tree - thumb-friendly, zero horizontal scroll */}
+      <div className="md:hidden">
+        <SkillsTreeMobile skills={skills} />
+      </div>
+      {/* Desktop: SVG mind map */}
+      <div className="hidden md:block">
+        <SkillsMapDesktop skills={skills} />
+      </div>
+    </>
+  );
+}
+
+/* ================= MOBILE TREE ================= */
+
+function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
+  const { ref, inView } = useInView<HTMLDivElement>(0.08);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const played = useRef(false);
+
+  useEffect(() => {
+    if (!inView || played.current || !ref.current) return;
+    played.current = true;
+    const host = ref.current;
+    const rootEl = rootRef.current;
+    if (!rootEl) return;
+
+    const rail = host.querySelector("[data-rail]");
+    if (rail) {
+      animate(rail, { scaleY: [0, 1], duration: 800, ease: "outQuad" });
+    }
+    animate(host.querySelectorAll("[data-branch]"), {
+      opacity: [0, 1],
+      translateX: [24, 0],
+      duration: 550,
+      ease: "outExpo",
+      delay: stagger(110, { start: 200 }),
+    });
+    animate(rootEl, {
+      opacity: [0, 1],
+      scale: [0.9, 1],
+      duration: 500,
+      ease: "outBack",
+    });
+  }, [inView, ref]);
+
+  return (
+    <div ref={ref} className="relative pl-6" role="img" aria-label="Capabilities grouped into seven areas">
+      <span
+        data-rail
+        aria-hidden="true"
+        className="absolute left-[5px] top-2 bottom-6 w-px bg-border origin-top"
+      />
+      <div ref={rootRef} className="inline-flex flex-col items-center border-2 border-primary bg-card rounded-2xl px-6 py-3.5 mb-7">
+        <span className="font-extrabold tracking-wide text-[15px]">AI ENGINEERING</span>
+        <span className="mono-label text-[10px] text-muted-foreground mt-0.5">PRODUCTION STACK</span>
+      </div>
+
+      <div className="space-y-7">
+        {skills.map((group) => (
+          <div key={group.id} data-branch className="relative">
+            <span
+              aria-hidden="true"
+              className="absolute -left-6 top-[13px] w-[11px] h-[11px] rounded-full bg-background border-2 border-primary"
+            />
+            <h3 className="mono-label font-semibold inline-block bg-secondary border border-border px-3.5 py-2 rounded-lg">
+              {group.category.toUpperCase()}
+            </h3>
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {group.items.map((item) => (
+                <span key={item} className="mono-label text-[11px] text-muted-foreground border border-border bg-card px-2.5 py-1 rounded-md">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ================= DESKTOP SVG MAP ================= */
+
+function SkillsMapDesktop({ skills }: { skills: SkillGroup[] }) {
+  const { ref: containerRef, inView } = useInView<HTMLDivElement>(0.15);
+  const played = useRef(false);
+
+  useEffect(() => {
+    if (!inView || played.current || !containerRef.current) return;
+    played.current = true;
+    const svg = containerRef.current.querySelector("svg");
+    if (!svg) return;
+
+    // Draw edges organically
+    svg.querySelectorAll<SVGPathElement>("[data-edge]").forEach((path, i) => {
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = String(len);
+      animate(path, {
+        strokeDashoffset: [len, 0],
+        duration: 900,
+        ease: "outQuad",
+        delay: 120 + i * 90,
+      });
+    });
+
+    // Root pop
+    const rootG = svg.querySelector("[data-root]");
+    if (rootG) {
+      animate(rootG, {
+        opacity: [0, 1],
+        scale: [0.85, 1],
+        duration: 550,
+        ease: "outBack",
+      });
+    }
+
+    // Branch cascade
+    animate(svg.querySelectorAll("[data-branch-g]"), {
+      opacity: [0, 1],
+      translateX: [26, 0],
+      duration: 600,
+      ease: "outExpo",
+      delay: stagger(100, { start: 320 }),
+    });
+  }, [inView, containerRef]);
 
   const VIEW_H = columnHeight(skills);
   const pts = layoutBranches(skills);
   const rootY = VIEW_H / 2 - ROOT.h / 2;
 
   return (
-    <div className="overflow-x-auto" role="img" aria-label="Mind map of technical capabilities grouped into seven areas">
-      <svg
-        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        style={{ minWidth: 920, width: "100%" }}
-      >
+    <div ref={containerRef} className="overflow-x-auto" role="img" aria-label="Mind map of technical capabilities grouped into seven areas">
+      <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} style={{ minWidth: 920, width: "100%" }}>
         {/* Edges */}
         {skills.map((group, i) => {
-          const active = hovered === null || hovered === i;
           const y2 = pts[i].y - 8;
           const d = `M ${ROOT.x + ROOT.w} ${rootY + ROOT.h / 2}
                      C ${ROOT.x + ROOT.w + 90} ${rootY + ROOT.h / 2},
                      ${pts[i].x - 90} ${y2},
                      ${pts[i].x - 10} ${y2}`;
           return (
-            <motion.path
+            <path
               key={group.id}
+              data-edge
               d={d}
               fill="none"
               stroke="hsl(var(--primary))"
-              strokeWidth={active ? 1.8 : 1}
+              strokeWidth={1.6}
               strokeLinecap="round"
-              style={{ opacity: active ? 0.75 : 0.15, transition: "opacity .25s ease" }}
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              opacity={0.7}
             />
           );
         })}
 
         {/* Root node */}
-        <motion.g
-          initial={{ opacity: 0, scale: 0.85 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          style={{ transformOrigin: `${ROOT.x + ROOT.w / 2}px ${rootY + ROOT.h / 2}px` }}
-        >
+        <g data-root>
           <rect
             x={ROOT.x}
             y={rootY}
@@ -134,28 +248,13 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
           >
             PRODUCTION STACK
           </text>
-        </motion.g>
+        </g>
 
         {/* Branches */}
         {skills.map((group, i) => {
           const p = pts[i];
-          const active = hovered === null || hovered === i;
           return (
-            <motion.g
-              key={group.id}
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-              initial={{ opacity: 0, x: 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: 0.25 + i * 0.09, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                cursor: "default",
-                opacity: undefined,
-                transition: "opacity .25s ease",
-                ...(active ? {} : { opacity: 0.22 }),
-              }}
-            >
+            <g key={group.id} data-branch-g>
               <rect
                 x={p.x - 10}
                 y={p.y - 26}
@@ -163,7 +262,7 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
                 height={36}
                 rx={9}
                 fill="hsl(var(--secondary))"
-                stroke={hovered === i ? "hsl(var(--primary))" : "hsl(var(--border))"}
+                stroke="hsl(var(--border))"
                 strokeWidth={1.2}
               />
               <text
@@ -188,7 +287,7 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
                   {item}
                 </text>
               ))}
-            </motion.g>
+            </g>
           );
         })}
       </svg>
@@ -196,7 +295,7 @@ export function SkillsMindMap({ skills }: SkillsMindMapProps) {
   );
 }
 
-/** Low-motion / slow-connection fallback: hairline rows with inline items. */
+/** Low-bandwidth fallback: hairline rows with inline items. */
 function SkillFallback({ skills }: { skills: SkillGroup[] }) {
   return (
     <div>

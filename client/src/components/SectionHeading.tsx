@@ -1,5 +1,6 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { animate } from "animejs";
+import { useAnimeOnView, useCanAnimate } from "@/lib/use-anime";
 
 interface SectionHeadingProps {
   title: string;
@@ -20,6 +21,45 @@ const sectionNumbers: Record<string, number> = {
   "get-in-touch": 9,
 };
 
+/** Hand-drawn accent stroke that sketches itself under the title on scroll. */
+function PenStroke() {
+  const canAnimate = useCanAnimate();
+
+  const pathRef = useAnimeOnView<SVGPathElement>(
+    (path) => {
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = String(len);
+      animate(path, {
+        strokeDashoffset: [len, 0],
+        opacity: [1, 1],
+        duration: 950,
+        ease: "outQuad",
+        delay: 250,
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  return (
+    <svg
+      className="block mt-4 h-[10px] w-[190px] md:w-[230px] overflow-visible"
+      viewBox="0 0 230 10"
+      fill="none"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        ref={pathRef}
+        d="M3 7 C 55 2.5, 120 9.5, 165 5.5 S 215 4, 227 5"
+        stroke="hsl(var(--primary))"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        style={canAnimate ? { opacity: 0 } : undefined}
+      />
+    </svg>
+  );
+}
+
 export function SectionHeading({ title, subtitle, number }: SectionHeadingProps) {
   const sectionKey = title.toLowerCase().replace(/\s+/g, "-");
   const displayNumber = number !== undefined ? number : sectionNumbers[sectionKey] ?? 0;
@@ -31,37 +71,15 @@ export function SectionHeading({ title, subtitle, number }: SectionHeadingProps)
         <span className="ghost-num text-sm md:text-base shrink-0" aria-hidden="true">
           {formattedNumber}
         </span>
-        <motion.h2
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          className="display-lg"
-        >
-          {title}
-        </motion.h2>
+        <div>
+          <h2 className="display-lg">{title}</h2>
+          <PenStroke />
+        </div>
       </div>
 
       {subtitle && (
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.08 }}
-          className="mt-3 text-muted-foreground max-w-2xl"
-        >
-          {subtitle}
-        </motion.p>
+        <p className="mt-4 text-muted-foreground max-w-2xl">{subtitle}</p>
       )}
-
-      <motion.div
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-        className="h-px bg-border origin-left mt-6"
-        aria-hidden="true"
-      />
     </div>
   );
 }

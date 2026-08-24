@@ -1,6 +1,8 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { animate, stagger } from "animejs";
 import { useBlogs } from "@/hooks/use-portfolio";
 import { ExternalLink, Calendar } from "lucide-react";
+import { useCanAnimate, useInView } from "@/lib/use-anime";
 
 interface BlogPost {
   id: number;
@@ -19,6 +21,22 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function BlogSection() {
   const { data: blogs, isLoading } = useBlogs();
+  const canAnimate = useCanAnimate();
+  const { ref: gridRef, inView } = useInView<HTMLDivElement>(0.08);
+  const played = useRef(false);
+
+  useEffect(() => {
+    if (!canAnimate || !inView || played.current || !gridRef.current) return;
+    played.current = true;
+    const anim = animate(gridRef.current.querySelectorAll("[data-card]"), {
+      opacity: [0, 1],
+      translateY: [26, 0],
+      duration: 600,
+      ease: "outExpo",
+      delay: stagger(120),
+    });
+    return () => { anim.pause(); };
+  }, [canAnimate, inView, gridRef]);
 
   if (isLoading) {
     return (
@@ -55,13 +73,7 @@ export function BlogSection() {
   return (
     <section id="blog" className="rule-t py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, ease }}
-          className="mb-12 md:mb-16"
-        >
+        <div className="mb-12 md:mb-16">
           <div className="flex items-baseline gap-4 md:gap-5">
             <span className="ghost-num text-sm md:text-base shrink-0" aria-hidden="true">04</span>
             <h2 className="display-lg">Writing</h2>
@@ -69,18 +81,16 @@ export function BlogSection() {
           <p className="mt-3 text-muted-foreground max-w-2xl">
             Thoughts on AI, Machine Learning, and Technology
           </p>
-          <div className="h-px bg-border origin-left mt-6" aria-hidden="true" />
-        </motion.div>
+          <div className="h-px bg-border mt-6" aria-hidden="true" />
+        </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {featuredBlogs.map((blog: BlogPost, index: number) => (
-            <motion.article
+            <article
               key={blog.id}
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: index * 0.09, ease }}
+              data-card
               className="group border border-border bg-card hover:border-primary/60 transition-colors flex flex-col cursor-pointer overflow-hidden"
+              style={canAnimate ? { opacity: 0 } : undefined}
               onClick={() => window.open(blog.externalLink, "_blank", "noopener,noreferrer")}
             >
               {/* Thumbnail */}
@@ -148,18 +158,12 @@ export function BlogSection() {
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
-            </motion.article>
+            </article>
           ))}
         </div>
 
         {/* View All Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.25 }}
-          className="text-center mt-12"
-        >
+        <div className="text-center mt-12">
           <a
             href="/blog/"
             className="btn-push inline-flex items-center gap-2 px-8 py-3.5 border border-border rounded-full font-semibold text-sm hover:border-foreground transition-colors"
@@ -167,7 +171,7 @@ export function BlogSection() {
             View All Blog Posts
             <ExternalLink className="w-4 h-4" />
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

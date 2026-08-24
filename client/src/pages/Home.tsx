@@ -1,5 +1,6 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { animate, stagger } from "animejs";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -8,14 +9,16 @@ import {
 import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
 import { Link as ScrollLink } from "react-scroll";
 import { Navbar } from "@/components/Navbar";
-import { useExperiences, useProjects, useSkills, usePersonalInfo, useEducation, useResearch, useInterests, useHeroPhrases } from "@/hooks/use-portfolio";
+import { useExperiences, useProjects, useSkills, usePersonalInfo, useEducation, useResearch, useInterests, useHeroPhrases, useBlogs } from "@/hooks/use-portfolio";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SocialLinks } from "@/components/SocialLinks";
 import { useConnection } from "@/contexts/ConnectionContext";
-import { WordPopTicker } from "@/components/WordPopTicker";
+import { LetterCascade, WordReveal } from "@/components/LetterCascade";
+import { StatsStrip } from "@/components/StatsStrip";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { BlogSection } from "@/components/BlogSection";
+import { useCanAnimate, useAnimeOnView } from "@/lib/use-anime";
 
 const MemoryFlipCards = lazy(() =>
   import("@/components/MemoryFlipCards").then((m) => ({ default: m.MemoryFlipCards }))
@@ -25,6 +28,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function Home() {
   const { canLoadHeavy } = useConnection();
+  const canAnimate = useCanAnimate();
   const { data: experiences } = useExperiences();
   const { data: projects } = useProjects();
   const { data: skills } = useSkills();
@@ -32,9 +36,15 @@ export default function Home() {
   const { data: education } = useEducation();
   const { data: research } = useResearch();
   const { data: interests } = useInterests();
+  const { data: blogs } = useBlogs();
   const heroPhrases = useHeroPhrases();
 
   if (!personalInfo) return null;
+
+  const yearsBuilding = Math.max(1, new Date().getFullYear() - 2021);
+  const techCount = skills?.reduce((acc, g) => acc + g.items.length, 0) ?? 0;
+  const companyCount = new Set(experiences?.map((e) => e.company) ?? []).size;
+  const postCount = blogs?.length ?? 0;
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -53,15 +63,16 @@ export default function Home() {
                 AI/ML ENGINEER &middot; DHAKA, BANGLADESH
               </p>
               <h1 className="display-xl">
-                Mehedi<br />Hasan<span className="text-accent">.</span>
+                <LetterCascade as="span" text="Mehedi" className="block" />
+                <LetterCascade as="span" text="Hasan." className="block" delay={260} />
               </h1>
 
               <div className="mt-6 min-h-[2.2rem]">
-                {canLoadHeavy ? (
-                  <WordPopTicker phrases={heroPhrases} />
-                ) : (
-                  <p className="text-lg md:text-xl font-semibold">{heroPhrases[0]}</p>
-                )}
+                <WordReveal
+                  text={heroPhrases[0] ?? ""}
+                  className="text-lg md:text-xl font-semibold text-foreground"
+                  delay={700}
+                />
               </div>
 
               <p className="mt-5 text-muted-foreground text-base md:text-lg max-w-[58ch] leading-relaxed">
@@ -119,9 +130,9 @@ export default function Home() {
 
             {/* Portrait */}
             <motion.figure
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.15, ease }}
+              initial={canAnimate ? { clipPath: "inset(0 100% 0 0)" } : false}
+              animate={canAnimate ? { clipPath: "inset(0 0% 0 0)" } : undefined}
+              transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="hidden lg:block justify-self-end w-full max-w-[360px]"
             >
               <div className="relative group">
@@ -155,6 +166,16 @@ export default function Home() {
             <ArrowDown className="w-5 h-5 animate-bounce" />
           </ScrollLink>
         </section>
+
+        {/* ============ STATS ============ */}
+        <StatsStrip
+          stats={[
+            { value: yearsBuilding, suffix: "+", label: "Years building AI" },
+            { value: techCount, label: "Production technologies" },
+            { value: companyCount, label: "Companies" },
+            { value: postCount, label: "Published essays" },
+          ]}
+        />
 
         {/* ============ EXPERIENCE ============ */}
         <section id="experience" className="rule-t py-20 md:py-28">
@@ -246,22 +267,7 @@ export default function Home() {
         {/* ============ BEYOND CODE ============ */}
         <section id="personal" className="rule-t py-20 md:py-28">
           <SectionHeading title="Beyond Code" subtitle="Getting to know me beyond the code" />
-          <div className="flex flex-wrap gap-2.5">
-            {interests?.map((interest, idx) => (
-              <motion.span
-                key={idx}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="inline-flex items-center gap-2.5 border border-border rounded-full pl-3 pr-4 py-2 text-sm hover:border-foreground transition-colors"
-                title={interest.desc}
-              >
-                <i className="not-italic text-base" aria-hidden="true">{interest.icon}</i>
-                <b className="font-semibold">{interest.title}</b>
-              </motion.span>
-            ))}
-          </div>
+          <InterestWave interests={interests ?? []} />
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -304,16 +310,26 @@ export default function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease }}
           >
-            <h3 className="display-lg max-w-[14ch]">
-              Have an idea?<br />Let&rsquo;s <span className="text-accent">build it</span>.
+            <h3 className="display-lg max-w-[16ch]">
+              <LetterCascade as="span" text="Have an idea?" className="block" />
+              <span className="block">
+                <LetterCascade as="span" text="Let's build it." delay={350} />
+              </span>
             </h3>
             <p className="mt-6 text-muted-foreground max-w-xl leading-relaxed">
               I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
             </p>
             <a
               href={`mailto:${personalInfo.email}`}
-              className="btn-push inline-flex items-center gap-2.5 mt-8 px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
+              className="btn-push relative inline-flex items-center gap-2.5 mt-8 px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
             >
+              {canAnimate && (
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30"
+                  style={{ animationDuration: "2.4s" }}
+                />
+              )}
               Say Hello
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
             </a>
@@ -344,6 +360,53 @@ export default function Home() {
   );
 }
 
+/* ---------- Interest chips: center-out anime wave ---------- */
+
+interface Interest {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
+function InterestWave({ interests }: { interests: Interest[] }) {
+  const canAnimate = useCanAnimate();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const played = useRef(false);
+
+  useEffect(() => {
+    if (!canAnimate || played.current || !ref.current) return;
+    played.current = true;
+    const chips = ref.current.querySelectorAll("[data-chip]");
+    if (!chips.length) return;
+    const anim = animate(chips, {
+      opacity: [0, 1],
+      translateY: [16, 0],
+      scale: [0.9, 1],
+      duration: 550,
+      ease: "outBack",
+      delay: stagger(70, { from: "center" }),
+    });
+    return () => { anim.pause(); };
+  }, [canAnimate]);
+
+  return (
+    <div ref={ref} className="flex flex-wrap gap-2.5">
+      {interests.map((interest, idx) => (
+        <span
+          key={idx}
+          data-chip
+          className="inline-flex items-center gap-2.5 border border-border rounded-full pl-3 pr-4 py-2 text-sm hover:border-foreground transition-colors"
+          title={interest.desc}
+          style={canAnimate ? { opacity: 0 } : undefined}
+        >
+          <i className="not-italic text-base" aria-hidden="true">{interest.icon}</i>
+          <b className="font-semibold">{interest.title}</b>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 /* ---------- Project cell ---------- */
 
 interface Project {
@@ -365,6 +428,23 @@ function ProjectCell({
   className?: string;
   lead?: boolean;
 }) {
+  const canAnimate = useCanAnimate();
+  const chipsRef = useAnimeOnView<HTMLDivElement>(
+    (el) => {
+      const chips = el.querySelectorAll("[data-chip]");
+      if (!chips.length) return;
+      animate(chips, {
+        opacity: [0, 1],
+        translateY: [10, 0],
+        scale: [0.9, 1],
+        duration: 450,
+        ease: "outBack",
+        delay: stagger(40),
+      });
+    },
+    { threshold: 0.4 }
+  );
+
   return (
     <motion.a
       href={project.link}
@@ -383,9 +463,14 @@ function ProjectCell({
       <p className="text-sm text-muted-foreground mt-3 leading-relaxed flex-1 max-w-[64ch]">
         {project.description}
       </p>
-      <div className="flex flex-wrap gap-1.5 mt-5">
+      <div ref={chipsRef} className="flex flex-wrap gap-1.5 mt-5">
         {project.techStack.map((tech) => (
-          <span key={tech} className="mono-label text-muted-foreground border border-border px-2.5 py-1 rounded-md">
+          <span
+            key={tech}
+            data-chip
+            className="mono-label text-muted-foreground border border-border px-2.5 py-1 rounded-md"
+            style={canAnimate ? { opacity: 0 } : undefined}
+          >
             {tech}
           </span>
         ))}
