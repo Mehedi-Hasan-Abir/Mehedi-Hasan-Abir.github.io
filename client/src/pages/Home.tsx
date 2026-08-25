@@ -137,19 +137,21 @@ export default function Home() {
 
             {/* Portrait */}
             <motion.figure
-              initial={canAnimate ? { clipPath: "inset(0 100% 0 0)" } : false}
-              animate={canAnimate ? { clipPath: "inset(0 0% 0 0)" } : undefined}
-              transition={{ duration: 1, delay: 0.5, ease }}
+              initial={canAnimate ? { opacity: 0 } : false}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
               className="justify-self-center lg:justify-self-end w-full max-w-[280px] lg:max-w-[360px] mt-4 lg:mt-0"
             >
               <div className="relative group">
-                {/* Static editorial frame: offset block + accent corner ticks */}
+                {/* Static editorial frame: offset block + accent corner ticks.
+                    NOTE: the clip-wipe lives on the <img> only - a clip-path on
+                    the figure would permanently clip the frame outside its box. */}
                 <span aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 border border-primary/40 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2" />
                 <span aria-hidden="true" className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-primary" />
                 <span aria-hidden="true" className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-primary" />
                 <span aria-hidden="true" className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-primary" />
                 <span aria-hidden="true" className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-primary" />
-                <img
+                <motion.img
                   src={personalInfo.avatarUrl}
                   alt={personalInfo.name}
                   loading="eager"
@@ -157,6 +159,9 @@ export default function Home() {
                   fetchPriority="high"
                   width={800}
                   height={800}
+                  initial={canAnimate ? { clipPath: "inset(0 100% 0 0)" } : false}
+                  animate={canAnimate ? { clipPath: "inset(0 0% 0 0)" } : undefined}
+                  transition={{ duration: 1, delay: 0.5, ease }}
                   className="relative w-full aspect-square object-cover grayscale contrast-[1.04] group-hover:grayscale-0 transition-all duration-700"
                 />
               </div>
