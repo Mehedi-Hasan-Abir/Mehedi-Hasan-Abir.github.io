@@ -1,5 +1,6 @@
 import { spawnSync } from "child_process";
 import { readFile } from "fs/promises";
+import path from "path";
 import { loadEnv } from "vite";
 
 const siteUrl = "https://mehedi-hasan-abir.github.io/";
@@ -62,8 +63,10 @@ async function deploy(): Promise<void> {
   if (!assetMatch) throw new Error("Could not locate the built JavaScript asset.");
   if (!gaId) throw new Error("VITE_GOOGLE_ANALYTICS_ID is required for deployment verification.");
 
-  const npxCommand = process.platform === "win32" ? "npx.cmd" : "npx";
-  run(npxCommand, ["gh-pages", "-d", "dist/public", "--branch", "gh-pages"]);
+  // Node >= 18 refuses to spawn .cmd shims without a shell (EINVAL) - call
+  // gh-pages' JS entry with node directly instead of npx.cmd.
+  const ghPagesBin = path.resolve("node_modules", "gh-pages", "bin", "gh-pages.js");
+  run(process.execPath, [ghPagesBin, "-d", "dist/public", "--branch", "gh-pages"]);
 
   const afterHash = getRemoteHash();
   if (!afterHash || afterHash === beforeHash) {
