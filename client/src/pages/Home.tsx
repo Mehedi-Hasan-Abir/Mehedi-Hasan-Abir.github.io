@@ -17,7 +17,7 @@ import { LetterCascade } from "@/components/LetterCascade";
 import { DrawnName } from "@/components/DrawnName";
 import { SmoothTicker } from "@/components/SmoothTicker";
 import { StatsStrip } from "@/components/StatsStrip";
-import { Magnetic, Marquee, PulseRing, ScrollSkew } from "@/components/Interactive";
+import { Magnetic, Marquee, PulseRing } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { BlogSection } from "@/components/BlogSection";
@@ -52,8 +52,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
-      {/* Scroll-skew wraps page content only - never the fixed navbar */}
-      <ScrollSkew>
       <main className="max-w-6xl mx-auto px-5 md:px-8">
 
         {/* ============ HERO ============ */}
@@ -387,7 +385,6 @@ export default function Home() {
           <span>&copy; {new Date().getFullYear()} &middot; All rights reserved</span>
         </div>
       </footer>
-      </ScrollSkew>
     </div>
   );
 }

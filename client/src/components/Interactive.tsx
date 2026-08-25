@@ -1,36 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
+import { useEffect, useRef, type ReactNode, type MouseEvent } from "react";
 import { animate, stagger } from "animejs";
-import { motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
-
-/**
- * Scroll-velocity skew on page content (desktop only).
- * v3 tuning: 0.5deg cap + near-critically-damped fast spring - subtle lean
- * while scrolling, ~0.2s settle with zero oscillation (v2's underdamped
- * spring read as an earthquake; v1's overdamped read as drift).
- */
-export function ScrollSkew({ children }: { children: ReactNode }) {
-  const [isDesktop, setIsDesktop] = useState(true);
-  const { scrollY } = useScroll();
-  const velocity = useVelocity(scrollY);
-  const smooth = useSpring(velocity, { stiffness: 600, damping: 48, mass: 0.3 });
-  const skewY = useTransform(smooth, [-3000, 0, 3000], ["0.5deg", "0deg", "-0.5deg"], { clamp: true });
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
-  if (!isDesktop) return <>{children}</>;
-
-  return (
-    <motion.div style={{ skewY, willChange: "transform" }}>
-      {children}
-    </motion.div>
-  );
-}
 
 /** Pulls its child toward the cursor while hovered; springs back on leave. */
 export function Magnetic({ children, strength = 0.35 }: { children: ReactNode; strength?: number }) {
