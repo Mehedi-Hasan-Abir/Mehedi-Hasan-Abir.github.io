@@ -5,6 +5,8 @@ import {
   ArrowDown,
   ArrowUpRight,
   Download,
+  GraduationCap,
+  FlaskConical,
 } from "lucide-react";
 import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
 import { Link as ScrollLink } from "react-scroll";
@@ -141,32 +143,12 @@ export default function Home() {
               className="justify-self-center lg:justify-self-end w-full max-w-[280px] lg:max-w-[360px] mt-4 lg:mt-0"
             >
               <div className="relative group">
-                {/* Orbiting dashed rings */}
-                {canAnimate && (
-                  <>
-                    <svg
-                      aria-hidden="true"
-                      className="absolute -inset-7 w-[calc(100%+56px)] h-[calc(100%+56px)] pointer-events-none"
-                      style={{ animation: "spin-slow 26s linear infinite" }}
-                      viewBox="0 0 100 100"
-                      fill="none"
-                    >
-                      <circle cx="50" cy="50" r="48.5" stroke="hsl(var(--primary) / 0.55)" strokeWidth="0.5" strokeDasharray="1.6 2.6" />
-                      <circle cx="50" cy="1.5" r="1.5" fill="hsl(var(--primary))" />
-                    </svg>
-                    <svg
-                      aria-hidden="true"
-                      className="absolute -inset-3 w-[calc(100%+24px)] h-[calc(100%+24px)] pointer-events-none"
-                      style={{ animation: "spin-slow 16s linear infinite reverse" }}
-                      viewBox="0 0 100 100"
-                      fill="none"
-                    >
-                      <circle cx="50" cy="50" r="48.8" stroke="hsl(var(--primary) / 0.35)" strokeWidth="0.4" strokeDasharray="0.7 2.2" />
-                      <circle cx="98.5" cy="50" r="1.1" fill="hsl(var(--primary) / 0.9)" />
-                    </svg>
-                  </>
-                )}
+                {/* Static editorial frame: offset block + accent corner ticks */}
                 <span aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 border border-primary/40 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2" />
+                <span aria-hidden="true" className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-primary" />
+                <span aria-hidden="true" className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-primary" />
+                <span aria-hidden="true" className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-primary" />
+                <span aria-hidden="true" className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-primary" />
                 <img
                   src={personalInfo.avatarUrl}
                   alt={personalInfo.name}
@@ -257,11 +239,14 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.45, delay: idx * 0.06 }}
-                  className={`rule-t py-4 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
+                  className={`rule-t py-4 flex items-start gap-3.5 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
                 >
-                  <div className="font-bold text-[15px] leading-snug">{edu.degree}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{edu.institution}</div>
-                  <div className="mono-label text-accent mt-1.5">{edu.period.toUpperCase()}</div>
+                  <GraduationCap className="w-5 h-5 text-accent shrink-0 mt-0.5" aria-hidden="true" />
+                  <div>
+                    <div className="font-bold text-[15px] leading-snug">{edu.degree}</div>
+                    <div className="text-sm text-muted-foreground mt-1">{edu.institution}</div>
+                    <div className="mono-label text-accent mt-1.5">{edu.period.toUpperCase()}</div>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -274,20 +259,23 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.45, delay: idx * 0.06 }}
-                  className={`rule-t py-4 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
+                  className={`rule-t py-4 flex items-start gap-3.5 ${idx === 0 ? "border-t-0 pt-0" : ""}`}
                 >
-                  <div className="font-bold text-[15px] leading-snug">{res.title}</div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {res.authors} &middot; {res.venue} &middot; {res.year}
+                  <FlaskConical className="w-5 h-5 text-accent shrink-0 mt-0.5" aria-hidden="true" />
+                  <div>
+                    <div className="font-bold text-[15px] leading-snug">{res.title}</div>
+                    <div className="text-sm text-muted-foreground mt-1">
+                      {res.authors} &middot; {res.venue} &middot; {res.year}
+                    </div>
+                    <a
+                      href={res.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-accent text-[13px] font-semibold mt-2 hover:underline underline-offset-4"
+                    >
+                      View <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
                   </div>
-                  <a
-                    href={res.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-accent text-[13px] font-semibold mt-2 hover:underline underline-offset-4"
-                  >
-                    View <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
                 </motion.div>
               ))}
             </div>

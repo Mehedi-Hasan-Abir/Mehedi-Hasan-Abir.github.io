@@ -14,6 +14,7 @@ interface SectionHeadingProps {
 const sectionNumbers: Record<string, number> = {
   experience: 1,
   "selected-work": 2,
+  capabilities: 3,
   skills: 3,
   writing: 4,
   blog: 4,

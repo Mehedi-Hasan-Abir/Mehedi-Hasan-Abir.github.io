@@ -117,62 +117,18 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
     });
   }, [inView, ref]);
 
-  // CONSTANT LIFE loops - started once, never duplicated on re-entry
-  const loopsStarted = useRef(false);
-  const loopAnims = useRef<ReturnType<typeof animate>[]>([]);
-
+  // Branch header accent borders - fade-in overlay (opacity/scale only;
+  // anime v4 cannot interpolate colors containing CSS vars - it crashes)
   useEffect(() => {
-    if (loopsStarted.current || !inView || !ref.current) return;
-    loopsStarted.current = true;
-    const host = ref.current;
-
-    // Signal pulse travels down the rail forever
-    const rail = host.querySelector<HTMLElement>("[data-rail]");
-    const pulse = host.querySelector<HTMLElement>("[data-tree-pulse]");
-    if (rail && pulse) {
-      loopAnims.current.push(
-        animate(pulse, {
-          translateY: [0, rail.offsetHeight - 8],
-          opacity: [0, 1, 1, 0],
-          duration: 2600,
-          ease: "inOutQuad",
-          loop: true,
-        })
-      );
-    }
-    // Node dots breathe in sequence, forever
-    loopAnims.current.push(
-      animate(host.querySelectorAll("[data-node]"), {
-        scale: [1, 1.45, 1],
-        opacity: [0.75, 1, 0.75],
-        duration: 2000,
-        ease: "inOutQuad",
-        delay: stagger(280),
-        loop: true,
-      })
-    );
-    // Root marker breathes
-    const rootDot = host.querySelector("[data-root-dot]");
-    if (rootDot) {
-      loopAnims.current.push(
-        animate(rootDot, {
-          scale: [1, 1.35, 1],
-          opacity: [1, 0.55, 1],
-          duration: 2200,
-          ease: "inOutQuad",
-          loop: true,
-        })
-      );
-    }
+    if (!inView || !ref.current) return;
+    animate(ref.current.querySelectorAll("[data-haccent]"), {
+      opacity: [0, 1],
+      scale: [0.95, 1],
+      duration: 520,
+      ease: "outQuad",
+      delay: stagger(90, { start: 380 }),
+    });
   }, [inView, ref]);
-
-  useEffect(() => () => { loopAnims.current.forEach((a) => a.pause()); }, []);
-
-  // Pause loops while off-screen, resume on return (perf: no hidden work)
-  useEffect(() => {
-    if (!loopsStarted.current) return;
-    loopAnims.current.forEach((a) => (inView ? a.play() : a.pause()));
-  }, [inView]);
 
 
   return (
@@ -182,18 +138,7 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
         aria-hidden="true"
         className="absolute left-[5px] top-2 bottom-6 w-px bg-border origin-top"
       />
-      <span
-        data-tree-pulse
-        aria-hidden="true"
-        className="absolute left-[2px] top-[8px] w-[7px] h-[7px] rounded-full bg-primary"
-        style={{ opacity: 0 }}
-      />
-      <div ref={rootRef} className="relative inline-flex flex-col items-center border-2 border-primary bg-card rounded-2xl px-6 py-3.5 mb-7">
-        <span
-          data-root-dot
-          aria-hidden="true"
-          className="absolute -left-[2px] -top-[2px] w-2 h-2 rounded-full bg-primary"
-        />
+      <div ref={rootRef} className="inline-flex flex-col items-center border-2 border-primary bg-card rounded-2xl px-6 py-3.5 mb-7">
         <span className="font-extrabold tracking-wide text-[15px]">AI ENGINEERING</span>
         <span className="mono-label text-[10px] text-muted-foreground mt-0.5">PRODUCTION STACK</span>
       </div>
@@ -206,9 +151,17 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
               aria-hidden="true"
               className="absolute -left-6 top-[13px] w-[11px] h-[11px] rounded-full bg-background border-2 border-primary"
             />
-            <h3 className="mono-label font-semibold inline-block bg-secondary border border-border px-3.5 py-2 rounded-lg">
-              {group.category.toUpperCase()}
-            </h3>
+            <span className="relative inline-block">
+              <h3 className="mono-label font-semibold inline-block bg-secondary border border-border px-3.5 py-2 rounded-lg">
+                {group.category.toUpperCase()}
+              </h3>
+              <span
+                data-haccent
+                aria-hidden="true"
+                className="absolute -inset-px border border-primary rounded-lg pointer-events-none will-change-transform"
+                style={{ opacity: 0 }}
+              />
+            </span>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {group.items.map((item) => (
                 <span
