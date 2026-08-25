@@ -1,7 +1,10 @@
+import { useEffect, useRef } from "react";
+import { animate, stagger } from "animejs";
 import { motion } from "framer-motion";
 import { useBlogs } from "@/hooks/use-portfolio";
-import { ExternalLink, Calendar, Tag } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ExternalLink, Calendar } from "lucide-react";
+import { SectionHeading } from "@/components/SectionHeading";
+import { useCanAnimate, useInView } from "@/lib/use-anime";
 
 interface BlogPost {
   id: number;
@@ -16,27 +19,48 @@ interface BlogPost {
   tags: string[];
 }
 
+const ease = [0.16, 1, 0.3, 1] as const;
+
 export function BlogSection() {
   const { data: blogs, isLoading } = useBlogs();
+  const canAnimate = useCanAnimate();
+  const { ref: gridRef, inView } = useInView<HTMLDivElement>(0.08);
+
+  useEffect(() => {
+    if (!canAnimate || !inView || !gridRef.current) return;
+    // Replays on every viewport entry (owner preference)
+    // Diagonal clip-wipe reveal per card, then content settles upward
+    const cards = gridRef.current.querySelectorAll("[data-card]");
+    animate(cards, {
+      clipPath: ["inset(0% 100% 0% 0%)", "inset(0% 0% 0% 0%)"],
+      duration: 850,
+      ease: "outExpo",
+      delay: stagger(130),
+    });
+    animate(gridRef.current.querySelectorAll("[data-thumb]"), {
+      scale: [1.15, 1],
+      duration: 1100,
+      ease: "outExpo",
+      delay: stagger(130),
+    });
+  }, [canAnimate, inView, gridRef]);
 
   if (isLoading) {
     return (
-      <section id="blog" className="py-24 md:py-32 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Blog</h2>
-            <p className="text-lg text-muted-foreground">Loading blog posts...</p>
+      <section id="blog" className="rule-t py-20 md:py-28 cv-auto">
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
+          <div className="mb-12 md:mb-16" data-testid="section-heading">
+            <h2 className="display-lg">Writing</h2>
+            <p className="mt-3 text-muted-foreground">Loading posts...</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-4">
             {[...Array(3)].map((_, index) => (
-              <div key={index} className="bg-card p-6 rounded-xl border border-border/50 animate-pulse">
-                <div className="h-48 bg-secondary rounded-lg mb-4"></div>
-                <div className="h-6 bg-secondary rounded mb-2"></div>
-                <div className="h-4 bg-secondary rounded mb-4"></div>
-                <div className="flex gap-2">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="h-6 bg-secondary rounded-full w-16"></div>
-                  ))}
+              <div key={index} className="border border-border bg-card animate-pulse">
+                <div className="aspect-video bg-secondary" />
+                <div className="p-6 space-y-3">
+                  <div className="h-5 bg-secondary rounded w-4/5" />
+                  <div className="h-3.5 bg-secondary rounded w-full" />
+                  <div className="h-3.5 bg-secondary rounded w-2/3" />
                 </div>
               </div>
             ))}
@@ -54,40 +78,21 @@ export function BlogSection() {
   const featuredBlogs = blogs.slice(0, 3);
 
   return (
-    <section id="blog" className="py-24 md:py-32 bg-secondary/20">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold mb-4"
-          >
-            Blog
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-muted-foreground"
-          >
-            Thoughts on AI, Machine Learning, and Technology
-          </motion.p>
-        </div>
+    <section id="blog" className="rule-t py-20 md:py-28 cv-auto">
+      <div className="max-w-6xl mx-auto px-5 md:px-8">
+        <SectionHeading title="Writing" subtitle="Thoughts on AI, Machine Learning, and Technology" />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {featuredBlogs.map((blog: BlogPost, index: number) => (
             <motion.article
               key={blog.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group bg-card rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg hover:shadow-primary/10 cursor-pointer"
+              data-card
+              initial={canAnimate ? { clipPath: "inset(0% 100% 0% 0%)" } : false}
+              className="group border border-border bg-card hover:border-primary/60 transition-colors flex flex-col cursor-pointer overflow-hidden"
+              onClick={() => window.open(blog.externalLink, "_blank", "noopener,noreferrer")}
             >
-              {/* Blog Thumbnail */}
-              <div className="relative overflow-hidden aspect-video bg-secondary">
+              {/* Thumbnail */}
+              <div className="relative aspect-video bg-secondary overflow-hidden">
                 {blog.thumbnail ? (
                   <img
                     src={blog.thumbnail}
@@ -96,76 +101,60 @@ export function BlogSection() {
                     height={blog.thumbnailHeight}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    data-thumb
+                    className="w-full h-full object-cover grayscale-[35%] group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-500"
                     onError={(e) => {
-                      // Fallback for missing images - show gradient placeholder
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
-                      target.parentElement?.classList.add('bg-gradient-to-br', 'from-primary/20', 'to-secondary');
                     }}
                   />
                 ) : null}
-                {/* Always show fallback gradient if image fails or is missing */}
                 {!blog.thumbnail && (
-                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary flex items-center justify-center">
-                    <span className="text-4xl font-bold text-primary/50">Blog</span>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="mono-label text-muted-foreground">{blog.platform.toUpperCase()}</span>
                   </div>
                 )}
-                {/* Platform badge */}
-                <div className="absolute top-4 right-4">
-                  <Badge variant="secondary" className="text-xs font-medium">
-                    {blog.platform}
-                  </Badge>
-                </div>
-                {/* Platform overlay gradient for better readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="absolute top-3 right-3 mono-label text-[10px] bg-background/85 backdrop-blur px-2.5 py-1 border border-border">
+                  {blog.platform.toUpperCase()}
+                </span>
               </div>
 
-              {/* Blog Content */}
-              <div className="p-6">
-                <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
-                  <div className="flex items-center gap-1">
+              {/* Content */}
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-center gap-3 mono-label text-muted-foreground mb-3">
+                  <span className="inline-flex items-center gap-1.5">
                     <Calendar className="w-3 h-3" />
-                    <span>{new Date(blog.date).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <ExternalLink className="w-3 h-3" />
-                    <span>{blog.platform}</span>
-                  </div>
+                    {new Date(blog.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }).toUpperCase()}
+                  </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                <h3 className="text-lg font-extrabold tracking-tight leading-snug group-hover:text-accent transition-colors line-clamp-2" style={{ fontStretch: "106%" }}>
                   {blog.title}
                 </h3>
 
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                <p className="text-sm text-muted-foreground mt-2.5 line-clamp-3 leading-relaxed flex-1">
                   {blog.description}
                 </p>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-x-3 gap-y-1 mt-4 mono-label text-[10.5px] text-muted-foreground/80">
                   {blog.tags.slice(0, 3).map((tag: string) => (
-                    <Badge key={tag} variant="outline" className="text-xs">
-                      <Tag className="w-3 h-3 mr-1" />
-                      {tag}
-                    </Badge>
+                    <span key={tag}>{tag}</span>
                   ))}
                   {blog.tags.length > 3 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{blog.tags.length - 3} more
-                    </Badge>
+                    <span>+{blog.tags.length - 3} more</span>
                   )}
                 </div>
 
-                {/* Read More Button */}
                 <a
                   href={blog.externalLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 text-accent font-semibold text-sm mt-5 hover:underline underline-offset-4"
                 >
                   Read on {blog.platform}
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             </motion.article>
@@ -173,20 +162,15 @@ export function BlogSection() {
         </div>
 
         {/* View All Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="text-center mt-12"
-        >
+        <div className="text-center mt-12">
           <a
             href="/blog/"
-            className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-all hover:-translate-y-1 shadow-lg shadow-primary/25 inline-flex items-center gap-2 mx-auto"
+            className="btn-push inline-flex items-center gap-2 px-8 py-3.5 border border-border rounded-full font-semibold text-sm hover:border-foreground transition-colors"
           >
-            View All Blog Posts <ExternalLink className="w-4 h-4" />
+            View All Blog Posts
+            <ExternalLink className="w-4 h-4" />
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

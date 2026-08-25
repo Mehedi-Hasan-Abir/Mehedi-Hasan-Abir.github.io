@@ -1,5 +1,7 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { animate } from "animejs";
+import { VelocityTilt } from "@/components/Interactive";
+import { useAnimeOnView, useCanAnimate } from "@/lib/use-anime";
 
 interface SectionHeadingProps {
   title: string;
@@ -7,66 +9,119 @@ interface SectionHeadingProps {
   number?: number;
 }
 
-// Track section numbers based on the page/component they're used in
-// This prevents the counter from increasing when navigating between pages
-const sectionMap = new Map<string, number>();
+// Fixed numbering per section keeps order stable across renders/pages.
+// Keys are the lowercased, space-dashed section titles used in Home.
+const sectionNumbers: Record<string, number> = {
+  experience: 1,
+  "selected-work": 2,
+  capabilities: 3,
+  skills: 3,
+  writing: 4,
+  blog: 4,
+  background: 5,
+  "beyond-code": 6,
+  "fun-&-games": 7,
+  "fun-games": 7,
+  "get-in-touch": 8,
+};
 
-export function SectionHeading({ title, subtitle, number }: SectionHeadingProps) {
-  // Use the title as a key to maintain consistent numbering
-  const sectionKey = title.toLowerCase().replace(/\s+/g, '-');
-  
-  if (!sectionMap.has(sectionKey)) {
-    // Assign a fixed number based on the section type
-    const sectionNumbers: Record<string, number> = {
-      'about-me': 1,
-      'experience': 2,
-      'projects': 3,
-      'skills': 4,
-      'blog': 5,
-      'education': 6,
-      'research': 7,
-      'beyond-code': 8,
-      'fun-games': 9,
-      'get-in-touch': 10,
-    };
-    
-    const assignedNumber = sectionNumbers[sectionKey] || sectionMap.size + 1;
-    sectionMap.set(sectionKey, assignedNumber);
-  }
-  
-  const displayNumber = number !== undefined ? number : sectionMap.get(sectionKey)!;
-  const formattedNumber = String(displayNumber - 1).padStart(2, "0");
+/** Hand-drawn accent stroke that sketches itself under the title on scroll. */
+function PenStroke() {
+  const canAnimate = useCanAnimate();
+
+  const pathRef = useAnimeOnView<SVGPathElement>(
+    (path) => {
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = String(len);
+      animate(path, {
+        strokeDashoffset: [len, 0],
+        opacity: [1, 1],
+        duration: 950,
+        ease: "outQuad",
+        delay: 250,
+      });
+    },
+    { threshold: 0.5 }
+  );
 
   return (
-    <div className="mb-16 text-center" data-testid="section-heading">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="text-3xl md:text-4xl font-bold mb-4"
-      >
-        <span className="text-primary font-mono mr-2">{formattedNumber}.</span>
-        {title}
-      </motion.h2>
-      {subtitle && (
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-muted-foreground max-w-2xl mx-auto"
-        >
-          {subtitle}
-        </motion.p>
-      )}
-      <motion.div
-        initial={{ width: 0 }}
-        whileInView={{ width: "60px" }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="h-1 bg-primary mx-auto mt-6 rounded-full"
+    <svg
+      className="block mt-4 h-[10px] w-[190px] md:w-[230px] overflow-visible"
+      viewBox="0 0 230 10"
+      fill="none"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        ref={pathRef}
+        d="M3 7 C 55 2.5, 120 9.5, 165 5.5 S 215 4, 227 5"
+        stroke="hsl(var(--primary))"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        style={canAnimate ? { opacity: 0 } : undefined}
       />
+    </svg>
+  );
+}
+
+/** Big outlined section number; a filled copy wipes over it on scroll. */
+function GhostNumber({ label }: { label: string }) {
+  const canAnimate = useCanAnimate();
+
+  const fillRef = useAnimeOnView<HTMLSpanElement>(
+    (el) => {
+      animate(el, {
+        clipPath: ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
+        duration: 900,
+        ease: "outExpo",
+        delay: 200,
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  return (
+    <span className="relative inline-block shrink-0 select-none" aria-hidden="true">
+      <span
+        className="block text-5xl md:text-6xl font-extrabold leading-none text-transparent"
+        style={{ WebkitTextStroke: "1.5px hsl(var(--primary) / 0.55)", fontStretch: "110%" }}
+      >
+        {label}
+      </span>
+      <span
+        ref={fillRef}
+        className="absolute inset-0 block text-5xl md:text-6xl font-extrabold leading-none text-primary"
+        style={{
+          fontStretch: "110%",
+          ...(canAnimate ? { clipPath: "inset(0 100% 0 0)" } : {}),
+        }}
+      >
+        {label}
+      </span>
+    </span>
+  );
+}
+
+export function SectionHeading({ title, subtitle, number }: SectionHeadingProps) {
+  const sectionKey = title.toLowerCase().replace(/\s+/g, "-");
+  const displayNumber = number !== undefined ? number : sectionNumbers[sectionKey] ?? 0;
+  const formattedNumber = String(displayNumber).padStart(2, "0");
+
+  return (
+    <div className="mb-12 md:mb-16" data-testid="section-heading">
+      <div className="flex items-center gap-4 md:gap-6">
+        <GhostNumber label={formattedNumber} />
+        <VelocityTilt>
+          <div>
+            <h2 className="display-lg">{title}</h2>
+            <PenStroke />
+          </div>
+        </VelocityTilt>
+      </div>
+
+      {subtitle && (
+        <p className="mt-4 text-muted-foreground max-w-2xl">{subtitle}</p>
+      )}
     </div>
   );
 }

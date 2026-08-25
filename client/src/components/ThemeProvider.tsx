@@ -1,213 +1,177 @@
-import { useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { Moon, Sun, Palette } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const THEMES = {
-  cyan: {
-    bg: "222 47% 11%",
-    primary: "199 89% 48%",
-    auraDarkA: "199 89% 48%",
-    auraDarkB: "217 91% 60%",
-    auraDarkC: "191 89% 42%",
-    auraLightA: "193 92% 52%",
-    auraLightB: "210 96% 62%",
-    auraLightC: "186 88% 46%",
-    name: "Cyan",
-  },
+/**
+ * Editorial v3 theme system.
+ * - Dark is the default identity; light is opt-in.
+ * - Six accent palettes; each defines dark-surface and light-surface variants.
+ * - Only --primary / --accent / --ring are runtime-overridden; all other
+ *   tokens live in index.css.
+ */
+
+const ACCENTS = {
   blue: {
-    bg: "222 47% 11%",
-    primary: "217 100% 50%",
-    auraDarkA: "217 100% 56%",
-    auraDarkB: "225 90% 63%",
-    auraDarkC: "206 94% 52%",
-    auraLightA: "214 97% 57%",
-    auraLightB: "229 86% 66%",
-    auraLightC: "200 91% 50%",
-    name: "Blue",
+    name: "Klein Blue",
+    dark: "231 100% 79%",
+    light: "233 73% 48%",
   },
-  purple: {
-    bg: "222 47% 11%",
-    primary: "280 85% 55%",
-    auraDarkA: "280 85% 58%",
-    auraDarkB: "262 90% 66%",
-    auraDarkC: "302 74% 55%",
-    auraLightA: "274 88% 60%",
-    auraLightB: "255 90% 70%",
-    auraLightC: "298 76% 62%",
-    name: "Purple",
-  },
-  pink: {
-    bg: "222 47% 11%",
-    primary: "330 81% 60%",
-    auraDarkA: "332 81% 62%",
-    auraDarkB: "346 83% 66%",
-    auraDarkC: "307 76% 58%",
-    auraLightA: "330 86% 66%",
-    auraLightB: "350 88% 70%",
-    auraLightC: "308 80% 63%",
-    name: "Pink",
+  cyan: {
+    name: "Cyan",
+    dark: "187 92% 69%",
+    light: "192 80% 28%",
   },
   green: {
-    bg: "222 47% 11%",
-    primary: "142 72% 29%",
-    auraDarkA: "152 67% 42%",
-    auraDarkB: "168 72% 40%",
-    auraDarkC: "132 63% 38%",
-    auraLightA: "152 72% 46%",
-    auraLightB: "170 76% 44%",
-    auraLightC: "136 64% 42%",
-    name: "Green",
+    name: "Emerald",
+    dark: "142 69% 58%",
+    light: "161 90% 26%",
   },
   orange: {
-    bg: "222 47% 11%",
-    primary: "35 100% 55%",
-    auraDarkA: "35 100% 58%",
-    auraDarkB: "22 96% 58%",
-    auraDarkC: "49 95% 56%",
-    auraLightA: "35 100% 60%",
-    auraLightB: "16 96% 62%",
-    auraLightC: "49 96% 58%",
-    name: "Orange",
+    name: "Amber",
+    dark: "27 96% 61%",
+    light: "21 90% 42%",
   },
+  pink: {
+    name: "Rose",
+    dark: "330 85% 70%",
+    light: "330 76% 42%",
+  },
+  purple: {
+    name: "Violet",
+    dark: "251 91% 76%",
+    light: "262 83% 50%",
+  },
+} as const;
+
+export type AccentKey = keyof typeof ACCENTS;
+
+type ThemeContextValue = {
+  isDark: boolean;
+  currentTheme: AccentKey;
+  toggleDark: () => void;
+  changeTheme: (key: AccentKey) => void;
 };
 
-export function ThemeProvider() {
+const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+function applyTheme(theme: AccentKey, isDark: boolean) {
+  const root = document.documentElement;
+  const palette = ACCENTS[theme];
+  root.dataset.colorMode = isDark ? "dark" : "light";
+  root.style.setProperty("--primary", isDark ? palette.dark : palette.light);
+  root.style.setProperty("--accent", isDark ? palette.dark : palette.light);
+  root.style.setProperty("--ring", isDark ? palette.dark : palette.light);
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(true);
-  const [currentTheme, setCurrentTheme] = useState<keyof typeof THEMES>("cyan");
-  const [isOpen, setIsOpen] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState<AccentKey>("blue");
 
   useEffect(() => {
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem("app-theme") || "cyan";
-    const savedDarkMode = localStorage.getItem("dark-mode") !== "false";
-    
-    setCurrentTheme(savedTheme as keyof typeof THEMES);
-    setIsDark(savedDarkMode);
-    
-    applyTheme(savedTheme as keyof typeof THEMES, savedDarkMode);
+    // Dark is default; light only when explicitly saved.
+    const savedDark = localStorage.getItem("dark-mode") !== "false";
+    const savedTheme = (localStorage.getItem("app-theme") as AccentKey) || "blue";
+    setCurrentTheme(savedTheme in ACCENTS ? savedTheme : "blue");
+    setIsDark(savedDark);
+    applyTheme(savedTheme in ACCENTS ? savedTheme : "blue", savedDark);
   }, []);
 
-  const applyTheme = (theme: keyof typeof THEMES, darkMode: boolean) => {
-    const root = document.documentElement;
-    const themeVars = THEMES[theme];
-    root.dataset.colorMode = darkMode ? "dark" : "light";
-    
-    if (darkMode) {
-      root.style.setProperty("--background", themeVars.bg);
-      root.style.setProperty("--foreground", "210 40% 98%");
-      root.style.setProperty("--card", "222 47% 13%");
-      root.style.setProperty("--card-foreground", "210 40% 98%");
-      root.style.setProperty("--muted", "217 33% 17%");
-      root.style.setProperty("--muted-foreground", "215 20% 65%");
-      root.style.setProperty("--secondary", "217 33% 17%");
-      root.style.setProperty("--secondary-foreground", "210 40% 98%");
-      root.style.setProperty("--border", "217 33% 20%");
-      root.style.setProperty("--input", "217 33% 20%");
-      root.style.setProperty("--ring", themeVars.primary);
-      root.style.setProperty("--aura-1", themeVars.auraDarkA);
-      root.style.setProperty("--aura-2", themeVars.auraDarkB);
-      root.style.setProperty("--aura-3", themeVars.auraDarkC);
-      root.classList.add("dark");
-    } else {
-      root.style.setProperty("--background", "212 57% 98%");
-      root.style.setProperty("--foreground", "220 39% 16%");
-      root.style.setProperty("--card", "0 0% 100%");
-      root.style.setProperty("--card-foreground", "220 39% 16%");
-      root.style.setProperty("--muted", "210 34% 94%");
-      root.style.setProperty("--muted-foreground", "220 20% 41%");
-      root.style.setProperty("--secondary", "210 43% 96%");
-      root.style.setProperty("--secondary-foreground", "220 39% 16%");
-      root.style.setProperty("--border", "214 28% 87%");
-      root.style.setProperty("--input", "214 30% 92%");
-      root.style.setProperty("--ring", themeVars.primary);
-      root.style.setProperty("--aura-1", themeVars.auraLightA);
-      root.style.setProperty("--aura-2", themeVars.auraLightB);
-      root.style.setProperty("--aura-3", themeVars.auraLightC);
-      root.classList.remove("dark");
-    }
-    
-    root.style.setProperty("--primary", themeVars.primary);
-    root.style.setProperty("--accent", themeVars.primary);
-    
-    localStorage.setItem("app-theme", theme);
-    localStorage.setItem("dark-mode", String(darkMode));
+  const toggleDark = () => {
+    const next = !isDark;
+    setIsDark(next);
+    localStorage.setItem("dark-mode", String(next));
+    applyTheme(currentTheme, next);
   };
 
-  const toggleDarkMode = () => {
-    const newDarkMode = !isDark;
-    setIsDark(newDarkMode);
-    applyTheme(currentTheme, newDarkMode);
-  };
-
-  const changeTheme = (theme: keyof typeof THEMES) => {
-    setCurrentTheme(theme);
-    applyTheme(theme, isDark);
-    setIsOpen(false);
+  const changeTheme = (key: AccentKey) => {
+    setCurrentTheme(key);
+    localStorage.setItem("app-theme", key);
+    applyTheme(key, isDark);
   };
 
   return (
-    <div className="fixed bottom-8 left-8 z-40 flex flex-col items-end gap-4">
-      {/* Theme Menu */}
+    <ThemeContext.Provider value={{ isDark, currentTheme, toggleDark, changeTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
+  return ctx;
+}
+
+/** Compact control cluster: mode toggle + accent picker. */
+export function ThemeControls() {
+  const { isDark, currentTheme, toggleDark, changeTheme } = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative flex items-center gap-1">
+      {/* Mobile: fixed bottom sheet; Desktop: anchored popover */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            id="theme-picker"
-            role="group"
-            aria-label="Color theme"
-            initial={{ opacity: 0, scale: 0.8, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 10 }}
-            className="flex flex-wrap gap-2 p-4 bg-card rounded-xl border border-border shadow-lg max-w-xs"
-          >
-            {Object.entries(THEMES).map(([key, value]) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => changeTheme(key as keyof typeof THEMES)}
-                className={`w-10 h-10 rounded-full transition-all hover:scale-110 ${
-                  currentTheme === key
-                    ? "ring-2 ring-offset-2 ring-offset-card ring-primary"
-                    : ""
-                }`}
-                style={{
-                  backgroundColor: `hsl(${value.primary})`,
-                }}
-                title={value.name}
-                aria-label={value.name}
-                aria-pressed={currentTheme === key}
-              />
-            ))}
-          </motion.div>
+          <>
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="fixed inset-0 z-[65] bg-background/50 backdrop-blur-[2px] md:hidden"
+              onClick={() => setIsOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.div
+              key="picker"
+              initial={{ opacity: 0, y: 14, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 14, scale: 0.96 }}
+              transition={{ duration: 0.16 }}
+              role="group"
+              aria-label="Accent color"
+              className="fixed bottom-24 left-0 right-0 z-[70] mx-auto w-fit flex gap-3 p-5 bg-card rounded-2xl border border-border shadow-2xl md:absolute md:bottom-auto md:left-auto md:right-0 md:top-full md:mt-2 md:w-auto md:gap-2 md:p-3 md:rounded-lg md:shadow-xl"
+            >
+              {(Object.keys(ACCENTS) as AccentKey[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => { changeTheme(key); setIsOpen(false); }}
+                  className={`w-9 h-9 md:w-7 md:h-7 rounded-full transition-transform hover:scale-110 active:scale-95 ${
+                    currentTheme === key ? "ring-2 ring-offset-2 ring-offset-card ring-primary" : ""
+                  }`}
+                  style={{ backgroundColor: `hsl(${isDark ? ACCENTS[key].dark : ACCENTS[key].light})` }}
+                  title={ACCENTS[key].name}
+                  aria-label={ACCENTS[key].name}
+                  aria-pressed={currentTheme === key}
+                />
+              ))}
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
-      {/* Control Buttons */}
-      <div className="flex gap-2">
-        <motion.button
-          type="button"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={toggleDarkMode}
-          className="p-3 bg-secondary rounded-full hover:bg-primary hover:text-primary-foreground transition-all shadow-lg"
-          aria-label="Toggle dark mode"
-          aria-pressed={isDark}
-        >
-          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </motion.button>
+      <button
+        type="button"
+        onClick={toggleDark}
+        className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        aria-pressed={isDark}
+      >
+        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      </button>
 
-        <motion.button
-          type="button"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setIsOpen((open) => !open)}
-          className="p-3 bg-secondary rounded-full hover:bg-primary hover:text-primary-foreground transition-all shadow-lg"
-          aria-label="Toggle theme picker"
-          aria-expanded={isOpen}
-          aria-controls="theme-picker"
-        >
-          <Palette className="w-5 h-5" />
-        </motion.button>
-      </div>
+      <button
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+        className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        aria-label="Choose accent color"
+        aria-expanded={isOpen}
+        aria-controls="accent-picker"
+      >
+        <Palette className="w-4 h-4" />
+      </button>
     </div>
   );
 }

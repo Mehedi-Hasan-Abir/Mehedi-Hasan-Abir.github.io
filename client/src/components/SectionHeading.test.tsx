@@ -13,10 +13,10 @@ describe('SectionHeading', () => {
     expect(screen.getByText('Test Subtitle')).toBeInTheDocument();
   });
 
-  it('applies correct styling', () => {
+  it('applies editorial layout styling', () => {
     const { container } = render(<SectionHeading title="Test Title" />);
     const div = container.firstChild;
-    expect(div).toHaveClass('mb-16');
-    expect(div).toHaveClass('text-center');
+    expect(div).toHaveClass('mb-12');
+    expect(div).toHaveAttribute('data-testid', 'section-heading');
   });
 });
