@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, type CSSProperties, type ReactNode, type MouseEvent } from "react";
+import React, { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import { animate, stagger } from "animejs";
 import { motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
 
@@ -70,7 +70,7 @@ export function Marquee({ text, repeat = 6, duration = 20 }: MarqueeProps) {
     <div className="overflow-hidden py-6 rule-t select-none" aria-hidden="true">
       <div
         className="flex w-max"
-        style={{ "--marquee-dur": `${duration}s` } as CSSProperties}
+        style={{ animation: `marquee ${duration}s linear infinite` }}
       >
         {items.map((_, i) => (
           <span
