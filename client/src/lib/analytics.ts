@@ -17,8 +17,12 @@ export const initAnalytics = (): boolean => {
   if (analyticsInitialized) return true;
 
   window.dataLayer ??= [];
-  window.gtag ??= (...args: unknown[]) => {
-    window.dataLayer?.push(args);
+  // CRITICAL: must push the Arguments object (official stub pattern), NOT a
+  // real Array - gtag.js ignores Array entries and never initializes,
+  // silently suppressing every hit.
+  window.gtag ??= function () {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer?.push(arguments);
   };
 
   const existingScript = document.querySelector<HTMLScriptElement>(
