@@ -1,5 +1,36 @@
-import { useEffect, useRef, type ReactNode, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import { animate, stagger } from "animejs";
+import { motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
+
+/**
+ * Velocity-reactive tilt for SMALL elements only (headings, cards).
+ * The researched pattern: each wrapped element is its own tiny compositor
+ * layer, so the page itself never moves - kinetic feel, zero scroll cost.
+ * Desktop only.
+ */
+export function VelocityTilt({ children, max = 2.2 }: { children: ReactNode; max?: number }) {
+  const [isDesktop, setIsDesktop] = useState(true);
+  const { scrollY } = useScroll();
+  const velocity = useVelocity(scrollY);
+  const smooth = useSpring(velocity, { stiffness: 500, damping: 18, mass: 0.15 });
+  const skewY = useTransform(smooth, [-2600, 0, 2600], [`-${max}deg`, "0deg", `${max}deg`], { clamp: true });
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  if (!isDesktop) return <>{children}</>;
+
+  return (
+    <motion.div style={{ skewY, willChange: "transform" }} className="inline-block align-bottom">
+      {children}
+    </motion.div>
+  );
+}
 
 /** Pulls its child toward the cursor while hovered; springs back on leave. */
 export function Magnetic({ children, strength = 0.35 }: { children: ReactNode; strength?: number }) {

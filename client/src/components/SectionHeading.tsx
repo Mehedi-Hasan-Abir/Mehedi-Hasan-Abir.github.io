@@ -1,5 +1,6 @@
 import React from "react";
 import { animate } from "animejs";
+import { VelocityTilt } from "@/components/Interactive";
 import { useAnimeOnView, useCanAnimate } from "@/lib/use-anime";
 
 interface SectionHeadingProps {
@@ -109,10 +110,12 @@ export function SectionHeading({ title, subtitle, number }: SectionHeadingProps)
     <div className="mb-12 md:mb-16" data-testid="section-heading">
       <div className="flex items-center gap-4 md:gap-6">
         <GhostNumber label={formattedNumber} />
-        <div>
-          <h2 className="display-lg">{title}</h2>
-          <PenStroke />
-        </div>
+        <VelocityTilt>
+          <div>
+            <h2 className="display-lg">{title}</h2>
+            <PenStroke />
+          </div>
+        </VelocityTilt>
       </div>
 
       {subtitle && (
