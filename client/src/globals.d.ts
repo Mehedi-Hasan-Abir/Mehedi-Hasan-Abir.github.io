@@ -12,6 +12,6 @@ interface Navigator {
 }
 
 interface Window {
-  dataLayer?: unknown[][];
+  dataLayer?: any[];
   gtag?: (...args: unknown[]) => void;
 }

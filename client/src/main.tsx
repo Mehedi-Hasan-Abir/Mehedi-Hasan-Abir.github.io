@@ -4,7 +4,7 @@ import "./index.css";
 import { initSentry } from "./lib/sentry.config";
 import { initAnalytics } from "./lib/analytics";
 
-// initSentry(); // BISECT
+initSentry();
 initAnalytics();
 
 createRoot(document.getElementById("root")!).render(<App />);
