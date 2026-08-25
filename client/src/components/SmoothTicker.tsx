@@ -4,61 +4,55 @@ const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01<>/#$%&*";
 
 /**
  * Rotating hero tagline with a scramble/decrypt morph between phrases.
- * Characters shuffle randomly, then lock in left-to-right. Loops forever.
- * Falls back to static first phrase on low-bandwidth connections.
+ * Writes text directly to the DOM node (zero React re-renders per frame).
+ * Loops forever. Static first phrase on low-bandwidth connections.
  */
 export function SmoothTicker({ phrases, className }: { phrases: string[]; className?: string }) {
-  const [index, setIndex] = useState(0);
-  const [display, setDisplay] = useState(phrases[0] ?? "");
+  const textRef = useRef<HTMLSpanElement | null>(null);
   const rafRef = useRef(0);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     if (phrases.length <= 1) return;
     const HOLD = 1700;
     const SCRAMBLE = 520;
+    let index = 0;
+    let timeout: ReturnType<typeof setTimeout>;
 
-    const id = window.setTimeout(() => {
-      const next = phrases[(index + 1) % phrases.length];
+    const scrambleTo = (next: string, done: () => void) => {
       const start = performance.now();
-      const maxLen = Math.max(next.length, display.length);
-
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / SCRAMBLE);
         const reveal = Math.floor(t * next.length);
         let out = "";
         for (let i = 0; i < next.length; i++) {
-          if (i < reveal) {
-            out += next[i];
-          } else if (next[i] === " ") {
-            out += " ";
-          } else {
-            out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-          }
+          if (i < reveal || next[i] === " ") out += next[i];
+          else out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
         }
-        setDisplay(out);
-        if (t < 1) {
-          rafRef.current = requestAnimationFrame(tick);
-        } else {
-          setDisplay(next);
-          setIndex((i) => (i + 1) % phrases.length);
-        }
+        if (textRef.current) textRef.current.textContent = out;
+        if (t < 1) rafRef.current = requestAnimationFrame(tick);
+        else done();
       };
-      void maxLen;
       rafRef.current = requestAnimationFrame(tick);
-    }, HOLD);
+    };
+
+    const cycle = () => {
+      timeout = setTimeout(() => {
+        index = (index + 1) % phrases.length;
+        scrambleTo(phrases[index], cycle);
+      }, HOLD);
+    };
+    cycle();
 
     return () => {
-      clearTimeout(id);
-      clearTimeout(timeoutRef.current);
+      clearTimeout(timeout);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [index, phrases, display.length]);
+  }, [phrases]);
 
   return (
     <p className={`${className ?? ""} font-mono`} aria-live="polite">
       <span className="text-accent select-none" aria-hidden="true">&gt;&nbsp;</span>
-      {display}
+      <span ref={textRef}>{phrases[0]}</span>
       <span className="text-accent animate-pulse select-none" aria-hidden="true">_</span>
     </p>
   );

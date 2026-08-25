@@ -2,21 +2,28 @@ import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "re
 import { animate, stagger } from "animejs";
 import { motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
 
-/** Scroll-velocity skew on page content (noticeable on mobile, stronger on desktop). */
+/**
+ * Scroll-velocity skew on page content.
+ * Desktop: active (owner likes it). Mobile: disabled - touch momentum + tilt
+ * reads as "stuck then bounce" and costs frames on phone-class GPUs.
+ * Trade-off is deliberate; flip mobileSkew to re-enable.
+ */
 export function ScrollSkew({ children }: { children: ReactNode }) {
-  const [angle, setAngle] = useState(1.5);
+  const [isDesktop, setIsDesktop] = useState(true);
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
-  const smooth = useSpring(velocity, { stiffness: 260, damping: 55, mass: 0.5 });
-  const skewY = useTransform(smooth, [-3000, 0, 3000], [`${angle}deg`, "0deg", `-${angle}deg`], { clamp: true });
+  const smooth = useSpring(velocity, { stiffness: 300, damping: 65, mass: 0.4 });
+  const skewY = useTransform(smooth, [-3000, 0, 3000], ["1.2deg", "0deg", "-1.2deg"], { clamp: true });
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setAngle(mq.matches ? 1.2 : 1.5);
+    const update = () => setIsDesktop(mq.matches);
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
+
+  if (!isDesktop) return <>{children}</>;
 
   return (
     <motion.div style={{ skewY, willChange: "transform" }}>

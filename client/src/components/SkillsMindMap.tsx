@@ -168,6 +168,13 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
 
   useEffect(() => () => { loopAnims.current.forEach((a) => a.pause()); }, []);
 
+  // Pause loops while off-screen, resume on return (perf: no hidden work)
+  useEffect(() => {
+    if (!loopsStarted.current) return;
+    loopAnims.current.forEach((a) => (inView ? a.play() : a.pause()));
+  }, [inView]);
+
+
   return (
     <div ref={ref} className="relative pl-6" role="img" aria-label="Capabilities grouped into seven areas">
       <span
@@ -225,6 +232,7 @@ function SkillsTreeMobile({ skills }: { skills: SkillGroup[] }) {
 
 function SkillsMapDesktop({ skills }: { skills: SkillGroup[] }) {
   const { ref: containerRef, inView } = useInView<HTMLDivElement>(0.15);
+  const pulseAnimsRef = useRef<ReturnType<typeof animate>[]>([]);
 
   useEffect(() => {
     if (!inView || !containerRef.current) return;
@@ -263,27 +271,38 @@ function SkillsMapDesktop({ skills }: { skills: SkillGroup[] }) {
       delay: stagger(100, { start: 320 }),
     });
 
-    // Pulses travel root -> branch along each edge, looping
+    // Pulses travel root -> branch along each edge, looping (paused off-screen)
+    const pulseAnims: ReturnType<typeof animate>[] = [];
     svg.querySelectorAll<SVGCircleElement>("[data-pulse]").forEach((circle, i) => {
       const edge = svg.querySelectorAll<SVGPathElement>("[data-edge]")[i];
       if (!edge) return;
       const len = edge.getTotalLength();
       const state = { t: 0 };
-      animate(state, {
-        t: 1,
-        duration: 2400,
-        ease: "inOutQuad",
-        delay: 900 + i * 350,
-        loop: true,
-        onUpdate: () => {
-          const pt = edge.getPointAtLength(state.t * len);
-          circle.setAttribute("cx", String(pt.x));
-          circle.setAttribute("cy", String(pt.y));
-          circle.setAttribute("opacity", state.t > 0.04 && state.t < 0.96 ? "1" : "0");
-        },
-      });
+      pulseAnims.push(
+        animate(state, {
+          t: 1,
+          duration: 2400,
+          ease: "inOutQuad",
+          delay: 900 + i * 350,
+          loop: true,
+          onUpdate: () => {
+            const pt = edge.getPointAtLength(state.t * len);
+            circle.setAttribute("cx", String(pt.x));
+            circle.setAttribute("cy", String(pt.y));
+            circle.setAttribute("opacity", state.t > 0.04 && state.t < 0.96 ? "1" : "0");
+          },
+        })
+      );
     });
+    pulseAnimsRef.current = pulseAnims;
+    if (!inView) pulseAnims.forEach((a) => a.pause());
   }, [inView, containerRef]);
+
+  // Pause/resume edge pulses by viewport presence
+  useEffect(() => {
+    if (!pulseAnimsRef.current.length) return;
+    pulseAnimsRef.current.forEach((a) => (inView ? a.play() : a.pause()));
+  }, [inView]);
 
   const VIEW_H = columnHeight(skills);
   const pts = layoutBranches(skills);

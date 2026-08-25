@@ -175,8 +175,8 @@ export default function Home() {
                   loading="eager"
                   decoding="async"
                   fetchPriority="high"
-                  width={1328}
-                  height={1328}
+                  width={800}
+                  height={800}
                   className="relative w-full aspect-square object-cover grayscale contrast-[1.04] group-hover:grayscale-0 transition-all duration-700"
                 />
               </div>
@@ -210,7 +210,7 @@ export default function Home() {
         />
 
         {/* ============ EXPERIENCE ============ */}
-        <section id="experience" className="rule-t py-20 md:py-28">
+        <section id="experience" className="rule-t py-20 md:py-28 cv-auto">
           <SectionHeading title="Experience" subtitle="My professional journey" />
           {experiences && experiences.length > 0 && (
             <ExperienceGrouped experiences={experiences} />
@@ -218,7 +218,7 @@ export default function Home() {
         </section>
 
         {/* ============ PROJECTS ============ */}
-        <section id="projects" className="rule-t py-20 md:py-28">
+        <section id="projects" className="rule-t py-20 md:py-28 cv-auto">
           <SectionHeading title="Selected Work" subtitle="Some things I've built" />
 
           {projects && projects.length > 0 && (
@@ -235,7 +235,7 @@ export default function Home() {
         </section>
 
         {/* ============ SKILLS ============ */}
-        <section id="skills" className="rule-t py-20 md:py-28">
+        <section id="skills" className="rule-t py-20 md:py-28 cv-auto">
           <SectionHeading
             title="Capabilities"
             subtitle="The production stack behind seven years of shipped AI systems"
@@ -247,7 +247,7 @@ export default function Home() {
         <BlogSection />
 
         {/* ============ EDUCATION + RESEARCH ============ */}
-        <section id="education" className="rule-t py-20 md:py-28">
+        <section id="education" className="rule-t py-20 md:py-28 cv-auto">
           <SectionHeading title="Background" subtitle="Education and academic work" />
           <div className="grid md:grid-cols-2 gap-10 md:gap-16">
             <div>
@@ -297,7 +297,7 @@ export default function Home() {
         </section>
 
         {/* ============ BEYOND CODE ============ */}
-        <section id="personal" className="rule-t py-20 md:py-28">
+        <section id="personal" className="rule-t py-20 md:py-28 cv-auto">
           <SectionHeading title="Beyond Code" subtitle="Getting to know me beyond the code" />
           <InterestWave interests={interests ?? []} />
 
@@ -324,7 +324,7 @@ export default function Home() {
         </section>
 
         {/* ============ FUN & GAMES ============ */}
-        <section id="games" className="rule-t py-20 md:py-28">
+        <section id="games" className="rule-t py-20 md:py-28 cv-auto">
           <SectionHeading title="Fun & Games" subtitle="Take a break and test your memory" />
           <div className="flex justify-center">
             <Suspense fallback={null}>
@@ -334,7 +334,7 @@ export default function Home() {
         </section>
 
         {/* ============ CONTACT ============ */}
-        <section id="contact" className="rule-t py-20 md:py-28">
+        <section id="contact" className="rule-t py-20 md:py-28 cv-auto">
           <SectionHeading title="Get In Touch" />
           <motion.div
             initial={{ opacity: 0, y: 22 }}

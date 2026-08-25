@@ -166,6 +166,12 @@ html[data-color-mode="light"] {
     @apply text-primary-foreground bg-primary;
   }
 
+  /* Skip render work for far-offscreen sections (scroll perf) */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+
   .btn-push:active {
     transform: translateY(1px);
   }

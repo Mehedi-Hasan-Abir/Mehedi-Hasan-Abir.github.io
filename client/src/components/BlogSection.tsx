@@ -47,7 +47,7 @@ export function BlogSection() {
 
   if (isLoading) {
     return (
-      <section id="blog" className="rule-t py-20 md:py-28">
+      <section id="blog" className="rule-t py-20 md:py-28 cv-auto">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="mb-12 md:mb-16" data-testid="section-heading">
             <h2 className="display-lg">Writing</h2>
@@ -78,7 +78,7 @@ export function BlogSection() {
   const featuredBlogs = blogs.slice(0, 3);
 
   return (
-    <section id="blog" className="rule-t py-20 md:py-28">
+    <section id="blog" className="rule-t py-20 md:py-28 cv-auto">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         <SectionHeading title="Writing" subtitle="Thoughts on AI, Machine Learning, and Technology" />
 

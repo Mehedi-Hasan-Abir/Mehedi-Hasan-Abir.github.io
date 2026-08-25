@@ -69,15 +69,24 @@ export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
     const pulse = host.querySelector<HTMLElement>("[data-rail-pulse]");
     if (rail && pulse) {
       const distance = rail.offsetHeight - 8;
-      animate(pulse, {
+      railPulseRef.current = animate(pulse, {
         translateY: [0, distance],
         opacity: [0, 1, 1, 0],
         duration: 3000,
         ease: "inOutQuad",
         loop: true,
       });
+      if (!inView) railPulseRef.current.pause();
     }
   }, [canAnimate, inView, hostRef]);
+
+  // Pause/resume rail pulse by viewport presence
+  const railPulseRef = useRef<ReturnType<typeof animate> | null>(null);
+  useEffect(() => {
+    if (!railPulseRef.current) return;
+    if (inView) railPulseRef.current.play();
+    else railPulseRef.current.pause();
+  }, [inView]);
 
   const hidden = canAnimate ? { opacity: 0 } : undefined;
 
