@@ -25,8 +25,13 @@ export function CustomCursor() {
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
-      const target = e.target as HTMLElement | null;
-      hovering = !!target?.closest("a, button, [role='button'], input, textarea, select, [data-cursor='grow']");
+      // e.target is only typed as EventTarget: synthesized pointer moves (device
+      // emulation / touch) and moves over the page gutter can hand us the
+      // document or a text node, and only Element has .closest().
+      const target = e.target;
+      hovering =
+        target instanceof Element &&
+        target.closest("a, button, [role='button'], input, textarea, select, [data-cursor='grow']") !== null;
       dot.style.opacity = hovering ? "0" : "1";
     };
 

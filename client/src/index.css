@@ -60,6 +60,11 @@
 
   --font-sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'JetBrains Mono', Consolas, monospace;
+
+  /* NeuralBrain travelling-charge colors (see .circuit-* below).
+     Dark surfaces: a white-hot core reads as light in the traces. */
+  --circuit-core: hsl(0 0% 100% / 0.95);
+  --circuit-glow: hsl(var(--primary) / 0.5);
 }
 
 html[data-color-mode="light"] {
@@ -87,6 +92,11 @@ html[data-color-mode="light"] {
   --border: 55 15% 84%;
   --input: 55 15% 84%;
   --ring: 233 73% 48%;
+
+  /* Light surfaces: the traces are already a dark accent, so a white core
+     would erase them. Use full-strength accent as the charge instead. */
+  --circuit-core: hsl(var(--primary));
+  --circuit-glow: hsl(var(--primary) / 0.72);
 }
 
 @layer base {
@@ -135,6 +145,30 @@ html[data-color-mode="light"] {
 
   .text-accent { color: hsl(var(--primary)); }
 
+  /*
+   * Tech pills: accent-tinted, subtle glow. Pure CSS (border + box-shadow +
+   * text-shadow) - no JS/animation cost, cheap to render in bulk lists.
+   */
+  .tech-chip {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.08);
+    border: 1px solid hsl(var(--primary) / 0.35);
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.375rem;
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.55);
+    box-shadow: 0 0 0 hsl(var(--primary) / 0), inset 0 0 12px hsl(var(--primary) / 0.06);
+    transition: box-shadow 200ms ease, background-color 200ms ease, border-color 200ms ease;
+  }
+
+  .tech-chip:hover {
+    background: hsl(var(--primary) / 0.14);
+    border-color: hsl(var(--primary) / 0.6);
+    box-shadow: 0 0 14px hsl(var(--primary) / 0.35), inset 0 0 12px hsl(var(--primary) / 0.1);
+  }
+
   /* Hairline rules */
   .rule-t { border-top: 1px solid hsl(var(--border)); }
   .rule-b { border-bottom: 1px solid hsl(var(--border)); }
@@ -157,13 +191,42 @@ html[data-color-mode="light"] {
 
   /* Nav pill (floating header nav) */
   .nav-pill {
-    @apply px-4 py-1.5 rounded-full text-sm font-medium text-muted-foreground transition-all duration-200 cursor-pointer;
+    @apply relative px-4 py-1.5 rounded-full text-sm font-medium text-muted-foreground transition-colors duration-200 cursor-pointer;
   }
   .nav-pill:hover {
     @apply text-foreground;
   }
-  .nav-pill-active {
-    @apply text-primary-foreground bg-primary;
+  /* Active item: the pill background is a framer-motion layout element, so only
+     the text colour is handled here. Sits above the sliding indicator. */
+  .nav-pill-on {
+    @apply text-primary-foreground;
+  }
+  .nav-pill-on:hover {
+    @apply text-primary-foreground;
+  }
+
+  /* Dual-label vertical wipe. The clip is exactly one line tall, with a second
+     copy stacked below; hover slides the pair up by 100%, so the accent copy
+     takes its place. Transform-only, no layout or paint. */
+  .nav-pill-labels {
+    @apply relative z-10 block overflow-hidden;
+    height: 1.25rem;
+    line-height: 1.25rem;
+  }
+  .nav-pill-label {
+    @apply block transition-transform duration-300;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .nav-pill-label-alt {
+    color: hsl(var(--primary));
+  }
+  .nav-pill-on .nav-pill-label-alt {
+    color: inherit;
+  }
+  .nav-pill:hover .nav-pill-label,
+  .nav-pill:focus-visible .nav-pill-label {
+    transform: translateY(-100%);
   }
 
   /* Skip render work for far-offscreen sections (scroll perf) */
@@ -207,6 +270,104 @@ html[data-color-mode="light"] {
   10%  { opacity: 1; }
   85%  { opacity: 1; }
   100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* ── NeuralBrain: light flowing through the circuit traces ──────────────────
+   The gradients are masked by neural-brain.png, so motion only shows up where
+   the artwork has strokes. Transforms run on the inner (unmasked) spans.
+   `will-change: transform` keeps each band on its own compositor layer. */
+
+/* Dim base fill breathing under the signals. Kept dim on purpose - the
+   travelling bands need headroom to read as brighter than the traces. */
+@keyframes circuit-base {
+  0%, 100% { opacity: 0.42; }
+  50%      { opacity: 0.62; }
+}
+
+/* Signal band sweeping down-and-across the traces. */
+@keyframes circuit-flow {
+  from { transform: translate3d(0, -50%, 0); }
+  to   { transform: translate3d(0, 50%, 0); }
+}
+
+/* Same band, reversed - keeps the circuit from reading as one-way drainage. */
+@keyframes circuit-flow-reverse {
+  from { transform: translate3d(0, 50%, 0); }
+  to   { transform: translate3d(0, -50%, 0); }
+}
+
+/* Ring of light leaving the core. */
+@keyframes circuit-bloom {
+  0%   { transform: scale(0.35); opacity: 0; }
+  25%  { opacity: 0.85; }
+  100% { transform: scale(1.85); opacity: 0; }
+}
+
+/* Backlight glow behind the artwork. */
+@keyframes circuit-halo {
+  0%, 100% { opacity: 0.55; transform: scale(0.95); }
+  50%      { opacity: 1; transform: scale(1.06); }
+}
+
+.circuit-base {
+  animation: circuit-base 3.6s ease-in-out infinite;
+}
+
+.circuit-halo {
+  animation: circuit-halo 3.6s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.circuit-flow-a {
+  height: 300%;
+  animation: circuit-flow 2.6s linear infinite;
+  will-change: transform;
+}
+
+.circuit-flow-b {
+  height: 300%;
+  animation: circuit-flow-reverse 3.9s linear infinite;
+  animation-delay: -1.3s;
+  opacity: 0.75;
+  will-change: transform;
+}
+
+.circuit-bloom {
+  animation: circuit-bloom 4.2s ease-out infinite;
+  animation-delay: -0.8s;
+  will-change: transform, opacity;
+}
+
+/* Off-screen: stop compositing the four infinite loops entirely.
+   `will-change` is also dropped here - `animation-play-state: paused` keeps the
+   compositor layer alive on its own, so releasing the hint is what actually
+   frees memory while the hero is scrolled past. */
+.circuit-paused .circuit-base,
+.circuit-paused .circuit-halo,
+.circuit-paused .circuit-flow-a,
+.circuit-paused .circuit-flow-b,
+.circuit-paused .circuit-bloom {
+  animation-play-state: paused;
+  will-change: auto;
+}
+
+/* Hover / keyboard-focus surge: same choreography, faster and brighter. */
+.circuit-brain:hover .circuit-flow-a,
+.circuit-brain:focus-visible .circuit-flow-a {
+  animation-duration: 1.15s;
+}
+.circuit-brain:hover .circuit-flow-b,
+.circuit-brain:focus-visible .circuit-flow-b {
+  animation-duration: 1.7s;
+  opacity: 1;
+}
+.circuit-brain:hover .circuit-bloom,
+.circuit-brain:focus-visible .circuit-bloom {
+  animation-duration: 1.9s;
+}
+.circuit-brain:hover .circuit-base,
+.circuit-brain:focus-visible .circuit-base {
+  animation-duration: 1.6s;
 }
 
 /* Custom scrollbar - minimal */
