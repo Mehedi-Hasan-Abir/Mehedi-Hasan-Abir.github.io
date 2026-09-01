@@ -9,7 +9,6 @@ import {
   FlaskConical,
 } from "lucide-react";
 import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
-import { Link as ScrollLink } from "react-scroll";
 import { Navbar } from "@/components/Navbar";
 import { useExperiences, useProjects, useSkills, usePersonalInfo, useEducation, useResearch, useInterests, useHeroPhrases, useBlogs } from "@/hooks/use-portfolio";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -23,13 +22,29 @@ import { Magnetic, Marquee, PulseRing } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { BlogSection } from "@/components/BlogSection";
+import { NeuralBrain } from "@/components/NeuralBrain";
 import { useCanAnimate, useAnimeOnView, useInView } from "@/lib/use-anime";
+import { scrollToSection } from "@/lib/scroll-to";
 
 const MemoryFlipCards = lazy(() =>
   import("@/components/MemoryFlipCards").then((m) => ({ default: m.MemoryFlipCards }))
 );
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+/**
+ * React 18 does not recognise the camelCase `fetchPriority` prop (it landed in
+ * React 19), so it logs a DOM-attribute warning and drops the hint entirely.
+ * Spreading the lowercase HTML attribute name passes it straight through.
+ */
+const FETCH_PRIORITY_HIGH: Record<string, string> = { fetchpriority: "high" };
+
+/**
+ * True on touch-primary devices (no real hover). Used to swap hover-driven
+ * flourishes for scroll-driven ones instead of dropping them entirely.
+ */
+const isHoverless = () =>
+  typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
 export default function Home() {
   const { canLoadHeavy } = useConnection();
@@ -68,7 +83,14 @@ export default function Home() {
                 <span className="w-2 h-2 rounded-full bg-accent animate-pulse" aria-hidden="true" />
                 AI/ML ENGINEER &middot; DHAKA, BANGLADESH
               </p>
-              <DrawnName />
+              <div className="flex items-center gap-3 sm:gap-6">
+                <DrawnName />
+                {/* Circuit brain: hero-side easter egg, jumps to Capabilities.
+                    Scales with the viewport instead of being hidden on phones. */}
+                <Magnetic strength={0.3}>
+                  <NeuralBrain className="shrink-0 w-[76px] sm:w-[104px] md:w-[124px]" />
+                </Magnetic>
+              </div>
 
               <div className="mt-6 min-h-[2.2rem]">
                 <SmoothTicker
@@ -83,16 +105,17 @@ export default function Home() {
 
               <div className="flex flex-wrap gap-3 mt-9">
                 <Magnetic>
-                  <ScrollLink
-                    {...{ href: "#projects" }}
-                    to="projects"
-                    smooth={true}
-                    offset={-80}
+                  <a
+                    href="#projects"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection("projects");
+                    }}
                     className="btn-push relative inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer"
                   >
                     <PulseRing enabled={canAnimate} />
                     View my work <ArrowDown className="w-4 h-4" />
-                  </ScrollLink>
+                  </a>
                 </Magnetic>
                 <Magnetic>
                   <motion.a
@@ -156,7 +179,7 @@ export default function Home() {
                   alt={personalInfo.name}
                   loading="eager"
                   decoding="async"
-                  fetchPriority="high"
+                  {...FETCH_PRIORITY_HIGH}
                   width={800}
                   height={800}
                   initial={canAnimate ? { clipPath: "inset(0 100% 0 0)" } : false}
@@ -172,16 +195,17 @@ export default function Home() {
             </motion.figure>
           </div>
 
-          <ScrollLink
-            {...{ href: "#experience" }}
-            to="experience"
-            smooth={true}
-            offset={-80}
+          <a
+            href="#experience"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("experience");
+            }}
             aria-label="Scroll to Experience section"
             className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:block text-muted-foreground hover:text-accent transition-colors cursor-pointer"
           >
             <ArrowDown className="w-5 h-5 animate-bounce" />
-          </ScrollLink>
+          </a>
         </section>
 
         {/* ============ STATS ============ */}
@@ -207,14 +231,21 @@ export default function Home() {
           <SectionHeading title="Selected Work" subtitle="Some things I've built" />
 
           {projects && projects.length > 0 && (
-            <div className="grid lg:grid-cols-12 gap-4">
-              {/* Lead project */}
-              <ProjectCell project={projects[0]} index={0} className="lg:col-span-7" lead />
-              <div className="lg:col-span-5 grid gap-4 content-start">
-                {projects.slice(1).map((project, index) => (
-                  <ProjectCell key={project.id} project={project} index={index + 1} />
-                ))}
-              </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-4">
+              {/* Row 1: lead project + first secondary, side by side */}
+              <ProjectCell project={projects[0]} index={0} className="sm:col-span-2 lg:col-span-7" lead />
+              {projects[1] && (
+                <ProjectCell project={projects[1]} index={1} className="sm:col-span-2 lg:col-span-5" />
+              )}
+              {/* Row 2: remaining projects, split evenly */}
+              {projects.slice(2).map((project, index) => (
+                <ProjectCell
+                  key={project.id}
+                  project={project}
+                  index={index + 2}
+                  className="sm:col-span-1 lg:col-span-6"
+                />
+              ))}
             </div>
           )}
         </section>
@@ -480,8 +511,22 @@ function ProjectCell({
     });
   };
 
+  /*
+   * Touch devices never fire mouseenter, so the border trace - the signature
+   * moment of these cards - was invisible on phones. There, drive it from
+   * viewport entry instead: each card draws its own accent outline as it
+   * scrolls up, and erases it on the way out.
+   */
+  const { ref: cardRef, inView } = useInView<HTMLAnchorElement>(0.35);
+
+  useEffect(() => {
+    if (!canAnimate || !isHoverless()) return;
+    traceBorder(inView);
+  }, [canAnimate, inView]);
+
   return (
     <motion.a
+      ref={cardRef}
       href={project.link}
       target="_blank"
       rel="noopener noreferrer"
@@ -491,7 +536,7 @@ function ProjectCell({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.2 }}
       transition={{ duration: 0.55, delay: index * 0.08, ease }}
-      className={`group relative border border-border bg-card p-7 md:p-9 flex flex-col hover:border-primary/60 transition-colors overflow-hidden ${className}`}
+      className={`group relative border border-border bg-card p-7 md:p-9 flex flex-col hover:border-primary/60 active:border-primary/60 active:scale-[0.99] transition-[color,background-color,border-color,transform] duration-200 overflow-hidden ${className}`}
     >
       {canAnimate && (
         <svg aria-hidden="true" className="pointer-events-none absolute inset-0 w-full h-full">
@@ -505,6 +550,14 @@ function ProjectCell({
           />
         </svg>
       )}
+      {/* Oversized index watermark: gives each stacked mobile card a visual
+          anchor where the bento's size hierarchy is unavailable. */}
+      <span
+        aria-hidden="true"
+        className="ghost-num pointer-events-none absolute -top-2 right-3 select-none text-[5.5rem] leading-none !opacity-[0.07] md:text-[7rem]"
+      >
+        {String(index + 1).padStart(2, "0")}
+      </span>
       <span className="mono-label text-accent">P&middot;{String(index + 1).padStart(2, "0")}</span>
       <h3 className={`font-extrabold tracking-tight mt-3 ${lead ? "text-2xl md:text-[2rem]" : "text-xl"}`} style={{ fontStretch: "106%" }}>
         {project.title}
@@ -517,7 +570,7 @@ function ProjectCell({
           <span
             key={tech}
             data-chip
-            className="mono-label text-muted-foreground border border-border px-2.5 py-1 rounded-md"
+            className="tech-chip"
             style={canAnimate ? { opacity: 0 } : undefined}
           >
             {tech}

@@ -12,6 +12,8 @@ attached_assets/
 **/*.jpeg
 **/*.png
 !client/public/images/**
+# Hero circuit-brain artwork: it IS the mask for NeuralBrain, so it must ship
+!client/public/neural-brain.png
 
 # Build output
 client/dist/

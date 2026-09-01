@@ -1,9 +1,9 @@
-import { Link as ScrollLink } from "react-scroll";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
 import { ThemeControls } from "@/components/ThemeProvider";
+import { scrollToSection, activeSection } from "@/lib/scroll-to";
 
 const navItems = [
   { name: "Experience", to: "experience" },
@@ -12,6 +12,8 @@ const navItems = [
   { name: "Writing", to: "blog" },
   { name: "Contact", to: "contact" },
 ];
+
+const navIds = navItems.map((item) => item.to);
 
 const socialLinks = [
   { href: "https://github.com/Mehedi-Hasan-Abir", label: "GitHub", Icon: SiGithub },
@@ -22,14 +24,41 @@ const socialLinks = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  /**
+   * Active section, measured ourselves rather than via react-scroll's `spy`.
+   * `spy` marked the first registered link active at scrollTop 0, so "Experience"
+   * lit up while the hero was still filling the viewport. `activeSection` returns
+   * null when nothing is under the navbar, which is the correct hero state.
+   */
+  const [active, setActive] = useState<string | null>(null);
+
+  // Reading-progress: reuse the existing accent hairline as the track.
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 220, damping: 40, mass: 0.4 });
 
   useEffect(() => {
+    let queued = false;
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
+      // getBoundingClientRect per section is a layout read; batch it to one
+      // rAF per frame so a fast scroll cannot thrash.
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        setActive(activeSection(navIds));
+      });
     };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Sections change height on resize (and as cv-auto content materialises).
+    window.addEventListener("resize", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   return (
@@ -39,46 +68,72 @@ export function Navbar() {
         scrolled || isOpen ? "bg-background/80 backdrop-blur-md" : "bg-transparent"
       }`}
     >
-      {/* Accent hairline under the bar once scrolled */}
+      {/* Accent hairline under the bar once scrolled, doubling as a
+          reading-progress rail (scaleX is compositor-only). */}
       <span
         aria-hidden="true"
-        className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent transition-opacity duration-300 ${
+        className={`absolute bottom-0 left-0 right-0 h-px overflow-hidden transition-opacity duration-300 ${
           scrolled ? "opacity-100" : "opacity-0"
         }`}
-      />
+      >
+        <motion.span
+          className="block h-full origin-left bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+          style={{ scaleX: progress }}
+        />
+      </span>
 
       <div className="max-w-6xl mx-auto px-5 md:px-8 h-[4.5rem] flex items-center justify-between gap-4">
         {/* Wordmark */}
-        <ScrollLink
-          {...{ href: "#hero" }}
-          to="hero"
-          smooth={true}
-          duration={500}
+        <a
+          href="#hero"
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
         >
           <span className="w-2.5 h-2.5 bg-primary rotate-45 transition-transform duration-300 group-hover:rotate-[135deg]" aria-hidden="true" />
           <span className="font-extrabold tracking-tight text-lg" style={{ fontStretch: "110%" }}>
             Mehedi<span className="text-accent"> / </span>Hasan
           </span>
-        </ScrollLink>
+        </a>
 
         {/* Floating pill nav (desktop) */}
         <div className="hidden lg:flex items-center gap-1 border border-border bg-card/60 backdrop-blur-sm rounded-full px-2 py-1.5">
-          {navItems.map((item) => (
-            <ScrollLink
-              {...{ href: `#${item.to}` }}
-              key={item.name}
-              to={item.to}
-              spy={true}
-              smooth={true}
-              offset={-80}
-              duration={500}
-              className="nav-pill"
-              activeClass="nav-pill-active"
-            >
-              {item.name}
-            </ScrollLink>
-          ))}
+          {navItems.map((item) => {
+            const isActive = active === item.to;
+            return (
+              <a
+                key={item.name}
+                href={`#${item.to}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.to);
+                }}
+                aria-current={isActive ? "true" : undefined}
+                className={`nav-pill ${isActive ? "nav-pill-on" : ""}`}
+              >
+                {/* Shared layoutId: framer-motion glides this single pill from
+                    the old item to the new one instead of cross-fading two. */}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-indicator"
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-full bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 32, mass: 0.6 }}
+                  />
+                )}
+                {/* Dual label: the second copy sits one line below and both
+                    slide up together on hover, wiping to the accent colour. */}
+                <span className="nav-pill-labels">
+                  <span className="nav-pill-label">{item.name}</span>
+                  <span className="nav-pill-label nav-pill-label-alt" aria-hidden="true">
+                    {item.name}
+                  </span>
+                </span>
+              </a>
+            );
+          })}
         </div>
 
         {/* Right cluster */}
@@ -140,20 +195,23 @@ export function Navbar() {
           >
             <div className="px-5 py-4 flex flex-col gap-1">
               {navItems.map((item) => (
-                <ScrollLink
-                  {...{ href: `#${item.to}` }}
+                <a
                   key={item.name}
-                  to={item.to}
-                  spy={true}
-                  smooth={true}
-                  offset={-80}
-                  duration={500}
-                  className="text-muted-foreground hover:text-primary transition-colors block py-2.5 font-medium"
-                  activeClass="text-foreground"
-                  onClick={() => setIsOpen(false)}
+                  href={`#${item.to}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsOpen(false);
+                    // Let the menu's collapse commit first: it shrinks the page,
+                    // so measuring before it closes aims at a stale layout.
+                    requestAnimationFrame(() => scrollToSection(item.to));
+                  }}
+                  aria-current={active === item.to ? "true" : undefined}
+                  className={`block py-2.5 font-medium transition-colors ${
+                    active === item.to ? "text-foreground" : "text-muted-foreground hover:text-primary"
+                  }`}
                 >
                   {item.name}
-                </ScrollLink>
+                </a>
               ))}
               <div className="border-t border-border pt-3 mt-2 flex items-center justify-between">
                 <div className="flex items-center gap-1">

@@ -166,18 +166,26 @@ export function ExperienceGrouped({ experiences }: ExperienceGroupedProps) {
                     <ul className="mt-4 space-y-2 max-w-[82ch]">
                       {role.description.map((line, li) => {
                         const isTech = line.startsWith("Tech:");
+                        if (isTech) {
+                          const chips = line.replace(/^Tech:\s*/, "").split(",").map((c) => c.trim());
+                          return (
+                            <li key={li} data-xp-bullet className="flex flex-wrap gap-2 pl-0 pt-1" style={hidden}>
+                              {chips.map((chip) => (
+                                <span key={chip} className="tech-chip">
+                                  {chip}
+                                </span>
+                              ))}
+                            </li>
+                          );
+                        }
                         return (
                           <li
                             key={li}
                             data-xp-bullet
-                            className={
-                              isTech
-                                ? "mono-label text-muted-foreground/80 pl-0 leading-relaxed"
-                                : "relative pl-5 text-sm md:text-[15px] text-foreground/90 leading-relaxed before:absolute before:left-0 before:top-[0.62em] before:w-2.5 before:h-px before:bg-primary"
-                            }
+                            className="relative pl-5 text-sm md:text-[15px] text-foreground/90 leading-relaxed before:absolute before:left-0 before:top-[0.62em] before:w-2.5 before:h-px before:bg-primary"
                             style={hidden}
                           >
-                            {isTech ? line.replace(/^Tech:\s*/, "") : line}
+                            {line}
                           </li>
                         );
                       })}
