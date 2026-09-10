@@ -435,7 +435,13 @@ html[data-color-mode="light"] {
 .ci-compglow { animation: circuit-compglow 3.2s ease-in-out infinite; }
 
 /* Hover choreography */
-.cap-chip:hover .ci-svg { animation: circuit-spin 1.6s linear infinite; }
+.cap-chip .ci-svg { transition: transform 0.55s cubic-bezier(0.6, 0.05, 0.2, 1.2); }
+.cap-chip:hover .ci-svg { transform: rotate(90deg); }
+/* Marquee chip: periodic quarter-turn rock, never a full spin */
+@keyframes circuit-quarter {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(90deg); }
+}
 .cap-sci:hover .ci-gear,
 .cap-admin:hover .ci-gear { animation: circuit-spin 1.6s linear infinite; }
 .cap-admin:hover .ci-gear { animation-duration: 1.8s; }
@@ -451,7 +457,9 @@ html[data-color-mode="light"] {
 }
 .cap-comp:hover .ci-compglow { animation-duration: 1.2s; }
 .cap-comp { position: relative; }
-/* Reflection sweep (the computer's sheen), shared by every icon */
+/* Reflection sweep, clipped INSIDE the artwork:
+   line icons wear an SVG clipPath of their own strokes (.ci-glint),
+   the computer wears its PNG silhouette mask (.ci-sheen). */
 .ci-sheen {
   position: absolute;
   top: 0;
@@ -464,9 +472,14 @@ html[data-color-mode="light"] {
   transform: skewX(-12deg);
 }
 .cap-item:hover .ci-sheen { animation: circuit-sheen 1.4s ease-in-out infinite; }
+@keyframes circuit-glint {
+  from { transform: translateX(0); }
+  to   { transform: translateX(35px); }
+}
+.cap-item:hover .ci-glint { animation: circuit-glint 1.4s ease-in-out infinite; }
 
 /* Marquee: choreography runs by default while the band moves (live only) */
-.cap-live.cap-marquee .cap-chip .ci-svg { animation: circuit-spin 2.4s linear infinite; }
+.cap-live.cap-marquee .cap-chip .ci-svg { animation: circuit-quarter 2.4s ease-in-out infinite; }
 .cap-live.cap-marquee .ci-gear { animation: circuit-spin 1.6s linear infinite; }
 .cap-live.cap-marquee .ci-boxA { animation-duration: 1.2s; }
 .cap-live.cap-marquee .ci-boxB { animation-duration: 1.2s; }
@@ -479,6 +492,7 @@ html[data-color-mode="light"] {
 }
 .cap-live.cap-marquee .ci-compglow { animation-duration: 1.2s; }
 .cap-live.cap-marquee .ci-sheen { animation: circuit-sheen 2.2s ease-in-out infinite; }
+.cap-live.cap-marquee .ci-glint { animation: circuit-glint 2.2s ease-in-out infinite; }
 
 /* Cursor spotlight following ProjectCard's radial glow */
 .cap-spot {
@@ -505,6 +519,7 @@ html[data-color-mode="light"] {
 .circuit-paused .ci-gear,
 .circuit-paused .ci-sign,
 .circuit-paused .ci-sheen,
+.circuit-paused .ci-glint,
 .circuit-paused .ci-net,
 .circuit-paused .ci-boxA,
 .circuit-paused .ci-boxB,
