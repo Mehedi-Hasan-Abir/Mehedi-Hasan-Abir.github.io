@@ -27,8 +27,8 @@ import {
  *
  * Reflection sweep: an SVG rect clipped by the artwork itself (clipPath
  * of the same layer paths), so light only ever travels INSIDE the
- * strokes — never a full-box wash. The computer's HTML sheen wears the
- * same PNG mask for the same reason.
+ * strokes — never a full-box wash. The computer keeps the original
+ * recipe: breathing silhouette + a single travelling light.
  *
  * Idle loops only run when `on` (useCanAnimate); hover choreography is
  * pure CSS :hover like the rest of the portfolio. Off-screen pausing is
@@ -52,11 +52,13 @@ function SvgShell({
   on,
   layers,
   children,
+  overlay,
 }: {
   label: string;
   on: boolean;
   layers: string[];
   children: React.ReactNode;
+  overlay?: React.ReactNode;
 }) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const gradId = `cg${uid}`;
@@ -85,6 +87,7 @@ function SvgShell({
           <rect x="-10" y="-6" width="9" height="36" fill={`url(#${gradId})`} className="ci-glint" />
         </g>
       </svg>
+      {overlay}
     </span>
   );
 }
@@ -122,8 +125,13 @@ export function BigDataIcon({ on, label }: { on: boolean; label: string }) {
 
 export function ChartNetworkIcon({ on, label }: { on: boolean; label: string }) {
   return (
-    <SvgShell label={label} on={on} layers={[P_NET]}>
-      <path d={P_NET} className={DIM(on) + " ci-net"} />
+    <SvgShell
+      label={label}
+      on={on}
+      layers={[P_NET]}
+      overlay={on && <span aria-hidden="true" className="ci-orbit" />}
+    >
+      <path d={P_NET} className={DIM(on)} />
     </SvgShell>
   );
 }
@@ -159,13 +167,12 @@ const COMP_MASK: CSSProperties = {
 
 const COMP_FLOW =
   "linear-gradient(160deg, transparent 44%, var(--circuit-glow) 47.5%, var(--circuit-core) 50%, var(--circuit-glow) 52.5%, transparent 56%)";
-const COMP_FLOW_REV =
-  "linear-gradient(205deg, transparent 44%, var(--circuit-glow) 47.5%, var(--circuit-core) 50%, var(--circuit-glow) 52.5%, transparent 56%)";
 
+/** First-integration simplicity: breathing silhouette + one travelling light. */
 export function ComputerIcon({ on, label }: { on: boolean; label: string }) {
   return (
     <span
-      className={"relative block w-full aspect-square " + (on ? "ci-compglow" : "")}
+      className="relative block w-full aspect-square"
       role="img"
       aria-label={label}
     >
@@ -176,19 +183,10 @@ export function ComputerIcon({ on, label }: { on: boolean; label: string }) {
         style={COMP_MASK}
       />
       {on && (
-        <>
-          <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>
-            <span className="circuit-flow-a absolute -inset-y-full left-0 w-full" style={{ backgroundImage: COMP_FLOW }} />
-          </span>
-          <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>
-            <span className="circuit-flow-b absolute -inset-y-full left-0 w-full" style={{ backgroundImage: COMP_FLOW_REV }} />
-          </span>
-        </>
+        <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>
+          <span className="circuit-flow-a absolute -inset-y-full left-0 w-full" style={{ backgroundImage: COMP_FLOW }} />
+        </span>
       )}
-      {/* Sheen clipped by the same silhouette mask: light stays inside the artwork */}
-      <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>
-        <span className="ci-sheen" />
-      </span>
     </span>
   );
 }
