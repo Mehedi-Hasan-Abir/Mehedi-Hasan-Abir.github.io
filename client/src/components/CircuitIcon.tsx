@@ -66,7 +66,10 @@ function SvgShell({
       <Halo on={on} />
       <svg viewBox="0 0 24 24" aria-hidden="true" className="ci-svg absolute inset-0">
         <defs>
-          <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
+          {/* Slant lives in the gradient (x2/y2), NOT in a g transform:
+              Chromium leaks clipped content when transform + clip-path
+              share one element. */}
+          <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0.25">
             <stop offset="0.2" stopColor="transparent" />
             <stop offset="0.5" style={{ stopColor: "var(--circuit-core)" }} />
             <stop offset="0.8" stopColor="transparent" />
@@ -78,7 +81,7 @@ function SvgShell({
           </clipPath>
         </defs>
         {children}
-        <g transform="skewX(-12)" clipPath={`url(#${clipId})`}>
+        <g clipPath={`url(#${clipId})`}>
           <rect x="-10" y="-6" width="9" height="36" fill={`url(#${gradId})`} className="ci-glint" />
         </g>
       </svg>

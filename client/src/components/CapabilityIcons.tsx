@@ -24,7 +24,7 @@ const ITEMS: CapItem[] = [
   { key: "sci", label: "LLMs & Agentic AI", Icon: ScienceAiIcon },
   { key: "net", label: "Vector & Search", Icon: ChartNetworkIcon },
   { key: "big", label: "Backend & Distributed Systems", Icon: BigDataIcon },
-  { key: "usr", label: "Frontend", Icon: ChartUserIcon },
+  { key: "usr", label: "Business Analytics", Icon: ChartUserIcon },
   { key: "admin", label: "DevOps & Cloud", Icon: AdminAltIcon },
 ];
 
