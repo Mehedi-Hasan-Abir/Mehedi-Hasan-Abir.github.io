@@ -235,6 +235,75 @@ export const portfolioData = {
       ],
       link: "https://github.com/Mehedi-Hasan-Abir/ECG-Arrythmia-Classification",
     },
+    {
+      id: 9,
+      title: "ToLet Dhaka - Rental Listings",
+      description:
+        "House-rental listings page for Dhaka (To-Let) with property posts and contact details.",
+      techStack: ["HTML"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Tolet-Dhaka",
+    },
+    {
+      id: 10,
+      title: "School Management System",
+      description:
+        "School administration console for student records, classes, and fees.",
+      techStack: ["Java"],
+      link: "https://github.com/Mehedi-Hasan-Abir/School-Management-System",
+    },
+    {
+      id: 11,
+      title: "Bangla Alarm Clock",
+      description: "Alarm clock application with a Bangla interface.",
+      techStack: ["Java"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Bangla-Alarm-Clock",
+    },
+    {
+      id: 12,
+      title: "Dhaka City Bus Routes",
+      description: "Bus route directory covering Dhaka city transit lines.",
+      techStack: ["Java"],
+      link: "https://github.com/Mehedi-Hasan-Abir/-Dhaka-City-Bus-Routes-",
+    },
+    {
+      id: 13,
+      title: "Bank Management System",
+      description:
+        "Bank account and transaction management console with balance tracking.",
+      techStack: ["Java"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Bank-Management-Sysytem",
+    },
+    {
+      id: 14,
+      title: "DX Ball Remastered",
+      description:
+        "Classic brick-breaker ball and paddle game with 4 new levels.",
+      techStack: ["C++"],
+      link: "https://github.com/Mehedi-Hasan-Abir/DX-Ball-Remastered",
+    },
+    {
+      id: 15,
+      title: "Hospital Management",
+      description: "Hospital management web application built with ASP.NET and C#.",
+      techStack: ["JavaScript", "ASP.NET", "C#"],
+      link: "https://github.com/Mehedi-Hasan-Abir/HospitalManagement",
+    },
+    {
+      id: 16,
+      title: "Railway Station Management System",
+      description:
+        "Railway station records and scheduling managed entirely in SQL.",
+      techStack: ["TSQL"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Railway-Station-Management-System",
+    },
+    {
+      id: 17,
+      title: "BanglaNet - Handwritten Recognition",
+      description:
+        "Lightweight CNN recognizing 50 Bangla handwritten characters and 10 numerals for OCR-style digitization.",
+      techStack: ["Python", "CNN", "OCR"],
+      link: "https://github.com/Mehedi-Hasan-Abir/BanglaNet-for-Bangla-Handwritten-Characters-and-Numerals-Recognition",
+    },
   ],
   skills: [
     {
