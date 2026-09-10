@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
-import { animate, stagger } from "animejs";
+import { animate, remove, stagger } from "animejs";
 import { motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
 
 /**
@@ -31,6 +31,10 @@ export function Magnetic({ children, strength = 0.35 }: { children: ReactNode; s
     const rect = el.getBoundingClientRect();
     const dx = e.clientX - (rect.left + rect.width / 2);
     const dy = e.clientY - (rect.top + rect.height / 2);
+    // One live tween at a time: mousemove fires faster than the 300ms
+    // follow, so drop the stale tween before retargeting. Same path,
+    // same easing — just no pile-up.
+    remove(el);
     animate(el, {
       translateX: dx * strength,
       translateY: dy * strength,
@@ -42,6 +46,7 @@ export function Magnetic({ children, strength = 0.35 }: { children: ReactNode; s
   const onLeave = () => {
     const el = ref.current;
     if (!el) return;
+    remove(el);
     animate(el, {
       translateX: 0,
       translateY: 0,

@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { animate, stagger } from "animejs";
 import { motion } from "framer-motion";
 import { useBlogs } from "@/hooks/use-portfolio";
-import { ExternalLink, Calendar } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Calendar } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useCanAnimate, useInView } from "@/lib/use-anime";
 
@@ -25,6 +25,8 @@ export function BlogSection() {
   const { data: blogs, isLoading } = useBlogs();
   const canAnimate = useCanAnimate();
   const { ref: gridRef, inView } = useInView<HTMLDivElement>(0.08);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [pos, setPos] = useState({ index: 0, atStart: true, atEnd: false });
 
   useEffect(() => {
     if (!canAnimate || !inView || !gridRef.current) return;
@@ -74,21 +76,76 @@ export function BlogSection() {
     return null;
   }
 
-  // Get first 3 blog posts for the homepage section
-  const featuredBlogs = blogs.slice(0, 3);
+  // Carousel window: up to 6 posts so the track travels on every viewport
+  const featuredBlogs = blogs.slice(0, 6);
+
+  const updatePos = () => {
+    const el = trackRef.current;
+    if (!el || !featuredBlogs.length) return;
+    const max = el.scrollWidth - el.clientWidth;
+    const card = el.querySelector<HTMLElement>("[data-card]");
+    const step = card ? card.offsetWidth + 16 : el.clientWidth;
+    setPos({
+      index: Math.min(featuredBlogs.length - 1, Math.round(el.scrollLeft / step)),
+      atStart: el.scrollLeft <= 8,
+      atEnd: el.scrollLeft >= max - 8,
+    });
+  };
+
+  const nudge = (dir: number) => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: "smooth" });
+  };
 
   return (
     <section id="blog" className="rule-t py-20 md:py-28 cv-auto">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         <SectionHeading title="Writing" subtitle="Thoughts on AI, Machine Learning, and Technology" />
 
-        <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <span className="mono-label text-muted-foreground" aria-live="polite">
+            {String(pos.index + 1).padStart(2, "0")} / {String(featuredBlogs.length).padStart(2, "0")}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => nudge(-1)}
+              disabled={pos.atStart}
+              aria-label="Previous posts"
+              className="inline-flex w-10 h-10 items-center justify-center rounded-full border border-border text-muted-foreground hover:text-primary hover:border-primary/60 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => nudge(1)}
+              disabled={pos.atEnd}
+              aria-label="Next posts"
+              className="inline-flex w-10 h-10 items-center justify-center rounded-full border border-border text-muted-foreground hover:text-primary hover:border-primary/60 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <div
+          ref={(el) => {
+            gridRef.current = el;
+            trackRef.current = el;
+          }}
+          onScroll={updatePos}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Featured posts"
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mx-5 px-5 md:mx-0 md:px-0"
+        >
           {featuredBlogs.map((blog: BlogPost, index: number) => (
             <motion.article
               key={blog.id}
               data-card
               initial={canAnimate ? { clipPath: "inset(0% 100% 0% 0%)" } : false}
-              className="group border border-border bg-card hover:border-primary/60 transition-colors flex flex-col cursor-pointer overflow-hidden"
+              className="group border border-border bg-card hover:border-primary/60 transition-colors flex flex-col cursor-pointer overflow-hidden snap-start shrink-0 w-[82%] sm:w-[47%] lg:w-[31.8%]"
               onClick={() => window.open(blog.externalLink, "_blank", "noopener,noreferrer")}
             >
               {/* Thumbnail */}

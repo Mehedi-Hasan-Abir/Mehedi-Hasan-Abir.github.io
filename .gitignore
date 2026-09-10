@@ -14,6 +14,8 @@ attached_assets/
 !client/public/images/**
 # Hero circuit-brain artwork: it IS the mask for NeuralBrain, so it must ship
 !client/public/neural-brain.png
+# Solid computer silhouette: mask for the Programming icon (CircuitIcon)
+!client/public/icons/computer-mono.png
 
 # Build output
 client/dist/

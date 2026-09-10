@@ -186,6 +186,127 @@ export const portfolioData = {
       ],
       link: "https://github.com/Mehedi-Hasan-Abir/Japanese-Lawyer-Assistant-Langchain-LLM",
     },
+    {
+      id: 5,
+      title: "Outlet Fraud Detection - No-Label Verification Screening",
+      description:
+        "No-label fraud screening for outlet-verification photos. Every image is compared only against other photos from the same outlet — visually isolated shots and reused uploads get flagged with an evidence-based reason.",
+      techStack: [
+        "Python",
+        "Computer Vision",
+        "Image Embeddings",
+        "Docker",
+      ],
+      link: "https://github.com/Mehedi-Hasan-Abir/outlet-fraud-detection",
+    },
+    {
+      id: 6,
+      title: "Aethion RAG - Naive vs Streaming Retrieval Shootout",
+      description:
+        "Full-stack AI agent answering questions over company documents, comparing Naive RAG against StreamRAG — retrieval fired in parallel with generation and streamed to the user.",
+      techStack: [
+        "Python",
+        "RAG",
+        "Streaming",
+        "Rust",
+        "Docker",
+      ],
+      link: "https://github.com/Mehedi-Hasan-Abir/aethion-rag",
+    },
+    {
+      id: 7,
+      title: "AI Research Agent - Multi-Source LLM Assistant",
+      description:
+        "LLM research assistant and multi-source AI agent capable of answering complex research questions across sources.",
+      techStack: ["Python", "LLM Agents", "RAG"],
+      link: "https://github.com/Mehedi-Hasan-Abir/AI_Powered_Research_Agent-LLM-",
+    },
+    {
+      id: 8,
+      title: "ECG Arrhythmia Classification - 2-D CNN",
+      description:
+        "2-D convolutional classifier detecting arrhythmia from ECG beats through careful signal preprocessing and feature extraction.",
+      techStack: [
+        "Python",
+        "Deep Learning",
+        "CNN",
+        "VGGNet",
+        "Signal Processing",
+        "Jupyter",
+      ],
+      link: "https://github.com/Mehedi-Hasan-Abir/ECG-Arrythmia-Classification",
+    },
+    {
+      id: 9,
+      title: "ToLet Dhaka - Rental Listings",
+      description:
+        "Flat-renting website with property posts and contact details, enhanced with interactive elements.",
+      techStack: ["HTML5", "CSS", "PHP", "JavaScript"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Tolet-Dhaka",
+    },
+    {
+      id: 10,
+      title: "School Management System",
+      description:
+        "School administration console for student records, classes, and fees.",
+      techStack: ["Java"],
+      link: "https://github.com/Mehedi-Hasan-Abir/School-Management-System",
+    },
+    {
+      id: 11,
+      title: "Bangla Alarm Clock",
+      description: "Alarm clock application with a Bangla interface.",
+      techStack: ["Java"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Bangla-Alarm-Clock",
+    },
+    {
+      id: 12,
+      title: "Dhaka City Bus Routes",
+      description:
+        "Route-finder Android app covering Dhaka city transit lines with map lookup.",
+      techStack: ["Java", "Google Maps API", "JSON"],
+      link: "https://github.com/Mehedi-Hasan-Abir/-Dhaka-City-Bus-Routes-",
+    },
+    {
+      id: 13,
+      title: "Bank Management System",
+      description:
+        "Transactional banking features with account handling and balance tracking.",
+      techStack: ["Java", "Java GUI", "MySQL"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Bank-Management-Sysytem",
+    },
+    {
+      id: 14,
+      title: "DX Ball Remastered",
+      description:
+        "Classic brick-breaker ball and paddle game with 4 new levels.",
+      techStack: ["C++"],
+      link: "https://github.com/Mehedi-Hasan-Abir/DX-Ball-Remastered",
+    },
+    {
+      id: 15,
+      title: "Hospital Management",
+      description:
+        "Full-stack hospital management system with patient, doctor, and appointment workflows.",
+      techStack: ["ASP.NET MVC", "C#", "Razor"],
+      link: "https://github.com/Mehedi-Hasan-Abir/HospitalManagement",
+    },
+    {
+      id: 16,
+      title: "Railway Station Management System",
+      description:
+        "Railway station records and scheduling with client-server components in PL/SQL.",
+      techStack: ["PL/SQL"],
+      link: "https://github.com/Mehedi-Hasan-Abir/Railway-Station-Management-System",
+    },
+    {
+      id: 17,
+      title: "BanglaNet - Handwritten Recognition",
+      description:
+        "Lightweight CNN recognizing 50 Bangla handwritten characters and 10 numerals for OCR-style digitization.",
+      techStack: ["Python", "CNN", "OCR"],
+      link: "https://github.com/Mehedi-Hasan-Abir/BanglaNet-for-Bangla-Handwritten-Characters-and-Numerals-Recognition",
+    },
   ],
   skills: [
     {

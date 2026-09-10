@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { animate, stagger } from "animejs";
 import {
   ArrowDown,
@@ -20,7 +20,11 @@ import { SmoothTicker } from "@/components/SmoothTicker";
 import { StatsStrip } from "@/components/StatsStrip";
 import { Magnetic, Marquee, PulseRing } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
+import { ProjectCell } from "@/components/ProjectCell";
+import { ProjectModal } from "@/components/ProjectModal";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
+import { CapabilityIcons } from "@/components/CapabilityIcons";
+import { CapabilityMarquee } from "@/components/CapabilityMarquee";
 import { BlogSection } from "@/components/BlogSection";
 import { NeuralBrain } from "@/components/NeuralBrain";
 import { useCanAnimate, useAnimeOnView, useInView } from "@/lib/use-anime";
@@ -39,13 +43,6 @@ const ease = [0.16, 1, 0.3, 1] as const;
  */
 const FETCH_PRIORITY_HIGH: Record<string, string> = { fetchpriority: "high" };
 
-/**
- * True on touch-primary devices (no real hover). Used to swap hover-driven
- * flourishes for scroll-driven ones instead of dropping them entirely.
- */
-const isHoverless = () =>
-  typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
-
 export default function Home() {
   const { canLoadHeavy } = useConnection();
   const canAnimate = useCanAnimate();
@@ -58,6 +55,9 @@ export default function Home() {
   const { data: interests } = useInterests();
   const { data: blogs } = useBlogs();
   const heroPhrases = useHeroPhrases();
+  const [detailId, setDetailId] = useState<number | null>(null);
+  const openDetails = (p: { id: number }) => setDetailId(p.id);
+  const detailIndex = projects?.findIndex((p) => p.id === detailId) ?? -1;
 
   if (!personalInfo) return null;
 
@@ -208,6 +208,9 @@ export default function Home() {
           </a>
         </section>
 
+        {/* ============ CAPABILITY TICKER ============ */}
+        <CapabilityMarquee />
+
         {/* ============ STATS ============ */}
         <StatsStrip
           stats={[
@@ -231,22 +234,34 @@ export default function Home() {
           <SectionHeading title="Selected Work" subtitle="Some things I've built" />
 
           {projects && projects.length > 0 && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-4">
-              {/* Row 1: lead project + first secondary, side by side */}
-              <ProjectCell project={projects[0]} index={0} className="sm:col-span-2 lg:col-span-7" lead />
-              {projects[1] && (
-                <ProjectCell project={projects[1]} index={1} className="sm:col-span-2 lg:col-span-5" />
-              )}
-              {/* Row 2: remaining projects, split evenly */}
-              {projects.slice(2).map((project, index) => (
-                <ProjectCell
-                  key={project.id}
-                  project={project}
-                  index={index + 2}
-                  className="sm:col-span-1 lg:col-span-6"
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-4">
+                {/* Row 1: lead project + first secondary, side by side */}
+                <ProjectCell project={projects[0]} index={0} className="sm:col-span-2 lg:col-span-7" lead onDetails={openDetails} />
+                {projects[1] && (
+                  <ProjectCell project={projects[1]} index={1} className="sm:col-span-2 lg:col-span-5" onDetails={openDetails} />
+                )}
+                {/* Row 2: next two projects, split evenly */}
+                {projects.slice(2, 4).map((project, index) => (
+                  <ProjectCell
+                    key={project.id}
+                    project={project}
+                    index={index + 2}
+                    className="sm:col-span-1 lg:col-span-6"
+                    onDetails={openDetails}
+                  />
+                ))}
+              </div>
+              <div className="text-center mt-10">
+                <a
+                  href="/works/"
+                  className="btn-push inline-flex items-center gap-2 px-8 py-3.5 border border-border rounded-full font-semibold text-sm hover:border-foreground transition-colors"
+                >
+                  View All Works
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </div>
+            </>
           )}
         </section>
 
@@ -256,7 +271,12 @@ export default function Home() {
             title="Capabilities"
             subtitle="The production stack behind seven years of shipped AI systems"
           />
-          {skills && skills.length > 0 && <SkillsMindMap skills={skills} />}
+          {skills && skills.length > 0 && (
+            <>
+              <CapabilityIcons />
+              <SkillsMindMap skills={skills} />
+            </>
+          )}
         </section>
 
         {/* ============ BLOG ============ */}
@@ -409,6 +429,16 @@ export default function Home() {
           <span>&copy; {new Date().getFullYear()} &middot; All rights reserved</span>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {projects && detailIndex >= 0 && (
+          <ProjectModal
+            projects={projects}
+            startIndex={detailIndex}
+            onClose={() => setDetailId(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -455,131 +485,5 @@ function InterestWave({ interests }: { interests: Interest[] }) {
         </span>
       ))}
     </div>
-  );
-}
-
-/* ---------- Project cell ---------- */
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  techStack: string[];
-  link: string;
-}
-
-function ProjectCell({
-  project,
-  index,
-  className = "",
-  lead = false,
-}: {
-  project: Project;
-  index: number;
-  className?: string;
-  lead?: boolean;
-}) {
-  const canAnimate = useCanAnimate();
-  const chipsRef = useAnimeOnView<HTMLDivElement>(
-    (el) => {
-      const chips = el.querySelectorAll("[data-chip]");
-      if (!chips.length) return;
-      animate(chips, {
-        opacity: [0, 1],
-        translateY: [10, 0],
-        scale: [0.9, 1],
-        duration: 450,
-        ease: "outBack",
-        delay: stagger(40),
-      });
-    },
-    { threshold: 0.4 }
-  );
-
-  const traceRef = useRef<SVGRectElement | null>(null);
-
-  const traceBorder = (draw: boolean) => {
-    const rect = traceRef.current;
-    if (!canAnimate || !rect) return;
-    const len = rect.getTotalLength();
-    rect.style.strokeDasharray = String(len);
-    animate(rect, {
-      strokeDashoffset: draw ? [len, 0] : [0, len],
-      opacity: draw ? [0, 1] : [1, 0],
-      duration: draw ? 700 : 400,
-      ease: draw ? "outQuad" : "inQuad",
-    });
-  };
-
-  /*
-   * Touch devices never fire mouseenter, so the border trace - the signature
-   * moment of these cards - was invisible on phones. There, drive it from
-   * viewport entry instead: each card draws its own accent outline as it
-   * scrolls up, and erases it on the way out.
-   */
-  const { ref: cardRef, inView } = useInView<HTMLAnchorElement>(0.35);
-
-  useEffect(() => {
-    if (!canAnimate || !isHoverless()) return;
-    traceBorder(inView);
-  }, [canAnimate, inView]);
-
-  return (
-    <motion.a
-      ref={cardRef}
-      href={project.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseEnter={() => traceBorder(true)}
-      onMouseLeave={() => traceBorder(false)}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2 }}
-      transition={{ duration: 0.55, delay: index * 0.08, ease }}
-      className={`group relative border border-border bg-card p-7 md:p-9 flex flex-col hover:border-primary/60 active:border-primary/60 active:scale-[0.99] transition-[color,background-color,border-color,transform] duration-200 overflow-hidden ${className}`}
-    >
-      {canAnimate && (
-        <svg aria-hidden="true" className="pointer-events-none absolute inset-0 w-full h-full">
-          <rect
-            ref={traceRef}
-            x="0.5" y="0.5" width="99.6%" height="99.6%"
-            fill="none"
-            stroke="hsl(var(--primary))"
-            strokeWidth="2"
-            style={{ opacity: 0 }}
-          />
-        </svg>
-      )}
-      {/* Oversized index watermark: gives each stacked mobile card a visual
-          anchor where the bento's size hierarchy is unavailable. */}
-      <span
-        aria-hidden="true"
-        className="ghost-num pointer-events-none absolute -top-2 right-3 select-none text-[5.5rem] leading-none !opacity-[0.07] md:text-[7rem]"
-      >
-        {String(index + 1).padStart(2, "0")}
-      </span>
-      <span className="mono-label text-accent">P&middot;{String(index + 1).padStart(2, "0")}</span>
-      <h3 className={`font-extrabold tracking-tight mt-3 ${lead ? "text-2xl md:text-[2rem]" : "text-xl"}`} style={{ fontStretch: "106%" }}>
-        {project.title}
-      </h3>
-      <p className="text-sm text-muted-foreground mt-3 leading-relaxed flex-1 max-w-[64ch]">
-        {project.description}
-      </p>
-      <div ref={chipsRef} className="flex flex-wrap gap-1.5 mt-5">
-        {project.techStack.map((tech) => (
-          <span
-            key={tech}
-            data-chip
-            className="tech-chip"
-            style={canAnimate ? { opacity: 0 } : undefined}
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-      <span className="inline-flex items-center gap-1.5 text-accent text-sm font-semibold mt-6">
-        View on GitHub <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-      </span>
-    </motion.a>
   );
 }
