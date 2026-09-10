@@ -9,6 +9,9 @@ const clientOutputDirectory = path.resolve("dist/public");
 const BLOG_TITLE = "AI/ML Engineering Blog — Mehedi Hasan";
 const BLOG_DESCRIPTION = "Insights on AI, machine learning, LLM systems, and practical production engineering from Mehedi Hasan.";
 const BLOG_URL = "https://mehedi-hasan-abir.github.io/blog/";
+const WORKS_TITLE = "Selected Work — Mehedi Hasan";
+const WORKS_DESCRIPTION = "Open-source AI/ML projects by Mehedi Hasan: LLM systems, RAG agents, search infrastructure, and applied deep learning.";
+const WORKS_URL = "https://mehedi-hasan-abir.github.io/works/";
 
 function replaceRequired(html: string, pattern: RegExp, replacement: string, label: string) {
   if (!pattern.test(html)) {
@@ -73,10 +76,58 @@ async function createStaticRouteFallbacks() {
   const indexPath = path.join(clientOutputDirectory, "index.html");
   const homeHtml = await readFile(indexPath, "utf8");
   const blogDirectory = path.join(clientOutputDirectory, "blog");
+  const worksDirectory = path.join(clientOutputDirectory, "works");
 
   await mkdir(blogDirectory, { recursive: true });
+  await mkdir(worksDirectory, { recursive: true });
+  const withMeta = (title: string, description: string, url: string, label: string) => {
+    let html = replaceRequired(homeHtml, /<title>.*?<\/title>/, `<title>${title}</title>`, `${label} title`);
+    html = replaceRequired(
+      html,
+      /<meta name="description" content="[^"]*"\s*\/?>/,
+      `<meta name="description" content="${description}" />`,
+      `${label} description`,
+    );
+    html = replaceRequired(
+      html,
+      /<meta property="og:title" content="[^"]*"\s*\/?>/,
+      `<meta property="og:title" content="${title}" />`,
+      `${label} Open Graph title`,
+    );
+    html = replaceRequired(
+      html,
+      /<meta property="og:description" content="[^"]*"\s*\/?>/,
+      `<meta property="og:description" content="${description}" />`,
+      `${label} Open Graph description`,
+    );
+    html = replaceRequired(
+      html,
+      /<meta property="og:url" content="[^"]*"\s*\/?>/,
+      `<meta property="og:url" content="${url}" />`,
+      `${label} Open Graph URL`,
+    );
+    html = replaceRequired(
+      html,
+      /<meta name="twitter:title" content="[^"]*"\s*\/?>/,
+      `<meta name="twitter:title" content="${title}" />`,
+      `${label} Twitter title`,
+    );
+    html = replaceRequired(
+      html,
+      /<meta name="twitter:description" content="[^"]*"\s*\/?>/,
+      `<meta name="twitter:description" content="${description}" />`,
+      `${label} Twitter description`,
+    );
+    return replaceRequired(
+      html,
+      /<link rel="canonical" href="[^"]*"\s*\/?>/,
+      `<link rel="canonical" href="${url}" />`,
+      `${label} canonical URL`,
+    );
+  };
   await Promise.all([
     writeFile(path.join(blogDirectory, "index.html"), createBlogHtml(homeHtml)),
+    writeFile(path.join(worksDirectory, "index.html"), withMeta(WORKS_TITLE, WORKS_DESCRIPTION, WORKS_URL, "works")),
     writeFile(path.join(clientOutputDirectory, "404.html"), homeHtml),
   ]);
 

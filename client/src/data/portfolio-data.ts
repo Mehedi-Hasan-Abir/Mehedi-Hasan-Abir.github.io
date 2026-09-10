@@ -186,6 +186,55 @@ export const portfolioData = {
       ],
       link: "https://github.com/Mehedi-Hasan-Abir/Japanese-Lawyer-Assistant-Langchain-LLM",
     },
+    {
+      id: 5,
+      title: "Outlet Fraud Detection - No-Label Verification Screening",
+      description:
+        "No-label fraud screening for outlet-verification photos. Every image is compared only against other photos from the same outlet — visually isolated shots and reused uploads get flagged with an evidence-based reason.",
+      techStack: [
+        "Python",
+        "Computer Vision",
+        "Image Embeddings",
+        "Docker",
+      ],
+      link: "https://github.com/Mehedi-Hasan-Abir/outlet-fraud-detection",
+    },
+    {
+      id: 6,
+      title: "Aethion RAG - Naive vs Streaming Retrieval Shootout",
+      description:
+        "Full-stack AI agent answering questions over company documents, comparing Naive RAG against StreamRAG — retrieval fired in parallel with generation and streamed to the user.",
+      techStack: [
+        "Python",
+        "RAG",
+        "Streaming",
+        "Rust",
+        "Docker",
+      ],
+      link: "https://github.com/Mehedi-Hasan-Abir/aethion-rag",
+    },
+    {
+      id: 7,
+      title: "AI Research Agent - Multi-Source LLM Assistant",
+      description:
+        "LLM research assistant and multi-source AI agent capable of answering complex research questions across sources.",
+      techStack: ["Python", "LLM Agents", "RAG"],
+      link: "https://github.com/Mehedi-Hasan-Abir/AI_Powered_Research_Agent-LLM-",
+    },
+    {
+      id: 8,
+      title: "ECG Arrhythmia Classification - 2-D CNN",
+      description:
+        "2-D convolutional classifier detecting arrhythmia from ECG beats through careful signal preprocessing and feature extraction.",
+      techStack: [
+        "Python",
+        "Deep Learning",
+        "CNN",
+        "Signal Processing",
+        "Jupyter",
+      ],
+      link: "https://github.com/Mehedi-Hasan-Abir/ECG-Arrythmia-Classification",
+    },
   ],
   skills: [
     {

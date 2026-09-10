@@ -16,6 +16,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
+const WorksPage = lazy(() => import("@/pages/WorksPage"));
 
 function AnalyticsPageView() {
   const [location] = useLocation();
@@ -36,6 +37,11 @@ function Router() {
           <Route path="/blog">
             <ErrorBoundary>
               <BlogPage />
+            </ErrorBoundary>
+          </Route>
+          <Route path="/works">
+            <ErrorBoundary>
+              <WorksPage />
             </ErrorBoundary>
           </Route>
           <Route component={NotFound} />
