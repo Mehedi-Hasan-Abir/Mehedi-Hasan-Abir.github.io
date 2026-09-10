@@ -21,6 +21,7 @@ import { StatsStrip } from "@/components/StatsStrip";
 import { Magnetic, Marquee, PulseRing } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
+import { CapabilityIcons } from "@/components/CapabilityIcons";
 import { BlogSection } from "@/components/BlogSection";
 import { NeuralBrain } from "@/components/NeuralBrain";
 import { useCanAnimate, useAnimeOnView, useInView } from "@/lib/use-anime";
@@ -256,7 +257,12 @@ export default function Home() {
             title="Capabilities"
             subtitle="The production stack behind seven years of shipped AI systems"
           />
-          {skills && skills.length > 0 && <SkillsMindMap skills={skills} />}
+          {skills && skills.length > 0 && (
+            <>
+              <CapabilityIcons />
+              <SkillsMindMap skills={skills} />
+            </>
+          )}
         </section>
 
         {/* ============ BLOG ============ */}
