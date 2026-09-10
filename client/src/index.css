@@ -474,7 +474,18 @@ html[data-color-mode="light"] {
 .cap-item:hover .ci-dim { opacity: 0.85; }
 .cap-item:hover .circuit-halo { opacity: 1; }
 
+/* Icon ticker under the hero: seamless -50% loop (track holds two copies). */
+.cap-track {
+  animation: marquee 32s linear infinite;
+  will-change: transform;
+}
+.cap-marquee:hover .cap-track,
+.cap-marquee:focus-within .cap-track {
+  animation-play-state: paused;
+}
+
 /* Off-screen: pause every capability loop with the brain loops */
+.circuit-paused .cap-track,
 .circuit-paused .ci-net,
 .circuit-paused .ci-boxA,
 .circuit-paused .ci-boxB,

@@ -22,6 +22,7 @@ import { Magnetic, Marquee, PulseRing } from "@/components/Interactive";
 import { ExperienceGrouped } from "@/components/ExperienceGrouped";
 import { SkillsMindMap } from "@/components/SkillsMindMap";
 import { CapabilityIcons } from "@/components/CapabilityIcons";
+import { CapabilityMarquee } from "@/components/CapabilityMarquee";
 import { BlogSection } from "@/components/BlogSection";
 import { NeuralBrain } from "@/components/NeuralBrain";
 import { useCanAnimate, useAnimeOnView, useInView } from "@/lib/use-anime";
@@ -208,6 +209,9 @@ export default function Home() {
             <ArrowDown className="w-5 h-5 animate-bounce" />
           </a>
         </section>
+
+        {/* ============ CAPABILITY TICKER ============ */}
+        <CapabilityMarquee />
 
         {/* ============ STATS ============ */}
         <StatsStrip
