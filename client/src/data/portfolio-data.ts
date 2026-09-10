@@ -230,6 +230,7 @@ export const portfolioData = {
         "Python",
         "Deep Learning",
         "CNN",
+        "VGGNet",
         "Signal Processing",
         "Jupyter",
       ],
@@ -239,8 +240,8 @@ export const portfolioData = {
       id: 9,
       title: "ToLet Dhaka - Rental Listings",
       description:
-        "House-rental listings page for Dhaka (To-Let) with property posts and contact details.",
-      techStack: ["HTML"],
+        "Flat-renting website with property posts and contact details, enhanced with interactive elements.",
+      techStack: ["HTML5", "CSS", "PHP", "JavaScript"],
       link: "https://github.com/Mehedi-Hasan-Abir/Tolet-Dhaka",
     },
     {
@@ -261,16 +262,17 @@ export const portfolioData = {
     {
       id: 12,
       title: "Dhaka City Bus Routes",
-      description: "Bus route directory covering Dhaka city transit lines.",
-      techStack: ["Java"],
+      description:
+        "Route-finder Android app covering Dhaka city transit lines with map lookup.",
+      techStack: ["Java", "Google Maps API", "JSON"],
       link: "https://github.com/Mehedi-Hasan-Abir/-Dhaka-City-Bus-Routes-",
     },
     {
       id: 13,
       title: "Bank Management System",
       description:
-        "Bank account and transaction management console with balance tracking.",
-      techStack: ["Java"],
+        "Transactional banking features with account handling and balance tracking.",
+      techStack: ["Java", "Java GUI", "MySQL"],
       link: "https://github.com/Mehedi-Hasan-Abir/Bank-Management-Sysytem",
     },
     {
@@ -284,16 +286,17 @@ export const portfolioData = {
     {
       id: 15,
       title: "Hospital Management",
-      description: "Hospital management web application built with ASP.NET and C#.",
-      techStack: ["JavaScript", "ASP.NET", "C#"],
+      description:
+        "Full-stack hospital management system with patient, doctor, and appointment workflows.",
+      techStack: ["ASP.NET MVC", "C#", "Razor"],
       link: "https://github.com/Mehedi-Hasan-Abir/HospitalManagement",
     },
     {
       id: 16,
       title: "Railway Station Management System",
       description:
-        "Railway station records and scheduling managed entirely in SQL.",
-      techStack: ["TSQL"],
+        "Railway station records and scheduling with client-server components in PL/SQL.",
+      techStack: ["PL/SQL"],
       link: "https://github.com/Mehedi-Hasan-Abir/Railway-Station-Management-System",
     },
     {
