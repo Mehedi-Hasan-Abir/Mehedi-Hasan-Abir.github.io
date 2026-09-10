@@ -156,6 +156,8 @@ const COMP_MASK: CSSProperties = {
 
 const COMP_FLOW =
   "linear-gradient(160deg, transparent 44%, var(--circuit-glow) 47.5%, var(--circuit-core) 50%, var(--circuit-glow) 52.5%, transparent 56%)";
+const COMP_FLOW_REV =
+  "linear-gradient(205deg, transparent 44%, var(--circuit-glow) 47.5%, var(--circuit-core) 50%, var(--circuit-glow) 52.5%, transparent 56%)";
 
 export function ComputerIcon({ on, label }: { on: boolean; label: string }) {
   return (
@@ -171,9 +173,14 @@ export function ComputerIcon({ on, label }: { on: boolean; label: string }) {
         style={COMP_MASK}
       />
       {on && (
-        <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>
-          <span className="circuit-flow-a absolute -inset-y-full left-0 w-full" style={{ backgroundImage: COMP_FLOW }} />
-        </span>
+        <>
+          <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>
+            <span className="circuit-flow-a absolute -inset-y-full left-0 w-full" style={{ backgroundImage: COMP_FLOW }} />
+          </span>
+          <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>
+            <span className="circuit-flow-b absolute -inset-y-full left-0 w-full" style={{ backgroundImage: COMP_FLOW_REV }} />
+          </span>
+        </>
       )}
       {/* Sheen clipped by the same silhouette mask: light stays inside the artwork */}
       <span aria-hidden="true" className="absolute inset-0 overflow-hidden" style={COMP_MASK}>

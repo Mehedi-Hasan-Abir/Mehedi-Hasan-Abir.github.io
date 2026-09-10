@@ -479,7 +479,7 @@ html[data-color-mode="light"] {
   left: -30%;
   width: 36%;
   pointer-events: none;
-  background: linear-gradient(105deg, transparent 20%, hsl(var(--primary) / 0.55) 50%, transparent 80%);
+  background: linear-gradient(105deg, transparent 20%, hsl(var(--primary) / 0.35) 42%, var(--circuit-core) 50%, hsl(var(--primary) / 0.35) 58%, transparent 80%);
   opacity: 0;
   transform: skewX(-12deg);
 }
