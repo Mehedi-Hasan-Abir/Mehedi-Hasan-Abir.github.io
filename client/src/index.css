@@ -438,7 +438,10 @@ html[data-color-mode="light"] {
 .ci-net {
   transform-box: fill-box;
   transform-origin: center;
-  animation: circuit-spin 26s linear infinite;
+  /* Two tracks at once: slow orbit (transform) + glow breathing (opacity).
+     A single `animation` shorthand per class would replace the other, so
+     both ride one comma list — this was why the net looked unlit. */
+  animation: circuit-spin 26s linear infinite, circuit-base 3.6s ease-in-out infinite;
 }
 .ci-boxA { animation: circuit-boxpulse 3s ease-in-out infinite; }
 .ci-boxB { animation: circuit-boxpulse 3s ease-in-out 0.4s infinite; }
@@ -457,7 +460,7 @@ html[data-color-mode="light"] {
 .cap-sci:hover .ci-gear,
 .cap-admin:hover .ci-gear { animation: circuit-spin 1.6s linear infinite; }
 .cap-admin:hover .ci-gear { animation-duration: 1.8s; }
-.cap-net:hover .ci-net { animation-duration: 4s; }
+.cap-net:hover .ci-net { animation-duration: 4s, 1.6s; }
 .cap-big:hover .ci-boxA,
 .cap-big:hover .ci-boxB,
 .cap-big:hover .ci-boxC,
@@ -497,7 +500,7 @@ html[data-color-mode="light"] {
 .cap-live.cap-marquee .ci-boxB { animation-duration: 1.2s; }
 .cap-live.cap-marquee .ci-boxC { animation-duration: 1.2s; }
 .cap-live.cap-marquee .ci-cloud { animation-duration: 1.2s; }
-.cap-live.cap-marquee .ci-net { animation-duration: 5s; }
+.cap-live.cap-marquee .ci-net { animation-duration: 5s, 1.2s; }
 .cap-live.cap-marquee .ci-sign {
   animation: circuit-rise 1.1s ease-in-out infinite;
   filter: drop-shadow(0 -4px 6px hsl(var(--primary)));
