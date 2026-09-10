@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Whole-site scale: 120% of the authored size. Tailwind spacing, type and
+   sizing are rem-based so the full layout grows; px details (borders,
+   blurs) stay put. Phones keep 100% — their sizes are already tuned. */
+html {
+  font-size: 120%;
+}
+@media (max-width: 640px) {
+  html {
+    font-size: 100%;
+  }
+}
+
 /* Self-hosted fonts (latin subsets) */
 @font-face {
   font-family: 'Archivo';

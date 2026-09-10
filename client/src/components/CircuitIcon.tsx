@@ -144,8 +144,8 @@ export function AdminAltIcon({ on, label }: { on: boolean; label: string }) {
 }
 
 const COMP_MASK: CSSProperties = {
-  WebkitMaskImage: "url(/icons/computer-mono.png)",
-  maskImage: "url(/icons/computer-mono.png)",
+  WebkitMaskImage: "url(/icons/computer-line.png)",
+  maskImage: "url(/icons/computer-line.png)",
   WebkitMaskSize: "contain",
   maskSize: "contain",
   WebkitMaskRepeat: "no-repeat",
