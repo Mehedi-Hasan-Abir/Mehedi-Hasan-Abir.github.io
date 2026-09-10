@@ -435,8 +435,7 @@ html[data-color-mode="light"] {
 .ci-compglow { animation: circuit-compglow 3.2s ease-in-out infinite; }
 
 /* Hover choreography */
-.cap-chip .ci-svg { transition: transform 0.55s cubic-bezier(0.6, 0.05, 0.2, 1.2); }
-.cap-chip:hover .ci-svg { transform: rotate(90deg); }
+.cap-chip:hover .ci-svg { animation: circuit-spin 1.6s linear infinite; }
 .cap-sci:hover .ci-gear,
 .cap-admin:hover .ci-gear { animation: circuit-spin 1.6s linear infinite; }
 .cap-admin:hover .ci-gear { animation-duration: 1.8s; }
@@ -452,10 +451,11 @@ html[data-color-mode="light"] {
 }
 .cap-comp:hover .ci-compglow { animation-duration: 1.2s; }
 .cap-comp { position: relative; }
-.cap-comp .ci-sheen {
+/* Reflection sweep (the computer's sheen), shared by every icon */
+.ci-sheen {
   position: absolute;
-  top: 6%;
-  bottom: 34%;
+  top: 0;
+  bottom: 0;
   left: -30%;
   width: 36%;
   pointer-events: none;
@@ -463,7 +463,22 @@ html[data-color-mode="light"] {
   opacity: 0;
   transform: skewX(-12deg);
 }
-.cap-comp:hover .ci-sheen { animation: circuit-sheen 1.4s ease-in-out infinite; }
+.cap-item:hover .ci-sheen { animation: circuit-sheen 1.4s ease-in-out infinite; }
+
+/* Marquee: choreography runs by default while the band moves (live only) */
+.cap-live.cap-marquee .cap-chip .ci-svg { animation: circuit-spin 2.4s linear infinite; }
+.cap-live.cap-marquee .ci-gear { animation: circuit-spin 1.6s linear infinite; }
+.cap-live.cap-marquee .ci-boxA { animation-duration: 1.2s; }
+.cap-live.cap-marquee .ci-boxB { animation-duration: 1.2s; }
+.cap-live.cap-marquee .ci-boxC { animation-duration: 1.2s; }
+.cap-live.cap-marquee .ci-cloud { animation-duration: 1.2s; }
+.cap-live.cap-marquee .ci-net { animation-duration: 5s; }
+.cap-live.cap-marquee .ci-sign {
+  animation: circuit-rise 1.1s ease-in-out infinite;
+  filter: drop-shadow(0 -4px 6px hsl(var(--primary)));
+}
+.cap-live.cap-marquee .ci-compglow { animation-duration: 1.2s; }
+.cap-live.cap-marquee .ci-sheen { animation: circuit-sheen 2.2s ease-in-out infinite; }
 
 /* Cursor spotlight following ProjectCard's radial glow */
 .cap-spot {
@@ -486,6 +501,10 @@ html[data-color-mode="light"] {
 
 /* Off-screen: pause every capability loop with the brain loops */
 .circuit-paused .cap-track,
+.circuit-paused .ci-svg,
+.circuit-paused .ci-gear,
+.circuit-paused .ci-sign,
+.circuit-paused .ci-sheen,
 .circuit-paused .ci-net,
 .circuit-paused .ci-boxA,
 .circuit-paused .ci-boxB,

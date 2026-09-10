@@ -51,11 +51,12 @@ function SvgShell({
   children: React.ReactNode;
 }) {
   return (
-    <span className="relative block w-full aspect-square" role="img" aria-label={label}>
+    <span className="relative block w-full aspect-square overflow-hidden" role="img" aria-label={label}>
       <Halo on={on} />
       <svg viewBox="0 0 24 24" aria-hidden="true" className="ci-svg absolute inset-0">
         {children}
       </svg>
+      <span aria-hidden="true" className="ci-sheen" />
     </span>
   );
 }
@@ -134,7 +135,7 @@ const COMP_FLOW =
 export function ComputerIcon({ on, label }: { on: boolean; label: string }) {
   return (
     <span
-      className={"relative block w-full aspect-square " + (on ? "ci-compglow" : "")}
+      className={"relative block w-full aspect-square overflow-hidden " + (on ? "ci-compglow" : "")}
       role="img"
       aria-label={label}
     >

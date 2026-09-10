@@ -42,8 +42,11 @@ export function CapabilityMarquee() {
   const canAnimate = useCanAnimate();
   const { ref, inView } = useInView<HTMLDivElement>(0.1);
 
-  const goSkills = (e: React.MouseEvent) => {
+  const goSkills = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    // Mouse click leaves focus on the link, and :focus-within pauses the
+    // loop — release it so the marquee resumes (keyboard focus is kept).
+    if (e.detail > 0) e.currentTarget.blur();
     scrollToSection("skills");
   };
 
@@ -80,6 +83,7 @@ export function CapabilityMarquee() {
       ref={ref}
       className={
         "cap-marquee rule-t rule-b overflow-hidden bg-card/60 " +
+        (canAnimate ? "cap-live " : "") +
         (canAnimate && !inView ? "circuit-paused" : "")
       }
       aria-label="Capability areas — activate to see details"
