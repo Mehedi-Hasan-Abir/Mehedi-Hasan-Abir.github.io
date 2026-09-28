@@ -16,8 +16,11 @@ npm run dev
 # Build for production
 npm run build
 
-# Deploy to GitHub Pages
-npm run deploy
+# Check the static site before publishing
+npm run verify
+
+# Once GitHub Pages is set to GitHub Actions, push main to publish
+git push origin main
 ```
 
 ## 🛠️ Tech Stack
@@ -70,26 +73,19 @@ modern-portfolio/
 ├── script/                 # Build scripts
 │   └── build.ts           # Production build
 ├── .github/workflows/      # CI/CD
-│   └── deploy.yml         # GitHub Actions
+│   └── pages.yml          # GitHub Pages build and deploy
 └── data/                   # CV/LaTeX files
 ```
 
 ## 🚀 Deployment Options
 
 ### Option 1: GitHub Pages (Recommended)
-```bash
-# 1. Create GitHub repository
-# 2. Push your code
-git add .
-git commit -m "Initial portfolio"
-git push origin main
-
-# 3. Enable GitHub Pages
-# Settings → Pages → Source: GitHub Actions
-
-# 4. Deploy manually (optional)
-npm run deploy
-```
+The site uses `https://mhabir.dev/` as its preferred address. Follow
+[`DOMAIN_MIGRATION.md`](DOMAIN_MIGRATION.md) for the one-time GitHub Pages,
+Cloudflare DNS, and Search Console setup. After Pages Source is set to
+**GitHub Actions**, every push to `main` runs checks, builds `dist/public`,
+and publishes it. The old `npm run deploy` script is only for the earlier
+`gh-pages` branch publishing setup.
 
 ### Option 2: Vercel/Netlify
 ```bash
@@ -115,7 +111,7 @@ Create `.env.local` for development:
 
 ```env
 # Google Analytics (optional)
-VITE_GOOGLE_ANALYTICS_ID=G-XNZ049R7NF
+VITE_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 
 # Sentry (optional)
 VITE_SENTRY_DSN=https://your-dsn.ingest.sentry.io/project-id
@@ -128,12 +124,12 @@ DATABASE_URL=postgresql://user:pass@localhost:5432/portfolio
 VITE_APP_VERSION=1.0.0
 ```
 
-### GitHub Secrets (for CI/CD)
+### GitHub Actions variables (for CI/CD)
 
 Add to Settings → Secrets and variables → Actions:
 
-- `SENTRY_DSN` - Error monitoring
-- `GOOGLE_ANALYTICS_ID` - Analytics tracking
+- `VITE_GOOGLE_ANALYTICS_ID` - required by the production build
+- `VITE_SENTRY_DSN` - optional browser error monitoring
 
 ## 📝 Customization
 
@@ -287,35 +283,16 @@ X-XSS-Protection: 1; mode=block
 
 ## 🔄 CI/CD Pipeline
 
-### GitHub Actions Workflow
-```yaml
-# .github/workflows/deploy.yml
-on: [push, workflow_dispatch]
+`.github/workflows/pages.yml` runs `npm run verify` on pushes to `main`,
+uploads `dist/public`, and deploys the artifact through GitHub Pages. The
+workflow also supports manual runs on `main`.
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm ci
-      - run: npm run check
-      - run: npm run test:ci
-      - run: npm run build
-      - uses: actions/deploy-pages@v4
-```
+### Manual verification
 
-### Manual Deployment
-```bash
-# Local deployment
-npm run deploy
-
-# This runs:
-# 1. TypeScript check
-# 2. Tests
-# 3. Build
-# 4. Deploy to GitHub Pages
-```
+Run `npm run verify` locally before pushing. Once Pages Source is GitHub
+Actions, check the workflow result and the live domain after pushing. The
+legacy `npm run deploy` command publishes to `gh-pages` and does not update
+the live site after switching Pages Source to GitHub Actions.
 
 ## 🎨 Features Showcase
 
@@ -418,10 +395,7 @@ npm outdated
 ## 🚀 Advanced Usage
 
 ### Custom Domain
-1. Add domain to GitHub Pages settings
-2. Create `CNAME` file in `client/public/`
-3. Update DNS records
-4. Wait for propagation
+Use the staged cutover in [`DOMAIN_MIGRATION.md`](DOMAIN_MIGRATION.md).
 
 ### Database Integration
 ```bash

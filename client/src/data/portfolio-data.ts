@@ -38,7 +38,7 @@ export const portfolioData = {
     linkedin: "https://linkedin.com/in/mehedihasan102",
     location: "Dhaka, Bangladesh",
     avatarUrl: "/images/profile_re.webp",
-    resumeUrl: "https://drive.google.com/file/d/1HYdIv_xwwUIjEC-YLBBOOO1syQiGq-QU/view?usp=sharing",
+    resumeUrl: "/images/resume.pdf",
     facebook: "https://www.facebook.com/mehedihasan.abir.7/",
     instagram: "https://www.instagram.com/___abracadabra_____/",
     medium: "https://medium.com/@mhabir102",

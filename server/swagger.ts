@@ -24,7 +24,7 @@ const options = {
         description: 'Development server'
       },
       {
-        url: 'https://mehedi-hasan-abir.github.io',
+        url: 'https://mhabir.dev',
         description: 'Production server (GitHub Pages)'
       }
     ],

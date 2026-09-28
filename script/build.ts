@@ -8,10 +8,10 @@ const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
 const clientOutputDirectory = path.resolve("dist/public");
 const BLOG_TITLE = "AI/ML Engineering Blog — Mehedi Hasan";
 const BLOG_DESCRIPTION = "Insights on AI, machine learning, LLM systems, and practical production engineering from Mehedi Hasan.";
-const BLOG_URL = "https://mehedi-hasan-abir.github.io/blog/";
+const BLOG_URL = "https://mhabir.dev/blog/";
 const WORKS_TITLE = "Selected Work — Mehedi Hasan";
 const WORKS_DESCRIPTION = "Open-source AI/ML projects by Mehedi Hasan: LLM systems, RAG agents, search infrastructure, and applied deep learning.";
-const WORKS_URL = "https://mehedi-hasan-abir.github.io/works/";
+const WORKS_URL = "https://mhabir.dev/works/";
 
 function replaceRequired(html: string, pattern: RegExp, replacement: string, label: string) {
   if (!pattern.test(html)) {
@@ -189,7 +189,7 @@ async function buildAll() {
       process.env.VITE_APP_VERSION = execFileSync(
         "git",
         ["rev-parse", "--short", "HEAD"],
-        { encoding: "utf8" },
+        { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
       ).trim();
     } catch {
       process.env.VITE_APP_VERSION = "local";
@@ -243,7 +243,7 @@ async function buildAll() {
     throw new Error("Production build validation failed: an empty Google Analytics ID was emitted.");
   }
 
-  console.log(`validated client analytics configuration (${gaId})`);
+  console.log("validated client analytics configuration");
 }
 
 buildAll().catch((err) => {

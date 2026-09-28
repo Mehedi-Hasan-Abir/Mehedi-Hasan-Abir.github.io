@@ -3,7 +3,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { loadEnv } from "vite";
 
-const siteUrl = "https://mehedi-hasan-abir.github.io/";
+const siteUrl = "https://mhabir.dev/";
 const remoteRef = "refs/heads/gh-pages";
 
 function run(command: string, args: string[]): string {
