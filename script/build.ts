@@ -3,6 +3,7 @@ import { build as viteBuild, loadEnv } from "vite";
 import { mkdir, readFile, rm, writeFile } from "fs/promises";
 import path from "path";
 import { execFileSync } from "child_process";
+import { portfolioData } from "../client/src/data/portfolio-data";
 
 const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
 const clientOutputDirectory = path.resolve("dist/public");
@@ -12,6 +13,34 @@ const BLOG_URL = "https://mhabir.dev/blog/";
 const WORKS_TITLE = "Selected Work — Mehedi Hasan";
 const WORKS_DESCRIPTION = "Open-source AI/ML projects by Mehedi Hasan: LLM systems, RAG agents, search infrastructure, and applied deep learning.";
 const WORKS_URL = "https://mhabir.dev/works/";
+
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+})[character]!);
+
+/** Search engines and visitors still get useful content when the app bundle is delayed or fails. */
+function staticPageContent(page: "home" | "blog" | "works") {
+  const person = portfolioData.personalInfo;
+  const link = (href: string, label: string) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
+  const projects = portfolioData.projects.map((project) =>
+    `<li><strong>${escapeHtml(project.title)}</strong> — ${escapeHtml(project.description)}</li>`
+  ).join("");
+  const posts = portfolioData.blogs.map((post) =>
+    `<li>${link(post.externalLink, post.title)} — ${escapeHtml(post.description)}</li>`
+  ).join("");
+  const title = page === "home" ? `${person.name} — ${person.role}` : page === "blog" ? "Blog" : "Selected Work";
+  const body = page === "home"
+    ? `<p>${escapeHtml(person.bio)}</p><p>${link(person.resumeUrl, "Resume")} · ${link(person.github, "GitHub")} · ${link(person.linkedin, "LinkedIn")}</p><h2>Selected Work</h2><ul>${projects}</ul><h2>Writing</h2><ul>${posts}</ul>`
+    : page === "blog"
+      ? `<p>Technical writing on AI, machine learning, LLM systems, and production engineering.</p><ul>${posts}</ul>`
+      : `<p>AI and machine learning projects, from document intelligence and retrieval to production systems.</p><ul>${projects}</ul>`;
+
+  return `<div id="root"><main id="static-fallback" style="min-height:100vh;background:#111210;color:#e9e9e5;padding:7rem max(1.25rem,calc((100vw - 70rem)/2));font:1rem/1.6 Arial,sans-serif"><nav aria-label="Site pages">${link("/", "Home")} · ${link("/works/", "Work")} · ${link("/blog/", "Blog")}</nav><h1>${escapeHtml(title)}</h1>${body}</main></div>`;
+}
+
+function withStaticContent(html: string, page: "home" | "blog" | "works") {
+  return replaceRequired(html, /<div id="root"><\/div>/, staticPageContent(page), `${page} static content`);
+}
 
 function replaceRequired(html: string, pattern: RegExp, replacement: string, label: string) {
   if (!pattern.test(html)) {
@@ -126,8 +155,9 @@ async function createStaticRouteFallbacks() {
     );
   };
   await Promise.all([
-    writeFile(path.join(blogDirectory, "index.html"), createBlogHtml(homeHtml)),
-    writeFile(path.join(worksDirectory, "index.html"), withMeta(WORKS_TITLE, WORKS_DESCRIPTION, WORKS_URL, "works")),
+    writeFile(indexPath, withStaticContent(homeHtml, "home")),
+    writeFile(path.join(blogDirectory, "index.html"), withStaticContent(createBlogHtml(homeHtml), "blog")),
+    writeFile(path.join(worksDirectory, "index.html"), withStaticContent(withMeta(WORKS_TITLE, WORKS_DESCRIPTION, WORKS_URL, "works"), "works")),
     writeFile(path.join(clientOutputDirectory, "404.html"), homeHtml),
   ]);
 

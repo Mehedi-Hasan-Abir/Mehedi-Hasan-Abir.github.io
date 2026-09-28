@@ -25,6 +25,9 @@ for (const [page, url] of [
   if (!html.includes(`<meta property="og:url" content="${url}"`)) {
     throw new Error(`${page} has no Open Graph URL for ${url}`);
   }
+  if (!html.includes('<main id="static-fallback"') || !html.includes("<h1>")) {
+    throw new Error(`${page} has no readable fallback when JavaScript is unavailable`);
+  }
 }
 
 const sitemap = await readBuilt("sitemap.xml");

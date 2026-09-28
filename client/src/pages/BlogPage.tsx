@@ -70,8 +70,8 @@ export default function BlogPage() {
       <section className="py-24 md:py-32 bg-gradient-to-b from-background to-secondary/20">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 20 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.8 }}
             className="max-w-4xl mx-auto text-center"
           >

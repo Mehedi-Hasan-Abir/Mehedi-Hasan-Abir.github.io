@@ -75,8 +75,8 @@ export default function Home() {
         <section id="hero" className="relative min-h-[92dvh] flex items-center pt-28 pb-16">
           <div className="w-full grid lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, y: 26 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 26 }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.8, ease }}
             >
               <p className="inline-flex items-center gap-2.5 mono-label !text-[13px] md:!text-sm font-semibold text-accent border border-primary/50 bg-primary/10 rounded-full px-5 py-2.5 mb-6 tracking-wide">
@@ -84,6 +84,7 @@ export default function Home() {
                 AI/ML ENGINEER &middot; DHAKA, BANGLADESH
               </p>
               <div className="flex items-center gap-3 sm:gap-6">
+                <h1 className="sr-only">{personalInfo.name} — {personalInfo.role}</h1>
                 <DrawnName />
                 {/* Circuit brain: hero-side easter egg, jumps to Capabilities.
                     Scales with the viewport instead of being hidden on phones. */}
@@ -159,10 +160,7 @@ export default function Home() {
             </motion.div>
 
             {/* Portrait */}
-            <motion.figure
-              initial={canAnimate ? { opacity: 0 } : false}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
+            <figure
               className="justify-self-center lg:justify-self-end w-full max-w-[280px] lg:max-w-[360px] mt-4 lg:mt-0"
             >
               <div className="relative group">
@@ -174,7 +172,7 @@ export default function Home() {
                 <span aria-hidden="true" className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-primary" />
                 <span aria-hidden="true" className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-primary" />
                 <span aria-hidden="true" className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-primary" />
-                <motion.img
+                <img
                   src={personalInfo.avatarUrl}
                   alt={personalInfo.name}
                   loading="eager"
@@ -182,9 +180,6 @@ export default function Home() {
                   {...FETCH_PRIORITY_HIGH}
                   width={800}
                   height={800}
-                  initial={canAnimate ? { clipPath: "inset(0 100% 0 0)" } : false}
-                  animate={canAnimate ? { clipPath: "inset(0 0% 0 0)" } : undefined}
-                  transition={{ duration: 1, delay: 0.5, ease }}
                   className="relative w-full aspect-square object-cover grayscale contrast-[1.04] group-hover:grayscale-0 transition-all duration-700"
                 />
               </div>
@@ -192,7 +187,7 @@ export default function Home() {
                 <span>DHAKA &middot; UTC+6</span>
                 <span>EST. 2021</span>
               </figcaption>
-            </motion.figure>
+            </figure>
           </div>
 
           <a
