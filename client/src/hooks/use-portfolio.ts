@@ -1,83 +1,22 @@
-import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 import { portfolioData, educationData, researchData, interestsData, heroPhrases } from "@/data/portfolio-data";
 
-// ============================================
-// Data Hooks for Portfolio Content
-// ============================================
+// All portfolio content is bundled with the site. Stable return values keep
+// existing consumers simple without creating query observers on every page.
+const experiences = { data: portfolioData.experiences, isLoading: false };
+const projects = { data: portfolioData.projects, isLoading: false };
+const skills = { data: portfolioData.skills, isLoading: false };
+const personalInfo = { data: portfolioData.personalInfo, isLoading: false };
+const blogs = { data: portfolioData.blogs, isLoading: false };
+const education = { data: educationData, isLoading: false };
+const research = { data: researchData, isLoading: false };
+const interests = { data: interestsData, isLoading: false };
 
-export function useExperiences() {
-  return useQuery({
-    queryKey: ["experiences"],
-    queryFn: async () => portfolioData.experiences,
-    initialData: portfolioData.experiences,
-    staleTime: Infinity,
-  });
-}
-
-export function useProjects() {
-  return useQuery({
-    queryKey: ["projects"],
-    queryFn: async () => portfolioData.projects,
-    initialData: portfolioData.projects,
-    staleTime: Infinity,
-  });
-}
-
-export function useSkills() {
-  return useQuery({
-    queryKey: ["skills"],
-    queryFn: async () => portfolioData.skills,
-    initialData: portfolioData.skills,
-    staleTime: Infinity,
-  });
-}
-
-export function usePersonalInfo() {
-  return useQuery({
-    queryKey: ["personalInfo"],
-    queryFn: async () => portfolioData.personalInfo,
-    initialData: portfolioData.personalInfo,
-    staleTime: Infinity,
-  });
-}
-
-export function useBlogs() {
-  return useQuery({
-    queryKey: ["blogs"],
-    queryFn: async () => portfolioData.blogs,
-    initialData: portfolioData.blogs,
-    staleTime: Infinity,
-  });
-}
-
-export function useEducation() {
-  return useQuery({
-    queryKey: ["education"],
-    queryFn: async () => educationData,
-    initialData: educationData,
-    staleTime: Infinity,
-  });
-}
-
-export function useResearch() {
-  return useQuery({
-    queryKey: ["research"],
-    queryFn: async () => researchData,
-    initialData: researchData,
-    staleTime: Infinity,
-  });
-}
-
-export function useInterests() {
-  return useQuery({
-    queryKey: ["interests"],
-    queryFn: async () => interestsData,
-    initialData: interestsData,
-    staleTime: Infinity,
-  });
-}
-
-export function useHeroPhrases() {
-  return useMemo(() => heroPhrases, []);
-}
+export const useExperiences = () => experiences;
+export const useProjects = () => projects;
+export const useSkills = () => skills;
+export const usePersonalInfo = () => personalInfo;
+export const useBlogs = () => blogs;
+export const useEducation = () => education;
+export const useResearch = () => research;
+export const useInterests = () => interests;
+export const useHeroPhrases = () => heroPhrases;

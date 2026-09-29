@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight, X } from "lucide-react";
 import type { Project } from "@shared/schema";
+import { caseStudyForProject } from "@/data/case-studies";
 
 interface ProjectModalProps {
   projects: Project[];
@@ -40,6 +41,7 @@ export function ProjectModal({ projects, startIndex, onClose }: ProjectModalProp
   }, [onClose, step]);
 
   const project = projects[index];
+  const caseStudy = caseStudyForProject(project.id);
 
   return (
     <motion.div
@@ -132,10 +134,15 @@ export function ProjectModal({ projects, startIndex, onClose }: ProjectModalProp
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-accent text-sm font-semibold hover:underline underline-offset-4"
             >
-              View on GitHub <ArrowUpRight className="w-4 h-4" />
+              {project.link.includes("github.com") ? "View on GitHub" : "Open live demo"} <ArrowUpRight className="w-4 h-4" />
             </a>
           )}
         </div>
+        {caseStudy && (
+          <a href={`/projects/${caseStudy.slug}/`} className="inline-flex items-center gap-2 text-accent text-sm font-semibold mt-5 hover:underline underline-offset-4">
+            Read case study <ArrowUpRight className="w-4 h-4" />
+          </a>
+        )}
       </div>
     </motion.div>
   );

@@ -4,7 +4,7 @@ import { scrollToSection } from "@/lib/scroll-to";
 /**
  * Interactive "circuit brain" easter egg, wired beside the hero signature.
  *
- * The artwork is an owner-approved raster image (client/public/neural-brain.png
+ * The artwork is an owner-approved raster image (client/public/neural-brain.webp
  * - black strokes on a transparent background) painted with the site's accent
  * color via a CSS alpha mask: wherever the PNG is opaque, the accent color
  * shows. That means the image recolors itself with the theme's accent
@@ -29,14 +29,14 @@ import { scrollToSection } from "@/lib/scroll-to";
  * surges brighter/faster on hover, and click/tap scrolls to Skills.
  */
 
-/** Artwork is 1536x1024. Kept as a CSS aspect-ratio so the box can be sized
+/** Artwork is 512x341. Kept as a CSS aspect-ratio so the box can be sized
  *  fluidly (phones) without us doing the height maths in JS. */
-const IMG_ASPECT_RATIO = "1536 / 1024";
+const IMG_ASPECT_RATIO = "512 / 341";
 
 // Mask props kept in one object so the spans stay readable.
 const MASK_STYLE: React.CSSProperties = {
-  WebkitMaskImage: "url(/neural-brain.png)",
-  maskImage: "url(/neural-brain.png)",
+  WebkitMaskImage: "url(/neural-brain.webp)",
+  maskImage: "url(/neural-brain.webp)",
   WebkitMaskSize: "contain",
   maskSize: "contain",
   WebkitMaskRepeat: "no-repeat",

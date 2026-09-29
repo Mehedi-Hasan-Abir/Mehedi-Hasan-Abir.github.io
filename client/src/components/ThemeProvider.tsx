@@ -44,6 +44,7 @@ const ACCENTS = {
 } as const;
 
 export type AccentKey = keyof typeof ACCENTS;
+const DEFAULT_ACCENT: AccentKey = "green";
 
 type ThemeContextValue = {
   isDark: boolean;
@@ -65,15 +66,18 @@ function applyTheme(theme: AccentKey, isDark: boolean) {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(true);
-  const [currentTheme, setCurrentTheme] = useState<AccentKey>("pink");
+  const [currentTheme, setCurrentTheme] = useState<AccentKey>(DEFAULT_ACCENT);
 
   useEffect(() => {
     // Dark is default; light only when explicitly saved.
     const savedDark = localStorage.getItem("dark-mode") !== "false";
-    const savedTheme = (localStorage.getItem("app-theme") as AccentKey) || "pink";
-    setCurrentTheme(savedTheme in ACCENTS ? savedTheme : "pink");
+    const savedTheme = localStorage.getItem("app-theme");
+    const theme = savedTheme && Object.prototype.hasOwnProperty.call(ACCENTS, savedTheme)
+      ? savedTheme as AccentKey
+      : DEFAULT_ACCENT;
+    setCurrentTheme(theme);
     setIsDark(savedDark);
-    applyTheme(savedTheme in ACCENTS ? savedTheme : "pink", savedDark);
+    applyTheme(theme, savedDark);
   }, []);
 
   const toggleDark = () => {

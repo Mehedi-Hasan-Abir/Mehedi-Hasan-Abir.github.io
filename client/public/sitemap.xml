@@ -9,4 +9,16 @@
   <url>
     <loc>https://mhabir.dev/works/</loc>
   </url>
+  <url>
+    <loc>https://mhabir.dev/about/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/research/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/projects/search-microservice/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/projects/outlet-fraud-detection/</loc>
+  </url>
 </urlset>

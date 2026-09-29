@@ -48,8 +48,8 @@ html {
   --popover: 60 7% 8%;
   --popover-foreground: 60 12% 92%;
 
-  /* Default accent: Klein blue (bright variant for dark surfaces) */
-  --primary: 231 100% 79%;
+  /* Default accent: Emerald (bright variant for dark surfaces) */
+  --primary: 142 69% 58%;
   --primary-foreground: 60 7% 7%;
 
   --secondary: 60 5% 13%;
@@ -58,7 +58,7 @@ html {
   --muted: 60 5% 13%;
   --muted-foreground: 60 6% 62%;
 
-  --accent: 231 100% 79%;
+  --accent: 142 69% 58%;
   --accent-foreground: 60 7% 7%;
 
   --destructive: 0 62% 45%;
@@ -66,7 +66,7 @@ html {
 
   --border: 60 8% 16%;
   --input: 60 8% 16%;
-  --ring: 231 100% 79%;
+  --ring: 142 69% 58%;
 
   --radius: 0.25rem;
 
@@ -89,7 +89,7 @@ html[data-color-mode="light"] {
   --popover: 0 0% 100%;
   --popover-foreground: 60 7% 7%;
 
-  --primary: 233 73% 48%;
+  --primary: 161 90% 26%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 60 14% 94%;
@@ -98,12 +98,12 @@ html[data-color-mode="light"] {
   --muted: 60 14% 94%;
   --muted-foreground: 60 4% 38%;
 
-  --accent: 233 73% 48%;
+  --accent: 161 90% 26%;
   --accent-foreground: 0 0% 100%;
 
   --border: 55 15% 84%;
   --input: 55 15% 84%;
-  --ring: 233 73% 48%;
+  --ring: 161 90% 26%;
 
   /* Light surfaces: the traces are already a dark accent, so a white core
      would erase them. Use full-strength accent as the charge instead. */
@@ -285,7 +285,7 @@ html[data-color-mode="light"] {
 }
 
 /* ── NeuralBrain: light flowing through the circuit traces ──────────────────
-   The gradients are masked by neural-brain.png, so motion only shows up where
+   The gradients are masked by neural-brain.webp, so motion only shows up where
    the artwork has strokes. Transforms run on the inner (unmasked) spans.
    `will-change: transform` keeps each band on its own compositor layer. */
 

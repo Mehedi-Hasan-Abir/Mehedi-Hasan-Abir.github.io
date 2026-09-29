@@ -112,8 +112,8 @@ export function DrawnName() {
   }, [inView]);
 
   return (
-    <div ref={ref} role="img" aria-label="Mehedi Hasan" className="py-1">
-      <span className="sr-only">Mehedi Hasan</span>
+    <div ref={ref} role="img" aria-label="Mehedi Hasan Abir" className="py-1">
+      <span className="sr-only">Mehedi Hasan Abir</span>
       <Line line={MEHEDI_LINE} animated={canAnimate} />
       <Line line={HASAN_LINE} accentLast animated={canAnimate} />
     </div>

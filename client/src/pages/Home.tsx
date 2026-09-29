@@ -104,6 +104,11 @@ export default function Home() {
                 {personalInfo.bio}
               </p>
 
+              <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-accent">
+                <a href="/about/" className="hover:underline underline-offset-4">About Mehedi Hasan Abir</a>
+                <a href="/research/" className="hover:underline underline-offset-4">Research</a>
+              </div>
+
               <div className="flex flex-wrap gap-3 mt-9">
                 <Magnetic>
                   <a
@@ -172,16 +177,20 @@ export default function Home() {
                 <span aria-hidden="true" className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-primary" />
                 <span aria-hidden="true" className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-primary" />
                 <span aria-hidden="true" className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-primary" />
-                <img
-                  src={personalInfo.avatarUrl}
-                  alt={personalInfo.name}
-                  loading="eager"
-                  decoding="async"
-                  {...FETCH_PRIORITY_HIGH}
-                  width={800}
-                  height={800}
-                  className="relative w-full aspect-square object-cover grayscale contrast-[1.04] group-hover:grayscale-0 transition-all duration-700"
-                />
+                <picture>
+                  <source media="(max-width: 640px)" srcSet="/images/profile_re-640.avif" type="image/avif" />
+                  <source srcSet="/images/profile_re.avif" type="image/avif" />
+                  <img
+                    src={personalInfo.avatarUrl}
+                    alt={personalInfo.name}
+                    loading="eager"
+                    decoding="async"
+                    {...FETCH_PRIORITY_HIGH}
+                    width={800}
+                    height={800}
+                    className="relative w-full aspect-square object-cover grayscale contrast-[1.04] group-hover:grayscale-0 transition-all duration-700"
+                  />
+                </picture>
               </div>
               <figcaption className="mono-label text-muted-foreground mt-4 flex justify-between">
                 <span>DHAKA &middot; UTC+6</span>
@@ -318,14 +327,16 @@ export default function Home() {
                     <div className="text-sm text-muted-foreground mt-1">
                       {res.authors} &middot; {res.venue} &middot; {res.year}
                     </div>
-                    <a
-                      href={res.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-accent text-[13px] font-semibold mt-2 hover:underline underline-offset-4"
-                    >
-                      View <ArrowUpRight className="w-3.5 h-3.5" />
-                    </a>
+                    {res.link && (
+                      <a
+                        href={res.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-accent text-[13px] font-semibold mt-2 hover:underline underline-offset-4"
+                      >
+                        View paper <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -421,6 +432,12 @@ export default function Home() {
       <footer className="rule-t py-8">
         <div className="max-w-6xl mx-auto px-5 md:px-8 flex flex-wrap justify-between gap-3 mono-label text-muted-foreground">
           <span>Designed &amp; Built by {personalInfo.name}</span>
+          <nav aria-label="Additional pages" className="flex gap-4">
+            <a href="/about/" className="hover:text-accent">About</a>
+            <a href="/research/" className="hover:text-accent">Research</a>
+            <a href="/works/" className="hover:text-accent">Work</a>
+            <a href="/blog/" className="hover:text-accent">Writing</a>
+          </nav>
           <span>&copy; {new Date().getFullYear()} &middot; All rights reserved</span>
         </div>
       </footer>

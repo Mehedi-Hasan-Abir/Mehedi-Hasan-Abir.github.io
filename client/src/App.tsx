@@ -1,8 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
 import { MotionConfig } from "framer-motion";
 import { Switch, Route, useLocation } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackToTop } from "@/components/BackToTop";
@@ -17,6 +15,9 @@ import Home from "@/pages/Home";
 
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
 const WorksPage = lazy(() => import("@/pages/WorksPage"));
+const AboutPage = lazy(() => import("@/pages/AboutPage"));
+const ResearchPage = lazy(() => import("@/pages/ResearchPage"));
+const ProjectPage = lazy(() => import("@/pages/ProjectPage"));
 
 function AnalyticsPageView() {
   const [location] = useLocation();
@@ -44,6 +45,9 @@ function Router() {
               <WorksPage />
             </ErrorBoundary>
           </Route>
+          <Route path="/about" component={AboutPage} />
+          <Route path="/research" component={ResearchPage} />
+          <Route path="/projects/:slug" component={ProjectPage} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
@@ -68,16 +72,14 @@ function AppContent() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ConnectionProvider>
-        <TooltipProvider>
-          {/* Animations always run - explicit site-owner requirement. */}
-          <MotionConfig>
-            <AppContent />
-          </MotionConfig>
-        </TooltipProvider>
-      </ConnectionProvider>
-    </QueryClientProvider>
+    <ConnectionProvider>
+      <TooltipProvider>
+        {/* Animations always run - explicit site-owner requirement. */}
+        <MotionConfig>
+          <AppContent />
+        </MotionConfig>
+      </TooltipProvider>
+    </ConnectionProvider>
   );
 }
 

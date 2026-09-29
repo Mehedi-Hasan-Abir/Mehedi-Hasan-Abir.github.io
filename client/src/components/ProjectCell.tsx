@@ -4,6 +4,7 @@ import { animate, stagger } from "animejs";
 import { ArrowUpRight, LayoutGrid } from "lucide-react";
 import { useCanAnimate, useAnimeOnView, useInView } from "@/lib/use-anime";
 import type { Project } from "@shared/schema";
+import { caseStudyForProject } from "@/data/case-studies";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -29,6 +30,7 @@ export function ProjectCell({
   lead = false,
   onDetails,
 }: ProjectCellProps) {
+  const caseStudy = caseStudyForProject(project.id);
   const canAnimate = useCanAnimate();
   const chipsRef = useAnimeOnView<HTMLDivElement>(
     (el) => {
@@ -126,6 +128,14 @@ export function ProjectCell({
         ))}
       </div>
       <div className="flex flex-wrap items-center gap-2.5 mt-6">
+        {caseStudy && (
+          <a
+            href={`/projects/${caseStudy.slug}/`}
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 border border-primary/50 rounded-full font-semibold text-sm text-accent hover:border-primary"
+          >
+            Case study <ArrowUpRight className="w-4 h-4" />
+          </a>
+        )}
         <button
           type="button"
           onClick={() => onDetails(project)}
@@ -141,7 +151,7 @@ export function ProjectCell({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold text-muted-foreground hover:text-accent transition-colors"
           >
-            GitHub <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            {project.link.includes("github.com") ? "GitHub" : "Live demo"} <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         )}
       </div>

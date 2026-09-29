@@ -12,8 +12,13 @@ export default function NotFound() {
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground">
-            Did you forget to add the page to the router?
+            That page is unavailable. You can continue with the portfolio or browse the projects.
           </p>
+          <nav aria-label="Useful pages" className="mt-6 flex gap-5 text-sm font-semibold text-accent">
+            <a href="/" className="hover:underline">Home</a>
+            <a href="/works/" className="hover:underline">Selected Work</a>
+            <a href="/about/" className="hover:underline">About</a>
+          </nav>
         </CardContent>
       </Card>
     </div>

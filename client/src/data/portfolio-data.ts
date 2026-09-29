@@ -6,8 +6,8 @@ export const educationData = [
 ];
 
 export const researchData = [
-  { title: "Bengali Intent Classification with Generative Adversarial BERT", authors: "Mehedi Hasan (First Author)", venue: "IEEE Xplore", year: "2023", link: "https://github.com/Mehedi-Hasan-Abir" },
-  { title: "Design of an Arrhythmia Classification Algorithm Using 2-D Convolutional Neural Network", authors: "Mehedi Hasan (First Author)", venue: "Undergraduate Thesis, AUST", year: "2021", link: "https://github.com/Mehedi-Hasan-Abir" }
+  { title: "Bengali Intent Classification with Generative Adversarial BERT", authors: "Mehedi Hasan (First Author)", venue: "2023 ICCIT / IEEE Xplore", year: "2023", link: "https://ieeexplore.ieee.org/document/10440989/" },
+  { title: "Design of an Arrhythmia Classification Algorithm Using 2-D Convolutional Neural Network", authors: "Mehedi Hasan (First Author)", venue: "Undergraduate Thesis, AUST", year: "2021", link: "" }
 ];
 
 export const interestsData = [
@@ -29,7 +29,7 @@ export const heroPhrases = [
 export const portfolioData = {
   personalInfo: {
     id: 1,
-    name: "Mehedi Hasan",
+    name: "Mehedi Hasan Abir",
     role: "AI/ML Engineer",
     bio: "Senior AI/ML Engineer with 5+ years of experience building production AI systems across LLMs, RAG, document intelligence, and distributed services.",
     email: "abir.aust.102@gmail.com",
@@ -138,7 +138,7 @@ export const portfolioData = {
       id: 2,
       title: "Search Microservice - High-Performance Product Discovery",
       description:
-        "Typo-tolerant product discovery for 1M products and ~29K brands; reached 179 QPS at 3.17 ms P95 for warm traffic and 1,046 QPS under concurrent load.",
+        "Typo-tolerant search for 1M products and ~29K brands. Resource-limited tests reached about 180 QPS at 3.2 ms P95 for warm queries and 179 QPS at 13 ms P95 for unseen typos.",
       techStack: [
         "Python",
         "FastAPI",

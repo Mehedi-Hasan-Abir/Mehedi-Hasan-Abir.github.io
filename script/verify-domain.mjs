@@ -13,11 +13,17 @@ async function readBuilt(relativePath) {
   return content;
 }
 
-for (const [page, url] of [
-  ["index.html", `${site}/`],
-  ["blog/index.html", `${site}/blog/`],
-  ["works/index.html", `${site}/works/`],
-]) {
+const sitemap = await readBuilt("sitemap.xml");
+const urls = [...sitemap.matchAll(/<loc>(https:\/\/mhabir\.dev\/[^<]*)<\/loc>/g)].map((match) => match[1]);
+if (urls.length !== 7 || new Set(urls).size !== urls.length) {
+  throw new Error("sitemap.xml must contain seven distinct canonical pages");
+}
+for (const pathname of ["/", "/blog/", "/works/", "/about/", "/research/", "/projects/search-microservice/", "/projects/outlet-fraud-detection/"]) {
+  if (!urls.includes(`${site}${pathname}`)) throw new Error(`sitemap.xml is missing ${pathname}`);
+}
+
+for (const url of urls) {
+  const page = new URL(url).pathname.slice(1) + "index.html";
   const html = await readBuilt(page);
   if (!html.includes(`<link rel="canonical" href="${url}"`)) {
     throw new Error(`${page} has no canonical link to ${url}`);
@@ -30,11 +36,9 @@ for (const [page, url] of [
   }
 }
 
-const sitemap = await readBuilt("sitemap.xml");
-for (const url of [`${site}/`, `${site}/blog/`, `${site}/works/`]) {
-  if (!sitemap.includes(`<loc>${url}</loc>`)) {
-    throw new Error(`sitemap.xml is missing ${url}`);
-  }
+const missingPage = await readBuilt("404.html");
+if (!missingPage.includes('<meta name="robots" content="noindex"') || !missingPage.includes('href="/works/"')) {
+  throw new Error("404.html needs noindex and useful navigation");
 }
 
 const robots = await readBuilt("robots.txt");
