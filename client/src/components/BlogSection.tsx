@@ -14,6 +14,8 @@ interface BlogPost {
   thumbnailWidth: number;
   thumbnailHeight: number;
   externalLink: string;
+  /** Set when the full text is also published on this site. */
+  internalPath?: string;
   platform: string;
   date: string;
   tags: string[];
@@ -146,7 +148,11 @@ export function BlogSection() {
               data-card
               initial={canAnimate ? { clipPath: "inset(0% 100% 0% 0%)" } : false}
               className="group border border-border bg-card hover:border-primary/60 transition-colors flex flex-col cursor-pointer overflow-hidden snap-start shrink-0 w-[82%] sm:w-[47%] lg:w-[31.8%]"
-              onClick={() => window.open(blog.externalLink, "_blank", "noopener,noreferrer")}
+              onClick={() => {
+                // On-site articles navigate in place; cross-posts open a tab.
+                if (blog.internalPath) window.location.href = blog.internalPath;
+                else window.open(blog.externalLink, "_blank", "noopener,noreferrer");
+              }}
             >
               {/* Thumbnail */}
               <div className="relative aspect-video bg-secondary overflow-hidden">
@@ -204,13 +210,12 @@ export function BlogSection() {
                 </div>
 
                 <a
-                  href={blog.externalLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={blog.internalPath ?? blog.externalLink}
+                  {...(blog.internalPath ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                   onClick={(e) => e.stopPropagation()}
                   className="inline-flex items-center gap-1.5 text-accent font-semibold text-sm mt-5 hover:underline underline-offset-4"
                 >
-                  Read on {blog.platform}
+                  {blog.internalPath ? "Read on mhabir.dev" : `Read on ${blog.platform}`}
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>

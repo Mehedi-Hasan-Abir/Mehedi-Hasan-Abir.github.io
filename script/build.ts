@@ -5,6 +5,7 @@ import path from "path";
 import { execFileSync } from "child_process";
 import { educationData, portfolioData, researchData } from "../client/src/data/portfolio-data";
 import { caseStudies } from "../client/src/data/case-studies";
+import { articles, type Article, type ArticleBlock } from "../client/src/data/articles";
 
 const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
 const clientOutputDirectory = path.resolve("dist/public");
@@ -16,11 +17,39 @@ const WORKS_DESCRIPTION = "Explore AI/ML projects by Mehedi Hasan Abir, includin
 const WORKS_URL = "https://mhabir.dev/works/";
 const SITE = "https://mhabir.dev";
 
-type StaticPage = "home" | "blog" | "works" | "about" | "research" | "not-found" | `project:${string}`;
+type StaticPage = "home" | "blog" | "works" | "about" | "research" | "not-found" | `project:${string}` | `article:${string}`;
 
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
 })[character]!);
+
+/** Serialise the same block model data/articles.ts uses, so the article stays readable without JS. */
+function articleBlocksToHtml(blocks: ArticleBlock[]): string {
+  return blocks.map((block) => {
+    if (block.t === "h2") return `<h2>${escapeHtml(block.text)}</h2>`;
+    if (block.t === "h3") return `<h3>${escapeHtml(block.text)}</h3>`;
+    if (block.t === "code") return `<pre><code>${escapeHtml(block.text)}</code></pre>`;
+    if (block.t === "note") return `<blockquote><p>${escapeHtml(block.text)}</p></blockquote>`;
+    if (block.t === "ul") return `<ul>${block.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    if (block.t === "ol") return `<ol>${block.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>`;
+    return `<p>${escapeHtml(block.text)}</p>`;
+  }).join("");
+}
+
+function articleContent(article: Article) {
+  const published = new Date(article.date).toLocaleDateString("en-US", {
+    year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
+  });
+  const tags = article.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("");
+  const siblings = articles.filter((item) => item.slug !== article.slug)
+    .map((item) => `<li>${link(`/blog/${item.slug}/`, item.title)}</li>`).join("");
+
+  return `<p>${escapeHtml(article.summary)}</p>`
+    + `<h2>Tags</h2><ul>${tags}</ul>`
+    + `<p>Published ${escapeHtml(published)}.</p>`
+    + articleBlocksToHtml(article.blocks)
+    + (siblings ? `<h2>More writing</h2><ul>${siblings}</ul>` : "");
+}
 
 /** Search engines and visitors still get useful content when the app bundle is delayed or fails. */
 function staticPageContent(page: StaticPage) {
@@ -31,9 +60,13 @@ function staticPageContent(page: StaticPage) {
       ? link(`/projects/${caseStudies.find((study) => study.projectId === project.id)!.slug}/`, project.title)
       : `<strong>${escapeHtml(project.title)}</strong>`} — ${escapeHtml(project.description)}</li>`
   ).join("");
-  const posts = portfolioData.blogs.map((post) =>
-    `<li>${link(post.externalLink, post.title)} — ${escapeHtml(post.description)}</li>`
-  ).join("");
+  const posts = portfolioData.blogs.map((post) => {
+    const article = articles.find((item) => item.blogId === post.id);
+    // Prefer the on-site copy when one exists so crawlers can reach the text
+    // itself rather than only the cross-post.
+    const href = article ? `/blog/${article.slug}/` : post.externalLink;
+    return `<li>${link(href, post.title)} — ${escapeHtml(post.description)}</li>`;
+  }).join("");
   let title = `${person.name} — ${person.role}`;
   let body = `<p>${escapeHtml(person.bio)}</p><p>${link("/about/", "About")} · ${link("/research/", "Research")} · ${link(person.resumeUrl, "Resume")}</p><h2>Selected Work</h2><ul>${projects}</ul><h2>Writing</h2><ul>${posts}</ul>`;
 
@@ -59,6 +92,11 @@ function staticPageContent(page: StaticPage) {
   } else if (page === "not-found") {
     title = "404 Page Not Found";
     body = `<p>That page is unavailable. ${link("/", "Home")} · ${link("/works/", "Selected Work")} · ${link("/about/", "About")}</p>`;
+  } else if (page.startsWith("article:")) {
+    const article = articles.find((item) => item.slug === page.slice("article:".length));
+    if (!article) throw new Error(`Missing article for ${page}`);
+    title = article.title;
+    body = articleContent(article);
   }
 
   return `<div id="root"><main id="static-fallback" style="min-height:100vh;background:#111210;color:#e9e9e5;padding:4rem max(1.25rem,calc((100vw - 70rem)/2));font:1rem/1.6 Arial,sans-serif"><nav aria-label="Site pages">${link("/", "Home")} · ${link("/works/", "Work")} · ${link("/blog/", "Writing")} · ${link("/about/", "About")} · ${link("/research/", "Research")}</nav><h1>${escapeHtml(title)}</h1>${body}</main></div>`;
@@ -213,6 +251,32 @@ async function createStaticRouteFallbacks() {
       file: `projects/${study.slug}/index.html`,
       page: `project:${study.slug}`,
       html: addSchema(withMeta(`${study.title} | Mehedi Hasan Abir`, study.summary, url, study.slug), breadcrumb),
+    });
+  }
+
+  for (const article of articles) {
+    const url = `${SITE}/blog/${article.slug}/`;
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: article.title,
+      description: article.summary,
+      datePublished: article.date,
+      dateModified: article.updated ?? article.date,
+      inLanguage: "en",
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      author: { "@id": `${SITE}/#person` },
+      publisher: { "@id": `${SITE}/#person` },
+      image: `${SITE}/images/og-image.jpg`,
+      keywords: article.tags.join(", "),
+    };
+    routes.push({
+      file: `blog/${article.slug}/index.html`,
+      page: `article:${article.slug}`,
+      html: addSchema(
+        withMeta(`${article.title} | Mehedi Hasan Abir`, article.summary, url, article.slug),
+        schema,
+      ),
     });
   }
 

@@ -14,6 +14,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
+const ArticlePage = lazy(() => import("@/pages/ArticlePage"));
 const WorksPage = lazy(() => import("@/pages/WorksPage"));
 const AboutPage = lazy(() => import("@/pages/AboutPage"));
 const ResearchPage = lazy(() => import("@/pages/ResearchPage"));
@@ -35,6 +36,9 @@ function Router() {
       <Suspense fallback={<div className="min-h-screen bg-background" />}>
         <Switch>
           <Route path="/" component={Home} />
+          {/* Article detail must precede the /blog listing so the longer
+              path wins in wouter's ordered Switch. */}
+          <Route path="/blog/:slug" component={ArticlePage} />
           <Route path="/blog">
             <ErrorBoundary>
               <BlogPage />

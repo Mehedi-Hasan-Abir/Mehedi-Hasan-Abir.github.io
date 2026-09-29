@@ -437,6 +437,9 @@ export const portfolioData = {
       thumbnailWidth: 1200,
       thumbnailHeight: 670,
       externalLink: "https://medium.com/towards-artificial-intelligence/how-to-use-optimize-and-serve-an-llm-in-your-production-system-25fd40f63b6a",
+      // Full text is published on this site; the cross-post stays as the
+      // secondary link so the existing card layout is unchanged.
+      internalPath: "/blog/llm-in-production/",
       platform: "Medium",
       date: "2026-06-20",
       tags: ["LLM", "Production Systems", "Optimization", "Inference", "MLOps", "vLLM", "ONNX"]
