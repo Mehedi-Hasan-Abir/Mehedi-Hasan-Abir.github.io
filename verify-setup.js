@@ -16,7 +16,6 @@ const checks = [
   { file: 'client/src/main.tsx', description: 'App entry point' },
   
   // Sentry configuration
-  { file: 'client/src/lib/sentry.config.ts', description: 'Frontend Sentry config' },
   { file: 'server/sentry.config.ts', description: 'Backend Sentry config' },
   
   // Rate limiting
@@ -82,7 +81,6 @@ requiredScripts.forEach(script => {
 // Check dependencies
 console.log('\n📦 Checking key dependencies...\n');
 const dependencies = [
-  '@sentry/react',
   '@sentry/node', 
   'express-rate-limit',
   'swagger-ui-express',

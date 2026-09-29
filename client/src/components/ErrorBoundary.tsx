@@ -1,7 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
-import { captureError } from "@/lib/sentry.config";
 
 interface Props {
   children: ReactNode;
@@ -21,7 +20,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    captureError(error, { componentStack: info.componentStack });
+    console.error("Portfolio rendering error:", error, info.componentStack);
   }
 
   render() {

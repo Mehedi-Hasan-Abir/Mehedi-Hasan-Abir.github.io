@@ -280,7 +280,7 @@ async function buildAll() {
 
   // Vite resolves .env from its own root (client/), but our .env lives in the
   // repo root. Bridge VITE_* vars into process.env so the client build's
-  // import.meta.env replacement picks them up (GA + Sentry depend on this).
+  // import.meta.env replacement picks them up (Google Analytics needs this).
   for (const [key, value] of Object.entries(loadedEnv)) {
     if (key.startsWith("VITE_") && process.env[key] === undefined) {
       process.env[key] = value;

@@ -15,7 +15,7 @@ the prepared repository changes from the one-time account settings.
   rather than this file, when publishing with a custom Actions workflow.
 - `.github/workflows/pages.yml` checks and builds on pushes to `main`, then
   deploys `dist/public` as a GitHub Pages artifact. It needs the repository
-  variable `VITE_GOOGLE_ANALYTICS_ID`; `VITE_SENTRY_DSN` is optional.
+  variable `VITE_GOOGLE_ANALYTICS_ID`. Browser Sentry has been removed.
 - `npm run verify` checks TypeScript, tests, the build, generated metadata,
   sitemap, robots file, CNAME, and hosted CV PDF.
 
@@ -69,7 +69,7 @@ the live change to the domain and URLs; switch publishing automation later.
 
 1. In GitHub repository **Settings → Secrets and variables → Actions →
    Variables**, set `VITE_GOOGLE_ANALYTICS_ID` to the existing GA4 measurement
-   ID. Set `VITE_SENTRY_DSN` if browser error monitoring is wanted. Do not
+   ID. Browser error reporting to Sentry is disabled. Do not
    commit local `.env` values.
 2. Change repository **Pages → Source** to **GitHub Actions**, then merge and
    push the prepared source and `.github/workflows/pages.yml` to `main` in

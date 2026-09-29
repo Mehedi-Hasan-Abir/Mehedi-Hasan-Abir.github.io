@@ -41,7 +41,7 @@ git push origin main
 - **Passport.js** - Authentication
 
 ### Monitoring & Analytics
-- **Sentry** - Error tracking
+- **Sentry** - Optional backend error tracking only; removed from the browser
 - **Google Analytics 4** - User analytics
 
 ### DevOps
@@ -59,7 +59,7 @@ modern-portfolio/
 │   │   ├── components/    # Reusable components
 │   │   ├── pages/         # Page components
 │   │   ├── hooks/         # Custom hooks
-│   │   ├── lib/           # Utilities (Sentry, Analytics)
+│   │   ├── lib/           # Utilities and Analytics
 │   │   └── data/          # Static portfolio data
 │   └── index.html
 ├── server/                 # Backend (optional)
@@ -113,8 +113,7 @@ Create `.env.local` for development:
 # Google Analytics (optional)
 VITE_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 
-# Sentry (optional)
-VITE_SENTRY_DSN=https://your-dsn.ingest.sentry.io/project-id
+# Sentry (optional backend only)
 SENTRY_DSN=https://your-dsn.ingest.sentry.io/project-id
 
 # Database (optional - only if using backend)
@@ -129,7 +128,7 @@ VITE_APP_VERSION=1.0.0
 Add to Settings → Secrets and variables → Actions:
 
 - `VITE_GOOGLE_ANALYTICS_ID` - required by the production build
-- `VITE_SENTRY_DSN` - optional browser error monitoring
+- Browser Sentry is removed; no browser monitoring variable is needed.
 
 ## 📝 Customization
 
@@ -231,7 +230,7 @@ npm run test:verbose
 ## 🔍 Monitoring & Analytics
 
 ### Sentry Error Tracking
-- **Frontend**: Catches client-side errors
+- **Frontend**: Sentry is removed. The React error boundary retains its fallback screen and logs errors to the browser console without remote reporting.
 - **Backend**: Catches server errors (if using backend)
 - **Performance**: Monitors page load times
 - **Setup**: Add DSN to environment variables
