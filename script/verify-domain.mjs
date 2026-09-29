@@ -41,7 +41,9 @@ for (const url of urls) {
   if (!html.includes(`<meta property="og:url" content="${url}"`)) {
     throw new Error(`${page} has no Open Graph URL for ${url}`);
   }
-  if (!html.includes('<main id="static-fallback"') || !html.includes("<h1>")) {
+  // Matches the wrapper tag rather than a specific element: Home's fallback is
+  // a div that contains a <main>, while content pages use <main> directly.
+  if (!html.includes('id="static-fallback"') || !html.includes("<h1")) {
     throw new Error(`${page} has no readable fallback when JavaScript is unavailable`);
   }
 }

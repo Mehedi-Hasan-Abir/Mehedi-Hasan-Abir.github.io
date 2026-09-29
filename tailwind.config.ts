@@ -2,7 +2,10 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
+  // script/build.ts writes the static fallback markup into every generated
+  // page. It must be scanned too, otherwise classes used only in the fallback
+  // are never emitted and the pre-React paint renders unstyled.
+  content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}", "./script/build.ts"],
   theme: {
     extend: {
       borderRadius: {
