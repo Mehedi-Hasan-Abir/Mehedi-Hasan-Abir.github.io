@@ -1,3 +1,5 @@
+import { afterLoadWhenIdle } from "./defer-third-party";
+
 const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
 const gaId = (import.meta.env.VITE_GOOGLE_ANALYTICS_ID ?? "").trim();
 let analyticsInitialized = false;
@@ -25,21 +27,22 @@ export const initAnalytics = (): boolean => {
     window.dataLayer?.push(arguments);
   };
 
-  const existingScript = document.querySelector<HTMLScriptElement>(
-    `script[data-google-analytics-id="${gaId}"]`,
-  );
+  window.gtag("js", new Date());
+  window.gtag("config", gaId, { send_page_view: false });
+  analyticsInitialized = true;
+  // The stub queues the first page view and later events until gtag.js arrives.
+  afterLoadWhenIdle(() => {
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[data-google-analytics-id="${gaId}"]`,
+    );
+    if (existingScript) return;
 
-  if (!existingScript) {
     const script = document.createElement("script");
     script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
     script.async = true;
     script.dataset.googleAnalyticsId = gaId;
     document.head.appendChild(script);
-  }
-
-  window.gtag("js", new Date());
-  window.gtag("config", gaId, { send_page_view: false });
-  analyticsInitialized = true;
+  });
   return true;
 };
 

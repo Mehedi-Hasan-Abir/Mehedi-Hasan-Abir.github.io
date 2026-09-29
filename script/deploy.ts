@@ -66,7 +66,10 @@ async function deploy(): Promise<void> {
   // Node >= 18 refuses to spawn .cmd shims without a shell (EINVAL) - call
   // gh-pages' JS entry with node directly instead of npx.cmd.
   const ghPagesBin = path.resolve("node_modules", "gh-pages", "bin", "gh-pages.js");
-  run(process.execPath, [ghPagesBin, "-d", "dist/public", "--branch", "gh-pages"]);
+  // Keep prior fingerprinted assets while edge caches may still serve older HTML.
+  // GitHub Pages caches HTML for 10 minutes; removing its referenced bundle on
+  // every deploy can leave crawlers and visitors with a blank page.
+  run(process.execPath, [ghPagesBin, "-d", "dist/public", "--branch", "gh-pages", "--add"]);
 
   const afterHash = getRemoteHash();
   if (!afterHash || afterHash === beforeHash) {
