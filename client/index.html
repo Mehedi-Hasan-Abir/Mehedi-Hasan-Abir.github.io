@@ -3,6 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
     <title>Mehedi Hasan Abir | AI/ML Engineer</title>
     <meta name="description" content="Mehedi Hasan Abir is an AI/ML engineer in Dhaka building LLM applications, document intelligence, search systems, and production ML services. Explore his work, research, and writing." />
     <meta property="og:title" content="Mehedi Hasan Abir | AI/ML Engineer" />

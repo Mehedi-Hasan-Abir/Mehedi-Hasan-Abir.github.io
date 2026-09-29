@@ -114,6 +114,20 @@ html[data-color-mode="light"] {
   --circuit-glow: hsl(var(--primary) / 0.72);
 }
 
+/*
+ * Emergency-only static fallback.
+ *
+ * The build writes a styled copy of the page into #root so a visitor whose
+ * bundle never loads still sees the content. When JavaScript is running that
+ * copy is redundant: the React app replaces it within a frame or two, so
+ * showing it only produces a visible swap. `.js` is set by the inline script in
+ * the document head, which cannot run if scripting is unavailable, so this
+ * rule can never hide the fallback from a visitor who needs it.
+ */
+.js #static-fallback {
+  display: none;
+}
+
 @layer base {
   * {
     @apply border-border;
