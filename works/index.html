@@ -3,6 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
     <title>Selected AI/ML Work | Mehedi Hasan Abir</title>
     <meta name="description" content="Explore AI/ML projects by Mehedi Hasan Abir, including search infrastructure, retrieval systems, computer vision, and production engineering." />
     <meta property="og:title" content="Selected AI/ML Work | Mehedi Hasan Abir" />
@@ -65,11 +83,11 @@
       "author": { "@id": "https://mhabir.dev/#person" }
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-tFgLr-Vj.js"></script>
+    <script type="module" crossorigin src="/assets/index-DVQtnuGU.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/react-core-N--QU9DW.js">
     <link rel="modulepreload" crossorigin href="/assets/framer-CnDHW2dc.js">
     <link rel="modulepreload" crossorigin href="/assets/radix-BcK-Cui3.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-B91sA2Yx.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BdKxcDPL.css">
   </head>
   <body>
     <div id="root"><main id="static-fallback" class="min-h-screen bg-background text-foreground"><div class="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24"><nav aria-label="Breadcrumb" class="mono-label text-muted-foreground mb-10"><a href="/">Home</a> / Selected Work</nav><p class="mono-label text-accent mb-4">PORTFOLIO</p><h1 class="display-lg max-w-[26ch]">Selected Work</h1><div class="mt-7"><p>AI and machine learning projects, from document intelligence and retrieval to production systems.</p><ul class="space-y-3 mt-8"><li><strong>Agami Assistant - Voice-First Enterprise AI Assistant</strong> — Voice-first enterprise assistant providing grounded spoken answers from product catalogs, policies, and IT records, with live transcripts and captions.</li><li><a href="/projects/search-microservice/">Search Microservice - High-Performance Product Discovery</a> — Typo-tolerant search for 1M products and ~29K brands. Resource-limited tests reached about 180 QPS at 3.2 ms P95 for warm queries and 179 QPS at 13 ms P95 for unseen typos.</li><li><strong>Shorol Notes — AI-Powered Note-Taking</strong> — Voice notes with AI transcription and summarization; calendar sync with Bangla-first UX. Pluggable backends supporting OpenAI, Ollama, and Hugging Face models.</li><li><strong>Japanese Lawyer Assistant</strong> — Legal Q&amp;A over a Japanese corpus using RAG, FAISS retrieval, and an instruct LLM with a knowledge-base pipeline and custom prompts.</li><li><a href="/projects/outlet-fraud-detection/">Outlet Fraud Detection - No-Label Verification Screening</a> — No-label fraud screening for outlet-verification photos. Every image is compared only against other photos from the same outlet — visually isolated shots and reused uploads get flagged with an evidence-based reason.</li><li><strong>Aethion RAG - Naive vs Streaming Retrieval Shootout</strong> — Full-stack AI agent answering questions over company documents, comparing Naive RAG against StreamRAG — retrieval fired in parallel with generation and streamed to the user.</li><li><strong>AI Research Agent - Multi-Source LLM Assistant</strong> — LLM research assistant and multi-source AI agent capable of answering complex research questions across sources.</li><li><strong>ECG Arrhythmia Classification - 2-D CNN</strong> — 2-D convolutional classifier detecting arrhythmia from ECG beats through careful signal preprocessing and feature extraction.</li><li><strong>ToLet Dhaka - Rental Listings</strong> — Flat-renting website with property posts and contact details, enhanced with interactive elements.</li><li><strong>School Management System</strong> — School administration console for student records, classes, and fees.</li><li><strong>Bangla Alarm Clock</strong> — Alarm clock application with a Bangla interface.</li><li><strong>Dhaka City Bus Routes</strong> — Route-finder Android app covering Dhaka city transit lines with map lookup.</li><li><strong>Bank Management System</strong> — Transactional banking features with account handling and balance tracking.</li><li><strong>DX Ball Remastered</strong> — Classic brick-breaker ball and paddle game with 4 new levels.</li><li><strong>Hospital Management</strong> — Full-stack hospital management system with patient, doctor, and appointment workflows.</li><li><strong>Railway Station Management System</strong> — Railway station records and scheduling with client-server components in PL/SQL.</li><li><strong>BanglaNet - Handwritten Recognition</strong> — Lightweight CNN recognizing 50 Bangla handwritten characters and 10 numerals for OCR-style digitization.</li></ul></div></div></main></div>
