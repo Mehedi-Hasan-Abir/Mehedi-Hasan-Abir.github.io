@@ -139,7 +139,7 @@ export function Navbar() {
         {/* Right cluster */}
         <div className="flex items-center gap-1.5">
           <a
-            href="mailto:abir.aust.102@gmail.com"
+            href="mailto:hello@mhabir.dev"
             className="hidden xl:inline-flex items-center gap-2 mono-label !text-[11px] text-accent border border-primary/40 bg-primary/10 rounded-full px-3.5 py-1.5"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true" />

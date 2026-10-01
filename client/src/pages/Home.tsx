@@ -431,14 +431,21 @@ export default function Home() {
       {/* ============ FOOTER ============ */}
       <footer className="rule-t py-8">
         <div className="max-w-6xl mx-auto px-5 md:px-8 flex flex-wrap justify-between gap-3 mono-label text-muted-foreground">
-          <span>Designed &amp; Built by {personalInfo.name}</span>
+<span>Designed &amp; Built by {personalInfo.name}</span>
           <nav aria-label="Additional pages" className="flex gap-4">
             <a href="/about/" className="hover:text-accent">About</a>
             <a href="/research/" className="hover:text-accent">Research</a>
             <a href="/works/" className="hover:text-accent">Work</a>
             <a href="/blog/" className="hover:text-accent">Writing</a>
           </nav>
-          <span>&copy; {new Date().getFullYear()} &middot; All rights reserved</span>
+          <span className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            {/* Secondary address, deliberately footer-only so the domain address
+                stays the one readers use. */}
+            <a href={`mailto:${personalInfo.secondaryEmail}`} className="hover:text-accent">
+              {personalInfo.secondaryEmail}
+            </a>
+            <span>&copy; {new Date().getFullYear()} &middot; All rights reserved</span>
+          </span>
         </div>
       </footer>
 

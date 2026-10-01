@@ -32,7 +32,11 @@ export const portfolioData = {
     name: "Mehedi Hasan Abir",
     role: "AI/ML Engineer",
     bio: "Senior AI/ML Engineer with 5+ years of experience building production AI systems across LLMs, RAG, document intelligence, and distributed services.",
-    email: "abir.aust.102@gmail.com",
+    // Primary, public address. Drives every mailto on the site.
+    email: "hello@mhabir.dev",
+    // Retained as a live secondary. Listed in the footer only, never as the
+    // primary contact, so the domain address stays the one people use.
+    secondaryEmail: "abir.aust.102@gmail.com",
     phone: "(+880) 1521323549",
     github: "https://github.com/Mehedi-Hasan-Abir",
     linkedin: "https://linkedin.com/in/mehedihasan102",
