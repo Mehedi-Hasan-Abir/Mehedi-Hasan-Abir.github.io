@@ -130,7 +130,7 @@ function staticPageContent(page: StaticPage) {
       + `<p class="mt-6 min-h-[2.2rem] font-mono text-sm md:text-base text-muted-foreground"><span class="text-accent" aria-hidden="true">&gt;&nbsp;</span>Turning complex documents into useful data<span class="text-accent" aria-hidden="true">_</span></p>`
       + `<p class="mt-5 text-muted-foreground text-base md:text-lg max-w-[58ch] leading-relaxed">${escapeHtml(person.bio)}</p>`
       + `<div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-accent">`
-      + `<a href="/about/" class="hover:underline underline-offset-4">About Mehedi Hasan Abir</a>`
+      + `<a href="/about/" class="hover:underline underline-offset-4">About</a>`
       + `<a href="/research/" class="hover:underline underline-offset-4">Research</a></div>`
       + `<div class="flex flex-wrap gap-3 mt-9">`
       + `<a href="/works/" class="btn-push relative inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm">View my work</a>`
