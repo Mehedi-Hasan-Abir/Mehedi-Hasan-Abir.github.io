@@ -105,7 +105,7 @@ export default function Home() {
               </p>
 
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-accent">
-                <a href="/about/" className="hover:underline underline-offset-4">About Mehedi Hasan Abir</a>
+                <a href="/about/" className="hover:underline underline-offset-4">About</a>
                 <a href="/research/" className="hover:underline underline-offset-4">Research</a>
               </div>
 
