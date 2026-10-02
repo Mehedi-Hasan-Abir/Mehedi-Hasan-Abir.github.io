@@ -1,9 +1,24 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 const output = path.resolve("dist/public");
 const site = "https://mhabir.dev";
 const oldHost = /mehedi-hasan-abir\.github\.io/i;
+
+/** Every generated page, so a check can cover all of them and not just one URL. */
+async function walkHtmlFiles(directory, prefix = "") {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const found = [];
+  for (const entry of entries) {
+    const relative = path.posix.join(prefix, entry.name);
+    if (entry.isDirectory()) {
+      found.push(...(await walkHtmlFiles(path.join(directory, entry.name), relative)));
+    } else if (entry.name.endsWith(".html")) {
+      found.push(relative);
+    }
+  }
+  return found;
+}
 
 async function readBuilt(relativePath) {
   const content = await readFile(path.join(output, relativePath), "utf8");
@@ -90,6 +105,36 @@ if (cname.trim() !== "mhabir.dev") {
   throw new Error("CNAME must contain only mhabir.dev");
 }
 
+// A schema.org property repeated inside one node is invalid. Google reported
+// "Duplicate unique property" for https://mhabir.dev/ on 2026-10-02 because
+// `alternateName` was declared twice on the Person node. JSON.parse cannot
+// catch this, because it silently keeps only the last value for a repeated key,
+// so count these keys in the raw text instead. Only properties that are
+// single-valued and never appear on a nested node here are listed; `name`,
+// `url`, `description` and `@type` are excluded because nesting makes them
+// legitimately repeat.
+const SINGLE_VALUED_PERSON_KEYS = [
+  "alternateName", "givenName", "familyName", "jobTitle",
+  "telephone", "email", "honorificPrefix", "honorificSuffix",
+];
+const jsonLdPattern = /<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
+let structuredDataBlocks = 0;
+for (const htmlPath of await walkHtmlFiles(output)) {
+  const html = await readBuilt(htmlPath);
+  for (const [, block] of html.matchAll(jsonLdPattern)) {
+    structuredDataBlocks += 1;
+    for (const key of SINGLE_VALUED_PERSON_KEYS) {
+      const occurrences = block.split(`"${key}"`).length - 1;
+      if (occurrences > 1) {
+        throw new Error(
+          `${htmlPath} declares "${key}" ${occurrences} times in one ld+json block; ` +
+            "Google rejects the whole item as a duplicate unique property",
+        );
+      }
+    }
+  }
+}
+
 const resume = await readFile(path.join(output, "images/resume.pdf"));
 if (resume.subarray(0, 4).toString("ascii") !== "%PDF") {
   throw new Error("The hosted resume is missing or is not a PDF");
@@ -98,4 +143,7 @@ if (!resume.includes(Buffer.from("mhabir.dev")) || resume.includes(Buffer.from("
   throw new Error("The hosted CV PDF does not link to mhabir.dev");
 }
 
-console.log("Generated pages, sitemap, robots.txt, CNAME, and resume are ready for mhabir.dev");
+console.log(
+  `Generated pages, sitemap, robots.txt, CNAME, and resume are ready for ${site}. ` +
+    `Checked ${structuredDataBlocks} ld+json blocks for duplicate keys.`,
+);
