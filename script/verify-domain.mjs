@@ -24,6 +24,7 @@ const requiredPages = [
   "/projects/search-microservice/",
   "/projects/outlet-fraud-detection/",
   "/blog/llm-in-production/",
+  "/blog/ai-coding-harness/",
 ];
 if (urls.length !== requiredPages.length || new Set(urls).size !== urls.length) {
   throw new Error(`sitemap.xml must contain ${requiredPages.length} distinct canonical pages`);

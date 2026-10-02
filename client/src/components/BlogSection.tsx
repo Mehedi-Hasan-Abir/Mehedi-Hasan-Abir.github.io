@@ -13,7 +13,8 @@ interface BlogPost {
   thumbnail: string;
   thumbnailWidth: number;
   thumbnailHeight: number;
-  externalLink: string;
+  /** Set once the post is cross-posted. Optional while a post is site-only. */
+  externalLink?: string;
   /** Set when the full text is also published on this site. */
   internalPath?: string;
   platform: string;
@@ -151,7 +152,8 @@ export function BlogSection() {
               onClick={() => {
                 // On-site articles navigate in place; cross-posts open a tab.
                 if (blog.internalPath) window.location.href = blog.internalPath;
-                else window.open(blog.externalLink, "_blank", "noopener,noreferrer");
+                else if (blog.externalLink) window.open(blog.externalLink, "_blank", "noopener,noreferrer");
+                else window.location.href = "/blog/";
               }}
             >
               {/* Thumbnail */}

@@ -6,45 +6,57 @@ import type { ArticleBlock } from "@/data/articles";
  * Inline markdown is limited to what the articles actually use: `code`,
  * **bold**, ~~strike~~ and [links](href). Rendering it here instead of adding
  * a markdown dependency keeps the article payload inside the existing bundle.
+ *
+ * Parsing recurses into bold, strike and link labels so that a code span
+ * nested inside them, such as **`SESSION.md`**, becomes a real <code> element
+ * instead of showing literal backticks.
  */
-function Inline({ text }: { text: string }) {
-  const nodes: React.ReactNode[] = [];
+function parseInline(text: string, nodes: React.ReactNode[], key: { n: number }) {
   const pattern = /(`[^`]+`)|(\*\*[^*]+\*\*)|(~~[^~]+~~)|(\[[^\]]+\]\([^)]+\))/g;
   let last = 0;
   let match: RegExpExecArray | null;
-  let key = 0;
 
   while ((match = pattern.exec(text)) !== null) {
     if (match.index > last) nodes.push(text.slice(last, match.index));
     const token = match[0];
     if (token.startsWith("`")) {
       nodes.push(
-        <code key={key++} className="mono-label bg-secondary px-1.5 py-0.5 rounded text-foreground">
+        <code key={key.n++} className="mono-label bg-secondary px-1.5 py-0.5 rounded text-foreground">
           {token.slice(1, -1)}
         </code>,
       );
     } else if (token.startsWith("**")) {
-      nodes.push(<strong key={key++}>{token.slice(2, -2)}</strong>);
+      const inner: React.ReactNode[] = [];
+      parseInline(token.slice(2, -2), inner, key);
+      nodes.push(<strong key={key.n++}>{inner}</strong>);
     } else if (token.startsWith("~~")) {
-      nodes.push(<del key={key++} className="opacity-60">{token.slice(2, -2)}</del>);
+      const inner: React.ReactNode[] = [];
+      parseInline(token.slice(2, -2), inner, key);
+      nodes.push(<del key={key.n++} className="opacity-60">{inner}</del>);
     } else {
       const linkMatch = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(token)!;
       const external = linkMatch[2].startsWith("http");
+      const label: React.ReactNode[] = [];
+      parseInline(linkMatch[1], label, key);
       nodes.push(
         <a
-          key={key++}
+          key={key.n++}
           href={linkMatch[2]}
           {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           className="text-accent hover:underline underline-offset-4"
         >
-          {linkMatch[1]}
+          {label}
         </a>,
       );
     }
     last = match.index + token.length;
   }
   if (last < text.length) nodes.push(text.slice(last));
+}
 
+function Inline({ text }: { text: string }) {
+  const nodes: React.ReactNode[] = [];
+  parseInline(text, nodes, { n: 0 });
   return <>{nodes}</>;
 }
 

@@ -23,16 +23,51 @@ const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => (
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
 })[character]!);
 
+/**
+ * Mirrors the Inline component in ArticleBody.tsx: `code`, **bold**, ~~strike~~
+ * and [links](href). Without this the static HTML shipped literal markdown,
+ * because escaping alone leaves `**` and `[text](url)` visible to crawlers.
+ * Recurses into bold, strike and link labels so nested code spans render.
+ */
+function inlineMarkdown(value: string): string {
+  const pattern = /(`[^`]+`)|(\*\*[^*]+\*\*)|(~~[^~]+~~)|(\[[^\]]+\]\([^)]+\))/g;
+  let out = "";
+  let last = 0;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(value)) !== null) {
+    out += escapeHtml(value.slice(last, match.index));
+    const token = match[0];
+    if (token.startsWith("`")) {
+      out += `<code>${escapeHtml(token.slice(1, -1))}</code>`;
+    } else if (token.startsWith("**")) {
+      out += `<strong>${inlineMarkdown(token.slice(2, -2))}</strong>`;
+    } else if (token.startsWith("~~")) {
+      out += `<del>${inlineMarkdown(token.slice(2, -2))}</del>`;
+    } else {
+      const linkMatch = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(token)!;
+      const external = linkMatch[2].startsWith("http");
+      const attrs = external ? ` target="_blank" rel="noopener noreferrer"` : "";
+      out += `<a href="${escapeHtml(linkMatch[2])}"${attrs}>${inlineMarkdown(linkMatch[1])}</a>`;
+    }
+    last = match.index + token.length;
+  }
+  return out + escapeHtml(value.slice(last));
+}
+
+/** Shared by staticPageContent and articleContent, so both can cross-link. */
+const link = (href: string, label: string) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
+
 /** Serialise the same block model data/articles.ts uses, so the article stays readable without JS. */
 function articleBlocksToHtml(blocks: ArticleBlock[]): string {
+  const inline = (value: string) => inlineMarkdown(value);
   return blocks.map((block) => {
     if (block.t === "h2") return `<h2>${escapeHtml(block.text)}</h2>`;
     if (block.t === "h3") return `<h3>${escapeHtml(block.text)}</h3>`;
     if (block.t === "code") return `<pre><code>${escapeHtml(block.text)}</code></pre>`;
-    if (block.t === "note") return `<blockquote><p>${escapeHtml(block.text)}</p></blockquote>`;
-    if (block.t === "ul") return `<ul>${block.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
-    if (block.t === "ol") return `<ol>${block.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>`;
-    return `<p>${escapeHtml(block.text)}</p>`;
+    if (block.t === "note") return `<blockquote><p>${inline(block.text)}</p></blockquote>`;
+    if (block.t === "ul") return `<ul>${block.items.map((item) => `<li>${inline(item)}</li>`).join("")}</ul>`;
+    if (block.t === "ol") return `<ol>${block.items.map((item) => `<li>${inline(item)}</li>`).join("")}</ol>`;
+    return `<p>${inline(block.text)}</p>`;
   }).join("");
 }
 
@@ -100,7 +135,6 @@ function fallbackPortrait(alt: string) {
 /** Search engines and visitors still get useful content when the app bundle is delayed or fails. */
 function staticPageContent(page: StaticPage) {
   const person = portfolioData.personalInfo;
-  const link = (href: string, label: string) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
   const projects = portfolioData.projects.map((project) =>
     `<li>${caseStudies.some((study) => study.projectId === project.id)
       ? link(`/projects/${caseStudies.find((study) => study.projectId === project.id)!.slug}/`, project.title)

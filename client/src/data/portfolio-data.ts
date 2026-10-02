@@ -472,5 +472,19 @@ export const portfolioData = {
       date: "2026-06-20",
       tags: ["LLM", "Runtime", "vLLM", "TensorRT", "ONNX", "Inference Engine", "Production Systems"]
     },
+    {
+      id: 6,
+      title: "The AI Coding Harness I Reuse on Every Project (4 Files + Skills)",
+      description: "How to set up Claude Code and OpenCode before writing any code: four plain Markdown files plus the right skills. What belongs in AGENTS.md, SESSION.md, CHECKLIST.md, and HANDOFF.md, and the one prompt that starts your MVP.",
+      thumbnail: "/images/blog-coding-harness.webp",
+      thumbnailWidth: 1200,
+      thumbnailHeight: 670,
+      // Full text is published on this site. The Medium cross-post is being
+      // prepared; externalLink is added here once it is published.
+      internalPath: "/blog/ai-coding-harness/",
+      platform: "Medium",
+      date: "2026-10-03",
+      tags: ["AI", "Programming", "Claude", "Software Development", "Productivity"]
+    },
   ],
 };

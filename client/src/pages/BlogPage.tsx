@@ -11,7 +11,8 @@ interface BlogPost {
   thumbnail: string;
   thumbnailWidth: number;
   thumbnailHeight: number;
-  externalLink: string;
+  /** Set once the post is cross-posted. Optional while a post is site-only. */
+  externalLink?: string;
   /** Set when the full text is also published on this site. */
   internalPath?: string;
   platform: string;
@@ -173,8 +174,10 @@ export default function BlogPage() {
 
                     {/* Read More Button */}
                     <a
-                      href={blog.internalPath ?? blog.externalLink}
-                      {...(blog.internalPath ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                      href={blog.internalPath ?? blog.externalLink ?? "/blog/"}
+                      {...(blog.internalPath || !blog.externalLink
+                        ? {}
+                        : { target: "_blank", rel: "noopener noreferrer" })}
                       className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-primary/25"
                     >
                       {blog.internalPath ? "Read on mhabir.dev" : `Read on ${blog.platform}`}
