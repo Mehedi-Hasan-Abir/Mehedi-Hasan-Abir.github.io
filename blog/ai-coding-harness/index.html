@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
+    <title>The AI Coding Harness I Reuse on Every Project (4 Files + Skills) | Mehedi Hasan Abir</title>
+    <meta name="description" content="How I set up Claude Code and OpenCode before writing any code: 4 Markdown files plus the right skills. Copy the prompt, ship your MVP." />
+    <meta property="og:title" content="The AI Coding Harness I Reuse on Every Project (4 Files + Skills) | Mehedi Hasan Abir" />
+    <meta property="og:description" content="How I set up Claude Code and OpenCode before writing any code: 4 Markdown files plus the right skills. Copy the prompt, ship your MVP." />
+    <meta property="og:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <meta property="og:url" content="https://mhabir.dev/blog/ai-coding-harness/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mehedi Hasan Abir — Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The AI Coding Harness I Reuse on Every Project (4 Files + Skills) | Mehedi Hasan Abir" />
+    <meta name="twitter:description" content="How I set up Claude Code and OpenCode before writing any code: 4 Markdown files plus the right skills. Copy the prompt, ship your MVP." />
+    <meta name="twitter:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <link rel="canonical" href="https://mhabir.dev/blog/ai-coding-harness/" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="font" href="/fonts/ArchivoVariable.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/JetBrainsMonoVariable.woff2" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://mhabir.dev/#person",
+      "name": "Mehedi Hasan Abir",
+      "alternateName": "Mehedi Hasan",
+      "givenName": "Mehedi",
+      "jobTitle": "Senior Software Engineer (AI/ML)",
+      "description": "AI/ML Engineer specializing in LLMs, Document AI, and production-ready ML systems",
+      "url": "https://mhabir.dev/",
+      "image": "https://mhabir.dev/images/profile_re.webp",
+      "email": "hello@mhabir.dev",
+      "alternateName": "Mehedi Hasan",
+      "telephone": "(+880) 1521323549",
+      "address": { "@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "Ahsanullah University of Science and Technology (AUST)" },
+        { "@type": "CollegeOrUniversity", "name": "Hermann Gmeiner School, Mirpur" }
+      ],
+      "worksFor": { "@type": "Organization", "name": "Technonext" },
+      "knowsAbout": ["Large Language Models", "Retrieval-Augmented Generation", "Document AI", "Computer Vision", "Search Systems", "Machine Learning", "MLOps"],
+      "sameAs": [
+        "https://github.com/Mehedi-Hasan-Abir",
+        "https://linkedin.com/in/mehedihasan102",
+        "https://medium.com/@mhabir102",
+        "https://mhabir.substack.com",
+        "https://www.facebook.com/mehedihasan.abir.7/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mehedi Hasan Abir — Portfolio",
+      "url": "https://mhabir.dev/",
+      "description": "Building production-grade LLM systems and resilient AI pipelines. Specializing in Document AI, RAG, and high-throughput ML inference.",
+      "author": { "@id": "https://mhabir.dev/#person" }
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-BHTWqbHj.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-core-N--QU9DW.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-CnDHW2dc.js">
+    <link rel="modulepreload" crossorigin href="/assets/radix-BcK-Cui3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-BdKxcDPL.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The AI Coding Harness I Reuse on Every Project (4 Files + Skills)","description":"How I set up Claude Code and OpenCode before writing any code: 4 Markdown files plus the right skills. Copy the prompt, ship your MVP.","datePublished":"2026-10-03","dateModified":"2026-10-03","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https://mhabir.dev/blog/ai-coding-harness/"},"author":{"@id":"https://mhabir.dev/#person"},"publisher":{"@id":"https://mhabir.dev/#person"},"image":"https://mhabir.dev/images/og-image.jpg","keywords":"AI, Programming, Claude, Software Development, Productivity"}</script></head>
+  <body>
+    <div id="root"><main id="static-fallback" class="min-h-screen bg-background text-foreground"><div class="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24"><nav aria-label="Breadcrumb" class="mono-label text-muted-foreground mb-10"><a href="/">Home</a> / The AI Coding Harness I Reuse on Every Project (4 Files + Skills)</nav><p class="mono-label text-accent mb-4">ARTICLE</p><h1 class="display-lg max-w-[26ch]">The AI Coding Harness I Reuse on Every Project (4 Files + Skills)</h1><div class="mt-7"><p>How I set up Claude Code and OpenCode before writing any code: 4 Markdown files plus the right skills. Copy the prompt, ship your MVP.</p><h2>Tags</h2><ul><li>AI</li><li>Programming</li><li>Claude</li><li>Software Development</li><li>Productivity</li></ul><p>Published October 3, 2026.</p><p>You spend an hour with an AI coding agent. It fixes the bug, refactors the module, and finds the real cause of the failing test.</p><p>The next morning you open a new session and it knows none of it. It repeats the same dead end. It undoes a decision you made yesterday. You explain the project again from scratch.</p><p>The model isn&#39;t the problem. The agent has nowhere to keep its work.</p><p>So before I ask any agent to build a feature, I give it a place to keep it. Call it a harness: the instructions, memory, and skills wrapped around the model so its work survives between sessions. Mine is four plain Markdown files:</p><p><strong><code>AGENTS.md</code>, <code>SESSION.md</code>, <code>CHECKLIST.md</code>, and <code>HANDOFF.md</code>.</strong></p><p>The most important one is <strong><code>SESSION.md</code></strong>. It works whether you use Claude Code, OpenCode, or another coding agent, and it takes about five minutes to set up.</p><p>I came to this after years of building AI and AI-native software, including scalable services and systems. Working with frontier models such as Claude Opus taught me what an agent needs to record: what changed, what it learned, which issues are still open, and what the next agent needs to continue.</p><p>These files hold the project&#39;s instructions and working state. Skills supply reusable procedures for planning, debugging, design, and verification. Together they give me a setup I can carry from project to project.</p><h2>1. AGENTS.md: how I want the agent to work</h2><p>This is where I put instructions that should outlive the current task:</p><ul><li>What the project does and how the code is organized.</li><li>Commands to run, build, and verify it.</li><li>Engineering conventions and important constraints.</li><li>When to read and update the other three files.</li></ul><p>For a Python service, I include the boundaries between API handlers, business logic, and external services. I also make failure behavior explicit: what happens when a dependency times out, a request is invalid, or a background job fails?</p><p>A useful instruction to include is:</p><blockquote><p>Before coding, read SESSION.md and CHECKLIST.md. After each meaningful change or investigation, update SESSION.md. Before finishing, review the checklist and prepare a handoff if work remains.</p></blockquote><p><strong>Use it for:</strong> any repository you expect to revisit. Keep it short enough to read at the start of a session.</p><h2>2. SESSION.md: the file that stops the forgetting</h2><p>I want the reasoning and current state to stay with the project, not disappear when the chat closes.</p><p>My session file captures <strong>every meaningful change, its summary, findings, issues, and the review list</strong>. An unsuccessful investigation belongs here too, because the next agent needs to know what was already tried.</p><p>This is the structure I recommend:</p><pre><code># Session
+
+## Current objective
+The outcome we are working toward now.
+
+## Changes
+What changed, where, and why. Keep concise dated entries.
+
+## Findings and decisions
+What we learned, the evidence, and the decision it informed.
+
+## Issues and review list
+Open, resolved, or blocked issues; what still needs review.
+
+## Verification
+Checks actually run and their results. Mark unrun checks clearly.
+
+## Next action
+The next concrete step and any blocker.</code></pre><p>For a document-processing MVP, an entry such as &quot;fixed parsing&quot; gives the next agent very little to work with. Record the failing input, the relevant parser, the change, and the check that confirmed it.</p><p>Keep the current objective and next action easy to find. Older entries can move to an archive as the log grows.</p><p><strong>Use it for:</strong> debugging, refactoring, research, service development, and anything that spans sessions. For a tiny task, a few lines are enough.</p><h2>3. CHECKLIST.md: what &quot;done&quot; means</h2><p>A checklist turns &quot;build the MVP&quot; into something you can review.</p><p>Each item needs an outcome and a way to confirm it. Here is an example for a document-processing app:</p><pre><code># MVP deliverables
+
+- [ ] Accept a supported document upload.
+- [ ] Show extracted fields in an editable view.
+- [ ] Explain unsupported-file and processing errors.
+- [ ] Save a user&#39;s corrections.
+- [ ] Verify the upload-to-result flow with a sample document.
+- [ ] Document local setup and known limitations.</code></pre><p>Creating a route or a component does not complete an item by itself. I want evidence that the intended behavior works. A blocked item stays visible with its reason.</p><p><strong>Use it for:</strong> MVPs, releases, client work, and features with several deliverables. For a bug fix, it can be just the reproduction, the fix, and a regression check.</p><h2>4. HANDOFF.md: how any agent picks up the work</h2><p>When I switch agents or pass work to a reviewer, I need a clear starting point.</p><p>My handoff includes:</p><ul><li>The objective and current state.</li><li>Relevant files and decisions, with references to SESSION.md.</li><li>Remaining issues and verification gaps.</li><li>The next action and how to check its result.</li></ul><p>An example handoff could say: &quot;Upload validation is implemented. The browser flow still needs review. Start with the upload component, reproduce the unsupported-file case, and record the result in SESSION.md.&quot;</p><p><strong>Use it for:</strong> another agent, another developer, a review, or a session you will resume later. Refresh it when transferring work; a short task completed in one sitting may not need it.</p><h2>Which skills to add for which project</h2><p>The four files are the foundation. Add skills according to the work in front of you.</p><p><strong>Small script or focused bug fix:</strong> Short instructions, a session note, and a completion checklist. Extra packs are optional.</p><p><strong>Backend API or service:</strong> The four-file structure plus one development workflow pack.</p><p><strong>MVP with a user interface:</strong> Add Frontend Design and Webapp Testing.</p><p><strong>Dataset, model, or evaluation work:</strong> Add the relevant Hugging Face skills.</p><p><strong>Building an MCP server:</strong> Add MCP Builder.</p><p><strong>Long investigation or refactor:</strong> Keep SESSION.md current. Add Planning with Files if its workflow helps manage the task.</p><p><strong>Repeating your own engineering procedure:</strong> Package that procedure with Skill Creator.</p><p>Here is how I put those choices to work.</p><h3>Backend work: choose one development workflow</h3><p>I use <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener noreferrer">Superpowers</a> for structured planning, debugging, testing, and review. <a href="https://github.com/mattpocock/skills" target="_blank" rel="noopener noreferrer">Matt Pocock&#39;s skills</a> are useful for clarifying a change and documenting decisions; the collection&#39;s <code>grill-with-docs</code> workflow fits that preparation.</p><p>For an unclear feature, start with this instruction:</p><blockquote><p>Clarify the expected behavior and failure cases. Record decisions in SESSION.md and turn the agreed scope into CHECKLIST.md before implementation.</p></blockquote><p>Pick one workflow to lead the task. For a backend-only MVP, this is where I start; design and ML packs can wait until the project needs them.</p><h3>UI work: design it, then verify the interaction</h3><p>I use <a href="https://github.com/anthropics/skills/tree/main/skills/frontend-design" target="_blank" rel="noopener noreferrer">Frontend Design</a> to guide the interface and <a href="https://github.com/anthropics/skills/tree/main/skills/webapp-testing" target="_blank" rel="noopener noreferrer">Webapp Testing</a> to inspect the local app with browser checks.</p><p>Give the agent the main user journey: upload a document, correct a field, save it. Ask it to record screenshots, observed failures, and verification results against the checklist. Browser testing needs the required Playwright environment.</p><h3>ML work: add only the relevant Hugging Face skills</h3><p><a href="https://github.com/huggingface/skills" target="_blank" rel="noopener noreferrer">Hugging Face Skills</a> help with dataset, model, evaluation, and Hub workflows.</p><p>I define the evaluation question first. For retrieval, that means deciding what a useful result looks like and which failure cases matter. Then I ask the agent to record dataset assumptions, commands, results, and unresolved findings in SESSION.md.</p><h3>Agent tools: use MCP Builder when building the integration</h3><p>I use <a href="https://github.com/anthropics/skills/tree/main/skills/mcp-builder" target="_blank" rel="noopener noreferrer">MCP Builder</a> when exposing a service through an MCP server.</p><p>Start with the tool&#39;s job, inputs, outputs, and failure behavior. Put the implementation and verification requirements in the checklist. The server and its connection still need to be configured and tested.</p><h3>Longer work: give planning files one clear role</h3><p><a href="https://github.com/OthmanAdi/planning-with-files" target="_blank" rel="noopener noreferrer">Planning with Files</a> provides persistent planning, findings, and progress workflows.</p><p>It uses its own file conventions. If I add it, I decide which file owns each piece of state and link the records. Two competing progress logs make a handoff harder. My four-file setup already works without this pack; I add it when its workflow is useful.</p><h3>Repeated work: turn your procedure into a skill</h3><p>I use <a href="https://github.com/anthropics/skills/tree/main/skills/skill-creator" target="_blank" rel="noopener noreferrer">Skill Creator</a> to make a recurring procedure reusable.</p><p>A focused service-review skill could check validation, async behavior, timeouts, and dependency failures. Keep project-specific details in AGENTS.md and SESSION.md, so the procedure can travel to another repository.</p><h2>The one prompt that starts your MVP</h2><p>Copy this and fill in the brackets:</p><pre><code>Build an MVP for [product] that helps [user] achieve [main outcome].
+Use [stack]. The essential user journey is [steps].
+For this version, exclude [out-of-scope features].
+
+Inspect the repository first. Preserve existing instructions and work.
+Create or update these files before implementation:
+
+AGENTS.md — project structure, commands, conventions, and workflow.
+SESSION.md — objective, change summaries, findings, decisions,
+             every issue and its status, review list, verification,
+             and next action.
+CHECKLIST.md — MVP deliverables with acceptance criteria.
+HANDOFF.md — current state, relevant files, remaining work,
+             and instructions for the next agent.
+
+Use the available skills relevant to this project: [selected skills].
+If a requested skill is unavailable, say so and continue with a
+clear plan. Ask about missing information only when it blocks work.
+Record other assumptions in SESSION.md.
+
+Build the smallest complete user journey first. After each meaningful
+change or investigation, update SESSION.md. Verify deliverables with
+appropriate checks; only mark checklist items complete with evidence.
+Finish with run instructions, known gaps, and an updated handoff.</code></pre><p>One prompt can start the build and set up the workflow. A working MVP still depends on a manageable scope, the environment, and checking the result. I keep reviewing and refining as the work develops.</p><p>On the next project, reuse the structure and the relevant skills. Reset the session, checklist, and handoff, and adapt the project instructions. Old project state should not become the new project&#39;s context.</p><h2>Does this work in Claude Code and OpenCode?</h2><p>Yes, with a few checks.</p><p><a href="https://opencode.ai/docs/rules/" target="_blank" rel="noopener noreferrer">OpenCode supports AGENTS.md</a>. <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener noreferrer">Current Claude Code supports it too</a>, with version and configuration conditions. If Claude Code is loading CLAUDE.md instead, its documented <code>@AGENTS.md</code> import lets you share the instructions. Confirm which file your agent actually loads.</p><p>The other three files are ordinary project documents. The prompt and AGENTS.md tell the agent to read and maintain them.</p><p>Both tools support skill files, including project skills under <code>.claude/skills/</code>; see the <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener noreferrer">Claude Code</a> and <a href="https://opencode.ai/docs/skills/" target="_blank" rel="noopener noreferrer">OpenCode</a> documentation. Keep companion resources with a skill and follow each pack&#39;s installation instructions for your agent. Reusing the files does not guarantee that every plugin or runtime dependency transfers automatically.</p><h2>Start tomorrow&#39;s session where today&#39;s ended</h2><p>For your first project, start with a clear deliverable and a useful SESSION.md. Add the skill that helps with your next task.</p><p>When you come back tomorrow, or hand the work to another agent, you should be able to see what happened and continue from there. That is the whole point of the four files.</p><h2>More writing</h2><ul><li><a href="/blog/llm-in-production/">How to Use, Optimize, and Serve an LLM in Your Production System</a></li></ul></div></div></main></div>
+  </body>
+</html>
