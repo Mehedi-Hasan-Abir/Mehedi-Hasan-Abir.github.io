@@ -311,6 +311,14 @@ export const portfolioData = {
       techStack: ["Python", "CNN", "OCR"],
       link: "https://github.com/Mehedi-Hasan-Abir/BanglaNet-for-Bangla-Handwritten-Characters-and-Numerals-Recognition",
     },
+    {
+      id: 18,
+      title: "bd-union-explorer",
+      description:
+        "An independent, clickable atlas of all 4,584 unions in Bangladesh, built from the BBS 2022 Union Statistics. Search any union, upazila or district, recolour the map across 62 census indicators, and open a profile where every figure links back to its source PDF page. Ships as one self-contained HTML file with the dataset embedded and no external calls.",
+      techStack: ["Vanilla JS", "Canvas 2D", "Python", "pdfplumber", "Static HTML"],
+      link: "/demos/bd-union-explorer/",
+    },
   ],
   skills: [
     {

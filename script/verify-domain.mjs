@@ -40,15 +40,23 @@ const requiredPages = [
   "/projects/outlet-fraud-detection/",
   "/blog/llm-in-production/",
   "/blog/ai-coding-harness/",
+  "/demos/bd-union-explorer/",
 ];
+// Self-contained pages are published as static files rather than generated
+// React routes, so they carry no canonical/og tags or no-JS fallback.
+const staticPages = new Set(["/demos/bd-union-explorer/"]);
 if (urls.length !== requiredPages.length || new Set(urls).size !== urls.length) {
   throw new Error(`sitemap.xml must contain ${requiredPages.length} distinct canonical pages`);
 }
 for (const pathname of requiredPages) {
   if (!urls.includes(`${site}${pathname}`)) throw new Error(`sitemap.xml is missing ${pathname}`);
 }
+for (const pathname of staticPages) {
+  await readBuilt(`${pathname.slice(1)}index.html`);
+}
 
 for (const url of urls) {
+  if (staticPages.has(new URL(url).pathname)) continue;
   const page = new URL(url).pathname.slice(1) + "index.html";
   const html = await readBuilt(page);
   if (!html.includes(`<link rel="canonical" href="${url}"`)) {
