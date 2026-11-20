@@ -42,6 +42,7 @@ const requiredPages = [
   "/blog/ai-coding-harness/",
   "/demos/bd-union-explorer/",
   "/projects/hazari-card-game-scoring/",
+  "/blog/hazari-scoring-app/",
 ];
 // Self-contained pages are published as static files rather than generated
 // React routes, so they carry no canonical/og tags or no-JS fallback.

@@ -502,5 +502,17 @@ export const portfolioData = {
       date: "2026-10-03",
       tags: ["AI", "Programming", "Claude", "Software Development", "Productivity"]
     },
+    {
+      id: 7,
+      title: "How I Built an Offline Hazari Scoring App Friends Can Watch Live",
+      description: "Why scoring Hazari on paper goes wrong, and how I built a free offline scorekeeper in English and Bangla with a read-only live scoreboard you share by link.",
+      thumbnail: "/images/blog-hazari-scoring.webp",
+      thumbnailWidth: 1200,
+      thumbnailHeight: 630,
+      internalPath: "/blog/hazari-scoring-app/",
+      platform: "mhabir.dev",
+      date: "2026-11-21",
+      tags: ["Hazari", "Card Games", "Progressive Web App", "React", "Offline First", "Bangladesh"]
+    },
   ],
 };
