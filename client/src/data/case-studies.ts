@@ -1,5 +1,18 @@
 /** Public, source-backed case studies. Keep claims aligned with the linked project repositories. */
-export const caseStudies = [
+export interface CaseStudy {
+  projectId: number;
+  slug: string;
+  title: string;
+  summary: string;
+  challenge: string;
+  approach: string[];
+  outcome: string;
+  caveat: string;
+  /** Hosted app, when the project is a live product rather than only a repository. */
+  liveLink?: string;
+}
+
+export const caseStudies: CaseStudy[] = [
   {
     projectId: 2,
     slug: "search-microservice",
@@ -26,9 +39,22 @@ export const caseStudies = [
     outcome: "On the repository's labeled manual benchmark of 213 images from 15 outlets, the combined rules plus duplicate detection reported 83.3% precision and 85.7% recall. These are benchmark results for that sample, not a production guarantee.",
     caveat: "The suspicion score is a rank within an outlet, not a probability of fraud. Small photo sets and missing time information limit what the tool can conclude; a human reviewer makes the final decision.",
   },
-] as const;
-
-export type CaseStudy = (typeof caseStudies)[number];
+  {
+    projectId: 19,
+    slug: "hazari-card-game-scoring",
+    title: "Hazari Card Game Scoring: An Offline Scorekeeper Friends Can Watch Live",
+    summary: "A free, installable scorekeeper for the Hazari card game in English and Bangla. It works offline and can share a read-only live scoreboard by link.",
+    challenge: "Hazari is scored over many rounds, usually on paper or in a phone note, and running totals are easy to get wrong. Players at the table or watching from elsewhere also want to see who is leading without asking the scorer to read the numbers out.",
+    approach: [
+      "The scorer enters each round on a large keypad built for one-handed use on a small phone. Round totals are checked against the game rules, with a confirmation step when a round does not add up. Scores, rounds and recent player names stay on the device in IndexedDB, so scoring works with no connection once the app has loaded.",
+      "The scoring rules are a small, pure TypeScript module with unit tests, kept separate from the interface and storage. The app is a React 19 and Vite progressive web app that can be installed on a phone, with English and Bangla text and optional Bangla digits.",
+      "Live sharing is deliberate and read-only. The scorer starts sharing as a guest, with optional Google sign-in, and friends open a link to watch the leaderboard update. Spectators cannot change scores, and a shared link can be revoked or expires. Firebase is used only for this sharing, and the scoreboard shows leader, dealer and streak highlights for viewers.",
+    ],
+    outcome: "The app is live and has been used for roughly 80 games so far, according to its owner. It has a unit test suite for the scoring rules and browser tests for the main flows, including offline use and accessibility checks.",
+    caveat: "Rules for Hazari differ between regions, so the app follows a standard four-player rule set with an adjustable target and round total. It is a scorekeeper, not a card game; it does not deal cards or play against opponents.",
+    liveLink: "https://hazari-card-game-scoring.vercel.app/",
+  },
+];
 
 export function caseStudyForProject(projectId: number) {
   return caseStudies.find((study) => study.projectId === projectId);

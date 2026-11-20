@@ -319,6 +319,14 @@ export const portfolioData = {
       techStack: ["Vanilla JS", "Canvas 2D", "Python", "pdfplumber", "Static HTML"],
       link: "/demos/bd-union-explorer/",
     },
+    {
+      id: 19,
+      title: "Hazari Card Game Scoring",
+      description:
+        "A free offline scorekeeper for the Hazari card game in English and Bangla. Installable on a phone, with a large one-hand keypad, saved games on the device, and an optional read-only live scoreboard that friends can watch from a link.",
+      techStack: ["React", "TypeScript", "Vite", "Dexie", "Firebase", "PWA"],
+      link: "https://hazari-card-game-scoring.vercel.app/",
+    },
   ],
   skills: [
     {

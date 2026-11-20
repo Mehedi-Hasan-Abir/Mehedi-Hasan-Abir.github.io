@@ -230,7 +230,7 @@ function staticPageContent(page: StaticPage) {
       + `<h2 class="text-2xl font-extrabold mt-12 mb-4">How it works</h2>${study.approach.map((paragraph) => `<p class="mt-4 text-muted-foreground leading-relaxed">${escapeHtml(paragraph)}</p>`).join("")}`
       + `<h2 class="text-2xl font-extrabold mt-12 mb-4">Results and limits</h2><p class="text-muted-foreground leading-relaxed">${escapeHtml(study.outcome)}</p>`
       + `<p class="mt-4 text-muted-foreground leading-relaxed">${escapeHtml(study.caveat)}</p>`
-      + `<p class="mt-8">${link(project.link, "View source and evidence")} &middot; ${link("/works/", "All work")}</p>`;
+      + `<p class="mt-8">${study.liveLink ? `${link(study.liveLink, "Open the live app")} &middot; ` : ""}${project.link !== study.liveLink ? `${link(project.link, "View source and evidence")} &middot; ` : ""}${link("/works/", "All work")}</p>`;
   } else if (page === "not-found") {
     title = "404 Page Not Found";
     kicker = "NOT FOUND";

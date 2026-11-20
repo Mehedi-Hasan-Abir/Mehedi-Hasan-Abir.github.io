@@ -41,9 +41,16 @@ export default function ProjectPage() {
         </section>
 
         <div className="rule-t mt-14 pt-8 flex flex-wrap gap-5 items-center">
-          <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-accent font-semibold hover:underline">
-            View source and evidence <ArrowUpRight className="w-4 h-4" />
-          </a>
+          {study.liveLink && (
+            <a href={study.liveLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-accent font-semibold hover:underline">
+              Open the live app <ArrowUpRight className="w-4 h-4" />
+            </a>
+          )}
+          {project.link !== study.liveLink && (
+            <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-accent font-semibold hover:underline">
+              View source and evidence <ArrowUpRight className="w-4 h-4" />
+            </a>
+          )}
           <a href="/works/" className="text-muted-foreground hover:text-accent">All work</a>
         </div>
         {related.length > 0 && (
