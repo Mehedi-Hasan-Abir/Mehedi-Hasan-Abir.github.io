@@ -5,7 +5,8 @@ import path from "path";
 import { execFileSync } from "child_process";
 import { educationData, portfolioData, researchData } from "../client/src/data/portfolio-data";
 import { caseStudies } from "../client/src/data/case-studies";
-import { articles, type Article, type ArticleBlock } from "../client/src/data/articles";
+import { articles, hubArticles, type Article, type ArticleBlock } from "../client/src/data/articles";
+import { HAZARI_CTA, HAZARI_HUB, HAZARI_TOPICS } from "../client/src/data/hazari-hub";
 
 const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
 const clientOutputDirectory = path.resolve("dist/public");
@@ -16,8 +17,10 @@ const WORKS_TITLE = "Selected AI/ML Work | Mehedi Hasan Abir";
 const WORKS_DESCRIPTION = "Explore AI/ML projects by Mehedi Hasan Abir, including search infrastructure, retrieval systems, computer vision, and production engineering.";
 const WORKS_URL = "https://mhabir.dev/works/";
 const SITE = "https://mhabir.dev";
+/** Self-contained pages published as plain files; they are listed in the sitemap but not generated here. */
+const STATIC_PAGES = ["/demos/bd-union-explorer/"];
 
-type StaticPage = "home" | "blog" | "works" | "about" | "research" | "not-found" | `project:${string}` | `article:${string}`;
+type StaticPage = "home" | "blog" | "hazari-hub" | "works" | "about" | "research" | "not-found" | `project:${string}` | `article:${string}`;
 
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
@@ -71,19 +74,49 @@ function articleBlocksToHtml(blocks: ArticleBlock[]): string {
   }).join("");
 }
 
+/** The call to action every hub page ends with; mirrors HazariCta.tsx. */
+function hazariCtaHtml() {
+  return `<section aria-labelledby="hazari-cta-heading" class="mt-14 border border-primary/40 bg-primary/5 rounded-xl p-6 md:p-8">`
+    + `<h2 id="hazari-cta-heading" class="text-2xl font-extrabold">${escapeHtml(HAZARI_CTA.heading)}</h2>`
+    + `<p class="mt-3 text-muted-foreground leading-relaxed max-w-[60ch]">${escapeHtml(HAZARI_CTA.text)}</p>`
+    + `<div class="mt-6 flex flex-wrap gap-3">`
+    + `<a href="${escapeHtml(HAZARI_CTA.play.href)}" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm">${escapeHtml(HAZARI_CTA.play.label)}</a>`
+    + `<a href="${escapeHtml(HAZARI_CTA.score.href)}" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm">${escapeHtml(HAZARI_CTA.score.label)}</a>`
+    + `</div></section>`;
+}
+
+/** Hub articles grouped by topic, as a list of links. Used on the hub page and under each hub article. */
+function hubListHtml(items: Article[], withSummary: boolean) {
+  return HAZARI_TOPICS.map((topic) => {
+    const inTopic = items.filter((item) => item.topic === topic);
+    if (inTopic.length === 0) return "";
+    const rows = inTopic.map((item) => `<li>${link(`/blog/${item.slug}/`, item.title)}${withSummary ? ` — ${escapeHtml(item.summary)}` : ""}</li>`).join("");
+    return `<h2>${escapeHtml(topic)}</h2><ul>${rows}</ul>`;
+  }).join("");
+}
+
 function articleContent(article: Article) {
   const published = new Date(article.date).toLocaleDateString("en-US", {
     year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
   });
   const tags = article.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("");
-  const siblings = articles.filter((item) => item.slug !== article.slug)
-    .map((item) => `<li>${link(`/blog/${item.slug}/`, item.title)}</li>`).join("");
+  const inHub = article.hub === "hazari";
+
+  const related = inHub
+    ? `<h2>More Hazari guides</h2><p>${link(HAZARI_HUB.path, "All Hazari guides")}</p>`
+      + hubListHtml(hubArticles("hazari").filter((item) => item.slug !== article.slug), false)
+    : (() => {
+        const siblings = articles.filter((item) => item.slug !== article.slug && !item.hub)
+          .map((item) => `<li>${link(`/blog/${item.slug}/`, item.title)}</li>`).join("");
+        return siblings ? `<h2>More writing</h2><ul>${siblings}</ul>` : "";
+      })();
 
   return `<p>${escapeHtml(article.summary)}</p>`
     + `<h2>Tags</h2><ul>${tags}</ul>`
     + `<p>Published ${escapeHtml(published)}.</p>`
     + articleBlocksToHtml(article.blocks)
-    + (siblings ? `<h2>More writing</h2><ul>${siblings}</ul>` : "");
+    + (inHub ? hazariCtaHtml() : "")
+    + related;
 }
 
 /**
@@ -194,7 +227,13 @@ function staticPageContent(page: StaticPage) {
   if (page === "blog") {
     title = "Blog";
     kicker = "WRITING";
-    body = `<p>Sharing insights on AI, Machine Learning, and Technology. Explore my thoughts on the latest developments and practical applications.</p><ul class="space-y-3 mt-8">${posts}</ul>`;
+    body = `<p>Sharing insights on AI, Machine Learning, and Technology. Explore my thoughts on the latest developments and practical applications.</p><ul class="space-y-3 mt-8">${posts}</ul><p class="mt-8">${link(HAZARI_HUB.path, "Hazari card game guides")}</p>`;
+  } else if (page === "hazari-hub") {
+    title = HAZARI_HUB.heading;
+    kicker = "CARD GAME GUIDES";
+    body = `<p class="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-[65ch]">${escapeHtml(HAZARI_HUB.intro)}</p>`
+      + hazariCtaHtml()
+      + hubListHtml(hubArticles("hazari"), true);
   } else if (page === "works") {
     title = "Selected Work";
     kicker = "PORTFOLIO";
@@ -230,7 +269,7 @@ function staticPageContent(page: StaticPage) {
       + `<h2 class="text-2xl font-extrabold mt-12 mb-4">How it works</h2>${study.approach.map((paragraph) => `<p class="mt-4 text-muted-foreground leading-relaxed">${escapeHtml(paragraph)}</p>`).join("")}`
       + `<h2 class="text-2xl font-extrabold mt-12 mb-4">Results and limits</h2><p class="text-muted-foreground leading-relaxed">${escapeHtml(study.outcome)}</p>`
       + `<p class="mt-4 text-muted-foreground leading-relaxed">${escapeHtml(study.caveat)}</p>`
-      + `<p class="mt-8">${study.liveLink ? `${link(study.liveLink, "Open the live app")} &middot; ` : ""}${project.link !== study.liveLink ? `${link(project.link, "View source and evidence")} &middot; ` : ""}${link("/works/", "All work")}</p>`;
+      + `<p class="mt-8">${study.liveLink ? `${link(study.liveLink, "Open the live app")} &middot; ` : ""}${study.guides ? `${link(study.guides.href, study.guides.label)} &middot; ` : ""}${project.link !== study.liveLink ? `${link(project.link, "View source and evidence")} &middot; ` : ""}${link("/works/", "All work")}</p>`;
   } else if (page === "not-found") {
     title = "404 Page Not Found";
     kicker = "NOT FOUND";
@@ -373,6 +412,31 @@ async function createStaticRouteFallbacks() {
   const routes: Array<{ file: string; page: StaticPage; html: string }> = [
     { file: "index.html", page: "home", html: homeHtml },
     { file: "blog/index.html", page: "blog", html: createBlogHtml(homeHtml) },
+    {
+      file: "hazari/index.html",
+      page: "hazari-hub",
+      html: addSchema(
+        withMeta(`${HAZARI_HUB.title} | Mehedi Hasan Abir`, HAZARI_HUB.description, `${SITE}${HAZARI_HUB.path}`, "hazari hub"),
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: HAZARI_HUB.heading,
+          description: HAZARI_HUB.description,
+          url: `${SITE}${HAZARI_HUB.path}`,
+          inLanguage: "en",
+          author: { "@id": `${SITE}/#person` },
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: hubArticles("hazari").map((item, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              url: `${SITE}/blog/${item.slug}/`,
+              name: item.title,
+            })),
+          },
+        },
+      ),
+    },
     { file: "works/index.html", page: "works", html: withMeta(WORKS_TITLE, WORKS_DESCRIPTION, WORKS_URL, "works") },
     {
       file: "about/index.html",
@@ -423,15 +487,36 @@ async function createStaticRouteFallbacks() {
       image: `${SITE}/images/og-image.jpg`,
       keywords: article.tags.join(", "),
     };
+    const withArticleSchema = addSchema(
+      withMeta(`${article.title} | Mehedi Hasan Abir`, article.summary, url, article.slug),
+      schema,
+    );
     routes.push({
       file: `blog/${article.slug}/index.html`,
       page: `article:${article.slug}`,
-      html: addSchema(
-        withMeta(`${article.title} | Mehedi Hasan Abir`, article.summary, url, article.slug),
-        schema,
-      ),
+      html: article.hub === "hazari"
+        ? addSchema(withArticleSchema, {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+              { "@type": "ListItem", position: 2, name: "Hazari", item: `${SITE}${HAZARI_HUB.path}` },
+              { "@type": "ListItem", position: 3, name: article.title, item: url },
+            ],
+          })
+        : withArticleSchema,
     });
   }
+
+  // The sitemap is generated from the same route list, so a new article can never be left out of it.
+  const sitemapPaths = [
+    ...routes.map(({ file }) => (file === "index.html" ? "/" : `/${file.replace(/index\.html$/, "")}`)),
+    ...STATIC_PAGES,
+  ];
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
+    + sitemapPaths.map((pathname) => `  <url>\n    <loc>${SITE}${pathname}</loc>\n  </url>\n`).join("")
+    + `</urlset>\n`;
+  await writeFile(path.join(clientOutputDirectory, "sitemap.xml"), sitemap);
 
   const notFoundHtml = replaceRequired(
     replaceRequired(

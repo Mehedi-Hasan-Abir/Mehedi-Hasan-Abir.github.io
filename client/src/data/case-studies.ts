@@ -10,6 +10,8 @@ export interface CaseStudy {
   caveat: string;
   /** Hosted app, when the project is a live product rather than only a repository. */
   liveLink?: string;
+  /** Related section on this site, shown beside the live link. */
+  guides?: { href: string; label: string };
 }
 
 export const caseStudies: CaseStudy[] = [
@@ -51,8 +53,9 @@ export const caseStudies: CaseStudy[] = [
       "Live sharing is deliberate and read-only. The scorer starts sharing as a guest, with optional Google sign-in, and friends open a link to watch the leaderboard update. Spectators cannot change scores, and a shared link can be revoked or expires. Firebase is used only for this sharing, and the scoreboard shows leader, dealer and streak highlights for viewers.",
     ],
     outcome: "The app is live and has been used for roughly 80 games so far, according to its owner. It has a unit test suite for the scoring rules and browser tests for the main flows, including offline use and accessibility checks.",
-    caveat: "Rules for Hazari differ between regions, so the app follows a standard four-player rule set with an adjustable target and round total. It is a scorekeeper, not a card game; it does not deal cards or play against opponents.",
+    caveat: "Rules for Hazari differ between regions, so the app follows a standard four-player rule set with an adjustable target and round total. It is a scorekeeper first. A practice mode plays against three computer opponents, but the app does not deal cards for a table of friends and has no online multiplayer.",
     liveLink: "https://hazari-card-game-scoring.vercel.app/",
+    guides: { href: "/hazari/", label: "Hazari card game guides" },
   },
 ];
 

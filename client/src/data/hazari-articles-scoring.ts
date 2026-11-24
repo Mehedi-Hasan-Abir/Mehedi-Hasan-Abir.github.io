@@ -1,0 +1,338 @@
+import type { Article } from "./articles";
+
+/** Scoring, house-rules and playing-with-friends articles for the Hazari hub. */
+export const scoringArticles: Article[] = [
+  {
+    slug: "hazari-scoring-worked-example",
+    title: "Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through",
+    summary:
+      "A complete eight-deal Hazari game added up deal by deal, with every running total, so you can see how scores build and how the game ends.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Scoring", "Worked Example"],
+    hub: "hazari",
+    topic: "Scoring and house rules",
+    blocks: [
+      { t: "p", text: "Hazari scores are easy to understand and easy to get wrong over an evening. This is one complete game, every deal added up, so you can follow the numbers from the first deal to the winning total." },
+      { t: "p", text: "I generated the game with the Hazari engine, with four computer players. Each deal's points are what each player collected, and every deal adds up to 360." },
+      { t: "h2", text: "The game, deal by deal" },
+      { t: "p", text: "Each line shows the points collected in that deal, then the running totals for Players A, B, C and D." },
+      {
+        t: "ol",
+        items: [
+          "**Deal 1:** 185, 0, 0, 175. Totals: **185, 0, 0, 175**.",
+          "**Deal 2:** 270, 90, 0, 0. Totals: **455, 90, 0, 175**.",
+          "**Deal 3:** 0, 0, 265, 95. Totals: **455, 90, 265, 270**.",
+          "**Deal 4:** 280, 0, 80, 0. Totals: **735, 90, 345, 270**.",
+          "**Deal 5:** 0, 80, 85, 195. Totals: **735, 170, 430, 465**.",
+          "**Deal 6:** 180, 0, 90, 90. Totals: **915, 170, 520, 555**.",
+          "**Deal 7:** 0, 0, 85, 275. Totals: **915, 170, 605, 830**.",
+          "**Deal 8:** 175, 0, 185, 0. Totals: **1,090, 170, 790, 830**.",
+        ],
+      },
+      { t: "p", text: "Player A reached 1,090 in Deal 8 and won. Notice what happened along the way." },
+      { t: "h2", text: "What the numbers show" },
+      {
+        t: "ul",
+        items: [
+          "**Every row adds up to 360.** Deal 5, for example, is 0 + 80 + 85 + 195 = 360. If a row does not, someone miscounted.",
+          "**Points come in lumps.** A round winner takes every card in the round, so a player often collects 0 or 85 or 270 and rarely a number in between.",
+          "**The leader can lose it.** After Deal 6, Player A was on 915 and Player D on 555. After Deal 7 Player D had 830, and Player A, who scored nothing in Deal 7, still led by 85.",
+          "**You can finish above 1,000.** Player A won with 1,090 because the last deal added 175, not just the 85 needed.",
+        ],
+      },
+      { t: "h2", text: "What if two players pass 1,000 together?" },
+      { t: "p", text: "Two players can pass the target in the same deal. The usual way to settle it is that the higher total wins. Agree on this before you play, because tables differ. The [house rules checklist](/blog/hazari-house-rules-checklist/) covers it." },
+      { t: "h2", text: "Keeping the running score" },
+      {
+        t: "ol",
+        items: [
+          "After each deal, write each player's points on one row.",
+          "Add the row. It must be 360.",
+          "Add each player's points to their previous total, in a separate row, and check that the totals add up to 360 times the number of deals. After Deal 8 the totals add to 2,880.",
+          "Stop when a total reaches 1,000.",
+        ],
+      },
+      { t: "p", text: "That last check is a good one. In this game the four totals after eight deals are 1,090 + 170 + 790 + 830 = 2,880, which is 8 × 360, so nothing went missing along the way." },
+            { t: "p", text: "For the arithmetic behind each row, see [why every deal is worth 360 points](/blog/why-hazari-deal-is-360-points/). If your own totals ever disagree, [settle the argument in two minutes](/blog/settle-hazari-scoring-disputes/). And to know how long a game like this should take, read [how many deals a game to 1,000 lasts](/blog/how-many-deals-in-a-game-of-hazari/)." },
+      { t: "p", text: "The scorekeeper does these additions for you and flags a round that does not add up. The [guide to scoring Hazari](https://hazari-card-game-scoring.vercel.app/how-to-score-hazari) walks through it screen by screen." },
+    ],
+  },
+  {
+    slug: "settle-hazari-scoring-disputes",
+    title: "How to Settle a Hazari Scoring Argument in Two Minutes",
+    summary:
+      "A five-step method to find a Hazari scoring mistake fast, using the 360-point check, instead of arguing about who remembers what.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Scoring", "Arguments"],
+    hub: "hazari",
+    topic: "Scoring and house rules",
+    blocks: [
+      { t: "p", text: "Somebody says the totals are wrong. Somebody else is sure they added that round twice. Sound familiar? You can settle almost any Hazari scoring argument in a couple of minutes if you use the one fact that never changes: every deal is worth exactly 360 points." },
+      { t: "h2", text: "Step 1: check each deal adds up to 360" },
+      { t: "p", text: "Go down the score sheet row by row. Add the points of the four players in each deal. Every row must come to 360. The first row that does not is where the problem is." },
+      { t: "h2", text: "Step 2: if every row adds up, check the running totals" },
+      { t: "p", text: "A good check: the four running totals together must equal 360 times the number of deals played. After five deals they must add to 1,800. If they do not, an addition went wrong, and you can find it by re-adding one player's column at a time." },
+      { t: "h2", text: "Step 3: if a row is wrong, rebuild it from the rounds" },
+      { t: "p", text: "Each round's winner takes every card played. The first three rounds hold 12 cards each, and the last holds 16. Ask who won each of the four rounds and add up the card points in that round: 10 for ace, king, queen, jack and ten, 5 for anything else. This usually turns up the slip: a card counted at the wrong value, or a round credited to the wrong player." },
+      { t: "h2", text: "Step 4: agree one scorer" },
+      { t: "p", text: "A lot of arguments start because two people keep score. Pick one scorekeeper for the whole game and make that person's record the official one. Others can check it, but they do not keep a rival version." },
+      { t: "h2", text: "Step 5: when memory fails, go back to the rule" },
+      { t: "p", text: "If nobody can reconstruct the round, fall back on what you agreed before the game. This is the reason to agree on the rules at the start, such as what happens when two groups tie. See the [house rules checklist](/blog/hazari-house-rules-checklist/)." },
+      { t: "h2", text: "Make mistakes harder to make" },
+      {
+        t: "ul",
+        items: [
+          "Write each deal on its own row, not as a running number.",
+          "Say each player's points out loud as you write them.",
+          "Do the 360 check before you move on to the next deal.",
+          "Keep the full history, so a bad row can be found later.",
+        ],
+      },
+      { t: "p", text: "A scorekeeper app can do the 360 check and keep every row for you. The [scoring guide](https://hazari-card-game-scoring.vercel.app/how-to-score-hazari) shows how. Or read the [arithmetic behind the 360 points](/blog/why-hazari-deal-is-360-points/) first." },
+    ],
+  },
+  {
+    slug: "hazari-house-rules-checklist",
+    title: "Hazari House Rules Checklist: Agree These 8 Things Before the First Deal",
+    summary:
+      "Hazari rules vary by region and by family. Eight things to agree on before you play, so the first argument never happens.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "House Rules", "Rules"],
+    hub: "hazari",
+    topic: "Scoring and house rules",
+    blocks: [
+      { t: "p", text: "Ask three Hazari players about the rules and you may hear three versions. Regional variants exist, and families often add their own. The standard four-player rules are a good base, but the arguments tend to start in the gaps. Agree on these eight things before the first deal." },
+      { t: "h2", text: "The checklist" },
+      {
+        t: "ol",
+        items: [
+          "**The target score.** The usual target is 1,000. Pick a lower number, such as 500, for a shorter game.",
+          "**The points in a deal.** With the standard card values (10 for ace, king, queen, jack and ten; 5 for the rest) a deal is worth 360. If you change a card value, change the total you expect.",
+          "**Direction of play.** Standard Hazari goes counter-clockwise. Make sure everyone agrees on who goes after whom.",
+          "**Who leads.** Agree who plays first in the first round, and who leads after that.",
+          "**Equal groups.** When two groups tie in the same round, the standard rule is that the group played last wins. Some tables decide it differently. Agree on one.",
+          "**The ace.** An ace counts high in A-K-Q and low in A-2-3. Confirm that 2-A-K does not count as a run.",
+          "**Two players pass the target together.** The usual answer is that the higher total wins. Say so out loud.",
+          "**Who keeps score.** Name one scorekeeper and agree how mistakes are corrected.",
+        ],
+      },
+      { t: "h2", text: "Why a short list works" },
+      { t: "p", text: "Most disputes are not about the main rules. They are about the edge cases: a tie, a deal that goes wrong, a total that no one can reconstruct. A minute spent on this list is a lot cheaper than ten minutes of arguing mid-game." },
+      { t: "h2", text: "Where the standard rules come from" },
+      { t: "p", text: "The standard rules follow the description on [Pagat](https://www.pagat.com/partition/hazari.html), a long-running reference for card games, which also notes regional differences. The scorekeeper uses those rules as its defaults, with an adjustable target and round total, because tables differ." },
+      { t: "p", text: "The [Hazari rules guide](https://hazari-card-game-scoring.vercel.app/hazari-game-rules) and the [card points guide](https://hazari-card-game-scoring.vercel.app/hazari-card-points) cover the standard version in more detail." },
+            { t: "p", text: "Once the rules are agreed, keep the score in one place. [Paper or an app?](/blog/paper-or-app-hazari-scorekeeping/) compares the options, and [one full game worked through](/blog/hazari-scoring-worked-example/) shows how the totals build up." },
+      { t: "note", text: "If your family plays differently, your rules are the right rules. The point of the list is only to make sure everyone at the table is playing the same ones." },
+    ],
+  },
+  {
+    slug: "paper-or-app-hazari-scorekeeping",
+    title: "Paper or App? How to Keep Hazari Score Without Arguments",
+    summary:
+      "An honest comparison of keeping Hazari score on paper, in a notes app and in a scorekeeper, with a simple paper layout that makes errors visible.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Scoring", "Scorekeeper"],
+    hub: "hazari",
+    topic: "Scoring and house rules",
+    blocks: [
+      { t: "p", text: "Paper has run Hazari games for generations. A phone is in everyone's pocket now. Which keeps the better score? It depends on what you value, and both can go wrong in predictable ways." },
+      { t: "h2", text: "Paper" },
+      {
+        t: "ul",
+        items: [
+          "**Strengths:** free, needs no battery, everyone can see it at once and nothing can freeze.",
+          "**Weaknesses:** crossing out is messy, and running totals have to be added by hand. A single slip carries into every later row.",
+        ],
+      },
+      { t: "h2", text: "A phone notes app" },
+      {
+        t: "ul",
+        items: [
+          "**Strengths:** easy to share, easy to edit.",
+          "**Weaknesses:** you have to type the whole running total every time, and it is easy to overwrite the wrong number.",
+        ],
+      },
+      { t: "h2", text: "A scorekeeper app" },
+      {
+        t: "ul",
+        items: [
+          "**Strengths:** adds the totals itself, ranks the players, checks that a round adds up, keeps every round so a mistake can be found, and can share a live view.",
+          "**Weaknesses:** it needs a phone, and one person must be trusted to enter the scores.",
+        ],
+      },
+      { t: "h2", text: "A paper layout that makes mistakes visible" },
+      { t: "p", text: "If you stay with paper, use this layout:" },
+      {
+        t: "ol",
+        items: [
+          "One column per player and one row per deal.",
+          "A last column on the right for the row check, where you add the four points and write 360.",
+          "A separate block for running totals, so you never overwrite a points row.",
+          "A single line under the totals showing 360 times the number of deals, to compare with the total of the four running scores.",
+        ],
+      },
+      { t: "p", text: "Those two checks, the row sum and the grand total, catch nearly every addition error. The [article on settling scoring arguments](/blog/settle-hazari-scoring-disputes/) shows how to use them." },
+      { t: "h2", text: "When an app is worth it" },
+      { t: "p", text: "A scorekeeper helps most when you play long games, when the table argues, or when people who are not at the table want to follow along. If you only play a short game with four people sitting around one sheet of paper, paper is fine." },
+      { t: "p", text: "I built a free scorekeeper for the other case. It works offline, is in English and Bangla, and the [story of how it works](/blog/hazari-scoring-app/) is on this site." },
+    ],
+  },
+  {
+    slug: "hazari-banter-and-funny-tags",
+    title: "Roasting Your Friends at the Hazari Table: Funny Leaderboard Tags",
+    summary:
+      "Hazari is a game of banter. How funny leaderboard tags work, example lines in English and Bangla, and how to roast without hurting anyone.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Banter", "Bangla"],
+    hub: "hazari",
+    topic: "Playing with friends",
+    blocks: [
+      { t: "p", text: "A good Hazari night is half cards and half teasing. Whoever leads gets a boast, whoever trails gets a roast, and everyone laughs. I built that into the scorekeeper's leaderboard, so here is how it works, with a few lines you can steal." },
+      { t: "h2", text: "How the tags work" },
+      {
+        t: "ul",
+        items: [
+          "Each player gets a short tag based on where they stand on the leaderboard: first, second, third or last.",
+          "Tags only appear once two rounds have been saved, so the early scores are not teased.",
+          "The tag stays the same until the next round is saved, so it does not flicker while you look at it.",
+          "Bangla players get Bangla tags and English players get English ones, so the joke lands in the language you play in.",
+        ],
+      },
+      { t: "h2", text: "A few English examples" },
+      {
+        t: "ul",
+        items: [
+          "**First place:** “Boss mode”, “Main character”, “Chef mode: cooked everyone”.",
+          "**Second place:** “Breathing down their neck”, “Silver medal, smiling anyway”, “Eternal runner-up”.",
+          "**Third place:** “Mid and proud”, “Stuck in traffic”, “Background dancer energy”.",
+          "**Last place:** “Donating points”, “Cards hate me today”.",
+        ],
+      },
+      { t: "h2", text: "And in Bangla" },
+      {
+        t: "ul",
+        items: [
+          "**প্রথম:** “রাজা এসে গেছে, বস মোড অন”।",
+          "**দ্বিতীয়:** “ঘাড়ের কাছে নিঃশ্বাস”।",
+          "**শেষ:** “দান-খয়রাত চলছে…”।",
+        ],
+      },
+      { t: "h2", text: "How to roast kindly" },
+      {
+        t: "ol",
+        items: [
+          "**Tease the position, not the person.** “Donating points” is about the score. Jokes about someone's looks, family or background are not.",
+          "**Share the loser's seat.** Everybody ends up last at some point, so the same joke is aimed at the whole table over an evening.",
+          "**Keep it short.** A good tease is one line.",
+          "**Stop when someone is not laughing.** If a joke lands badly, drop it.",
+        ],
+      },
+      { t: "p", text: "The tags are playful by design, and they are for friends who already like each other. If your table prefers a quieter game, play without showing the leaderboard." },
+            { t: "p", text: "Tags suit a long game, because they only appear after two rounds and change with every saved round. See [how many deals to expect](/blog/how-many-deals-in-a-game-of-hazari/). For the Bangla side of the app, read about [the card names and how Bangla is handled](/blog/bangla-card-names-hazari-app/)." },
+      { t: "h2", text: "Use them" },
+      { t: "p", text: "Keep score in the scorekeeper, and the tags appear on its leaderboard from the second round. Share the live scoreboard and your friends can watch the roasts update. The [guide to sharing a live scoreboard](/blog/share-hazari-scoreboard-live/) shows how." },
+    ],
+  },
+  {
+    slug: "share-hazari-scoreboard-live",
+    title: "Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard",
+    summary:
+      "How to share a live, read-only Hazari scoreboard by link so friends and family who are not at the table can follow every round.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Live Scoreboard", "Sharing"],
+    hub: "hazari",
+    topic: "Playing with friends",
+    blocks: [
+      { t: "p", text: "Some of the best fans of a Hazari game are not at the table. A cousin abroad, a friend who is running late, the family in the next room. A read-only live scoreboard lets them all follow the game from their own phones." },
+      { t: "h2", text: "How to share" },
+      {
+        t: "ol",
+        items: [
+          "One person at the table keeps score in the scorekeeper.",
+          "Open the game, choose **Share live scoreboard**, then **Start sharing**.",
+          "Send the link, or let people scan the QR code on your screen.",
+          "Everyone who opens it sees the leaderboard update as each round is saved.",
+        ],
+      },
+      { t: "p", text: "You do not need an account to start. Sharing starts as a guest by default, and signing in with Google is optional." },
+      { t: "h2", text: "What viewers see" },
+      {
+        t: "ul",
+        items: [
+          "The ranked leaderboard, with who is leading and who deals next.",
+          "A table of the rounds so far.",
+          "Small highlights, such as a winning streak, and the funny tags that go with the standings.",
+        ],
+      },
+      { t: "p", text: "Viewers cannot change a score, and they do not see the scorer's drafts, other games or sign-in details. The scorer's phone stays the single source of truth." },
+      { t: "h2", text: "One link for the whole evening" },
+      { t: "p", text: "When a game ends and you press Play again, the link stays the same, so friends keep watching without a new link. Viewers follow the current game automatically and can look back at earlier games from the same session." },
+      { t: "h2", text: "Limits worth knowing" },
+      {
+        t: "ul",
+        items: [
+          "The scorer's browser has to stay open while the game is running, because it is the scorer's phone that sends the updates.",
+          "Shared links expire on their own, and the scorer can stop sharing at any time. Stopping closes the link.",
+          "Scoring itself works without a connection. Only the live view needs the internet.",
+        ],
+      },
+            { t: "p", text: "If you want the leaders teased while everyone watches, read about [funny leaderboard tags](/blog/hazari-banter-and-funny-tags/). If you are still deciding how to keep score, [paper or an app?](/blog/paper-or-app-hazari-scorekeeping/) compares the options." },
+      { t: "p", text: "A short [guide to sharing a live scoreboard](https://hazari-card-game-scoring.vercel.app/share-live-scoreboard) is on the app's site, and the [design of the live scoreboard](/blog/read-only-live-scoreboard-design/) is explained here for the curious." },
+    ],
+  },
+  {
+    slug: "play-hazari-against-the-computer",
+    title: "Play Hazari Alone: Practise Against Three Computer Players",
+    summary:
+      "How to play Hazari on your phone against three computer opponents, with easy, medium and hard levels, auto-arrange and a scoreboard that teases you.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Single Player", "Computer Opponent"],
+    hub: "hazari",
+    topic: "Playing with friends",
+    blocks: [
+      { t: "p", text: "Not everyone has three friends and a deck of cards at hand. The Hazari scorekeeper also has a single-player mode. You play against three computer players, learn how arrangements are compared and chase 1,000 points on your own." },
+      { t: "h2", text: "How a game goes" },
+      {
+        t: "ol",
+        items: [
+          "Open the game and choose **Play vs computer**. You and three computer players, Joy, Nayon and Rafi, each get 13 cards.",
+          "Arrange your cards into groups of 3, 3, 3 and 4. Tap a card, then tap an empty spot. Put your strongest group first and the four-card group last.",
+          "Press **Up!**. The four rounds are shown one at a time, with the winner and the points won.",
+          "See the deal result and the running scores, then play the next deal.",
+          "The first player to reach 1,000 wins.",
+        ],
+      },
+      { t: "h2", text: "Three levels" },
+      {
+        t: "ul",
+        items: [
+          "**Easy** (the default): the computer arranges its cards at random, within the rules.",
+          "**Medium:** it tries 40 random arrangements and keeps the best.",
+          "**Hard:** it searches every legal arrangement and keeps the best.",
+        ],
+      },
+      { t: "p", text: "The gaps are large. In my simulations a Medium player beat three Easy players in every one of 200 games, and a Hard player did so in every one of 60. The [article on the computer opponent](/blog/how-the-hazari-computer-opponent-works/) explains how it decides." },
+      { t: "h2", text: "Help when you are stuck" },
+      {
+        t: "ul",
+        items: [
+          "**Auto-arrange** fills in the best arrangement for your hand. It is useful for learning what a strong split looks like.",
+          "**Clear** puts your cards back so you can try again.",
+          "If your groups are out of order, you are told, so you cannot reveal an illegal arrangement.",
+        ],
+      },
+      { t: "p", text: "Try arranging yourself first, then press Auto-arrange to compare. The gap between the two is a quick lesson in strategy. The [guide to arranging cards](/blog/how-to-arrange-cards-in-hazari/) explains the principles." },
+      { t: "h2", text: "Details" },
+      {
+        t: "ul",
+        items: [
+          "Your progress is saved on your phone, so a reload does not lose the game.",
+          "It works offline, in English and in Bangla.",
+          "The leaderboard tags that tease players in a normal game appear here too, from the second deal.",
+          "It is practice, not online multiplayer. Nobody else joins, and nothing is sent anywhere.",
+        ],
+      },
+      { t: "p", text: "The computer follows the standard rules, with a few assumptions where sources differ: the deal passes to the next player each time, and the player after the dealer leads the first round. Tables vary on both." },
+    ],
+  },
+];

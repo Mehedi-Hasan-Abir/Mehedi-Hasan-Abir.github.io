@@ -46,6 +46,11 @@ export default function ProjectPage() {
               Open the live app <ArrowUpRight className="w-4 h-4" />
             </a>
           )}
+          {study.guides && (
+            <a href={study.guides.href} className="inline-flex items-center gap-2 text-accent font-semibold hover:underline">
+              {study.guides.label}
+            </a>
+          )}
           {project.link !== study.liveLink && (
             <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-accent font-semibold hover:underline">
               View source and evidence <ArrowUpRight className="w-4 h-4" />

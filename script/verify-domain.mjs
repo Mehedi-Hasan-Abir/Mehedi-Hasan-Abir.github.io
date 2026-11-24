@@ -43,15 +43,34 @@ const requiredPages = [
   "/demos/bd-union-explorer/",
   "/projects/hazari-card-game-scoring/",
   "/blog/hazari-scoring-app/",
+  "/hazari/",
+  "/blog/hazari-three-card-hand-odds/",
+  "/blog/how-the-hazari-computer-opponent-works/",
 ];
 // Self-contained pages are published as static files rather than generated
 // React routes, so they carry no canonical/og tags or no-JS fallback.
 const staticPages = new Set(["/demos/bd-union-explorer/"]);
-if (urls.length !== requiredPages.length || new Set(urls).size !== urls.length) {
-  throw new Error(`sitemap.xml must contain ${requiredPages.length} distinct canonical pages`);
+if (new Set(urls).size !== urls.length) {
+  throw new Error("sitemap.xml lists the same page more than once");
 }
 for (const pathname of requiredPages) {
   if (!urls.includes(`${site}${pathname}`)) throw new Error(`sitemap.xml is missing ${pathname}`);
+}
+// The sitemap is generated from the route list, so it must match the built pages exactly: no page
+// built without a sitemap entry, and no sitemap entry without a built page.
+const builtPages = (await walkHtmlFiles(output))
+  .filter((file) => file !== "404.html" && file !== "app.html")
+  .map((file) => (file === "index.html" ? "/" : `/${file.replace(/index\.html$/, "")}`));
+for (const pathname of builtPages) {
+  if (!urls.includes(`${site}${pathname}`)) throw new Error(`sitemap.xml is missing the built page ${pathname}`);
+}
+for (const url of urls) {
+  if (!builtPages.includes(new URL(url).pathname)) throw new Error(`sitemap.xml lists ${url} but no page was built for it`);
+}
+// The tracked copy is what local servers and reviewers see, so it must not drift from the build.
+const trackedSitemap = await readFile(path.resolve("client/public/sitemap.xml"), "utf8");
+if (trackedSitemap.replace(/\r\n/g, "\n") !== sitemap.replace(/\r\n/g, "\n")) {
+  throw new Error("client/public/sitemap.xml is out of date; copy dist/public/sitemap.xml over it after a build");
 }
 for (const pathname of staticPages) {
   await readBuilt(`${pathname.slice(1)}index.html`);
@@ -142,6 +161,37 @@ for (const htmlPath of await walkHtmlFiles(output)) {
         );
       }
     }
+  }
+}
+
+// Hazari hub: every hub article carries the app call to action, and the hub links to all of them,
+// so none is an orphan. Every internal link on every built page must resolve to a built file.
+const APP_URL = "https://hazari-card-game-scoring.vercel.app/";
+const PLAY_URL = "https://hazari-card-game-scoring.vercel.app/play";
+const hubHtml = await readBuilt("hazari/index.html");
+const hubArticlePaths = [];
+for (const htmlPath of await walkHtmlFiles(path.join(output, "blog"), "blog")) {
+  const html = await readBuilt(htmlPath);
+  if (!html.includes('id="hazari-cta-heading"')) continue;
+  const route = `/${htmlPath.replace(/index\.html$/, "")}`;
+  hubArticlePaths.push(route);
+  if (!html.includes(`href="${APP_URL}"`) || !html.includes(`href="${PLAY_URL}"`)) {
+    throw new Error(`${htmlPath} must link to both the scorekeeper and the play-against-computer page`);
+  }
+  if (!hubHtml.includes(`href="${route}"`)) throw new Error(`The Hazari hub does not link to ${route}`);
+}
+if (hubArticlePaths.length < 10) {
+  throw new Error(`Expected at least 10 Hazari articles, found ${hubArticlePaths.length}`);
+}
+const { access } = await import("node:fs/promises");
+const exists = (relative) => access(path.join(output, relative)).then(() => true, () => false);
+for (const htmlPath of await walkHtmlFiles(output)) {
+  const html = await readBuilt(htmlPath);
+  for (const [, href] of html.matchAll(/<a [^>]*href="(\/[^"#?]*)"/g)) {
+    if (href.startsWith("//")) continue;
+    const candidates = [href, `${href.replace(/\/$/, "")}/index.html`, `${href}.html`].map((item) => item.slice(1));
+    const found = (await Promise.all(candidates.map(exists))).some(Boolean);
+    if (!found) throw new Error(`${htmlPath} links to ${href}, which was not built`);
   }
 }
 

@@ -15,6 +15,7 @@ import Home from "@/pages/Home";
 
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
 const ArticlePage = lazy(() => import("@/pages/ArticlePage"));
+const HazariHubPage = lazy(() => import("@/pages/HazariHubPage"));
 const WorksPage = lazy(() => import("@/pages/WorksPage"));
 const AboutPage = lazy(() => import("@/pages/AboutPage"));
 const ResearchPage = lazy(() => import("@/pages/ResearchPage"));
@@ -44,6 +45,7 @@ function Router() {
               <BlogPage />
             </ErrorBoundary>
           </Route>
+          <Route path="/hazari" component={HazariHubPage} />
           <Route path="/works">
             <ErrorBoundary>
               <WorksPage />

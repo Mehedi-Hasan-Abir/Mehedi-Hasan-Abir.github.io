@@ -1,5 +1,7 @@
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { articleBySlug, articles } from "@/data/articles";
+import { articleBySlug, articles, hubArticles } from "@/data/articles";
+import { HazariCta } from "@/components/HazariCta";
+import { HAZARI_TOPICS } from "@/data/hazari-hub";
 import { ArticleBody } from "@/components/ArticleBody";
 import NotFound from "@/pages/not-found";
 
@@ -10,14 +12,22 @@ export default function ArticlePage() {
   const article = articleBySlug(slug);
   if (!article) return <NotFound />;
 
-  const others = articles.filter((item) => item.slug !== article.slug);
+  const inHub = article.hub === "hazari";
+  const hubSiblings = hubArticles("hazari").filter((item) => item.slug !== article.slug);
+  // Articles outside the hub never list hub pages, and the other way round.
+  const others = articles.filter((item) => item.slug !== article.slug && !item.hub);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24">
         <nav aria-label="Breadcrumb" className="mono-label text-muted-foreground mb-10">
           <a href="/" className="hover:text-accent">Home</a> /{" "}
-          <a href="/blog/" className="hover:text-accent">Writing</a> / Article
+          {inHub ? (
+            <a href="/hazari/" className="hover:text-accent">Hazari</a>
+          ) : (
+            <a href="/blog/" className="hover:text-accent">Writing</a>
+          )}{" "}
+          / Article
         </nav>
 
         <p className="mono-label text-accent mb-4">
@@ -37,9 +47,11 @@ export default function ArticlePage() {
           <ArticleBody blocks={article.blocks} />
         </div>
 
+        {inHub && <HazariCta />}
+
         <div className="rule-t mt-14 pt-8 flex flex-wrap gap-5 items-center">
-          <a href="/blog/" className="inline-flex items-center gap-2 text-accent font-semibold hover:underline">
-            <ArrowLeft className="w-4 h-4" /> All writing
+          <a href={inHub ? "/hazari/" : "/blog/"} className="inline-flex items-center gap-2 text-accent font-semibold hover:underline">
+            <ArrowLeft className="w-4 h-4" /> {inHub ? "All Hazari guides" : "All writing"}
           </a>
           {article.externalLink && (
             <a
@@ -53,7 +65,27 @@ export default function ArticlePage() {
           )}
         </div>
 
-        {others.length > 0 && (
+        {inHub && hubSiblings.length > 0 && (
+          <aside className="rule-t mt-12 pt-8" aria-label="More Hazari guides">
+            <h2 className="text-xl font-bold mb-4">More Hazari guides</h2>
+            {HAZARI_TOPICS.map((topic) => {
+              const items = hubSiblings.filter((item) => item.topic === topic);
+              if (items.length === 0) return null;
+              return (
+                <div key={topic} className="mt-5">
+                  <h3 className="mono-label text-muted-foreground">{topic}</h3>
+                  {items.map((item) => (
+                    <a key={item.slug} href={`/blog/${item.slug}/`} className="block mt-2 text-accent hover:underline">
+                      {item.title}
+                    </a>
+                  ))}
+                </div>
+              );
+            })}
+          </aside>
+        )}
+
+        {!inHub && others.length > 0 && (
           <aside className="rule-t mt-12 pt-8" aria-label="More writing">
             <h2 className="text-xl font-bold mb-4">More writing</h2>
             {others.map((item) => (

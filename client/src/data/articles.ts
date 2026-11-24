@@ -7,6 +7,11 @@
  * to crawlers and to visitors when JavaScript is unavailable, matching how the
  * rest of the site's content pages work.
  */
+import { numbersArticles } from "./hazari-articles-numbers";
+import { strategyArticles } from "./hazari-articles-strategy";
+import { scoringArticles } from "./hazari-articles-scoring";
+import { buildArticles } from "./hazari-articles-build";
+
 export type ArticleBlock =
   | { t: "p"; text: string }
   | { t: "h2"; text: string }
@@ -26,12 +31,16 @@ export interface Article {
   /** Canonical location of the original cross-post, when one exists. */
   externalLink?: string;
   externalPlatform?: string;
-  /** Blog-card id in portfolio-data.ts, so the listing can link here. */
-  blogId: number;
+  /** Blog-card id in portfolio-data.ts, so the listing can link here. Hub-only articles have no card. */
+  blogId?: number;
+  /** Section hub this article belongs to. Hub articles end with the app call to action. */
+  hub?: "hazari";
+  /** Group within the hub, shown as a heading on the hub page. */
+  topic?: string;
   blocks: ArticleBlock[];
 }
 
-export const articles: Article[] = [
+const coreArticles: Article[] = [
   {
     slug: "ai-coding-harness",
     title: "The AI Coding Harness I Reuse on Every Project (4 Files + Skills)",
@@ -389,6 +398,8 @@ export const articles: Article[] = [
     date: "2026-11-21",
     tags: ["Hazari", "Card Games", "Progressive Web App", "React", "Offline First", "Bangladesh"],
     blogId: 7,
+    hub: "hazari",
+    topic: "Behind the app",
     blocks: [
       { t: "p", text: "Hazari is a card game that runs for many rounds. Every round, each player's points are added to a running total, and the first to reach the target wins. By default I use a target of 1000 and 360 points shared in each round." },
       { t: "p", text: "Keeping that score on paper or in a phone note is where the arguments start. A number is copied wrong, a round is added twice, and nobody can say who is really ahead. I built a scorekeeper to fix exactly that, and you can use it free at [hazari-card-game-scoring.vercel.app](https://hazari-card-game-scoring.vercel.app/)." },
@@ -414,7 +425,7 @@ export const articles: Article[] = [
       { t: "p", text: "Scoring never needs an account or a server. Saved games live in the browser's IndexedDB. The only part that uses the cloud is live sharing, and it starts only when you choose to share. By default you share as a guest; signing in with Google is optional." },
       { t: "p", text: "A shared link is read-only and can be switched off. Viewers see a live leaderboard with who is leading and who deals next, plus small highlights such as a winning streak. The scorer's phone stays the single source of truth." },
       { t: "h3", text: "Playful tags" },
-      { t: "p", text: "Because Hazari is a game among friends, the leaderboard teases players. From the third round, each player gets a short tag based on their position, in English or Bangla, such as a boast for the leader and a friendly roast for whoever is last. The tag only changes when a new round is saved." },
+      { t: "p", text: "Because Hazari is a game among friends, the leaderboard teases players. Once two rounds are saved, each player gets a short tag based on their position, in English or Bangla, such as a boast for the leader and a friendly roast for whoever is last. The tag only changes when a new round is saved." },
       { t: "h2", text: "How it is built" },
       {
         t: "ul",
@@ -428,12 +439,24 @@ export const articles: Article[] = [
         ],
       },
       { t: "h2", text: "What it does not do" },
-      { t: "p", text: "It is a scorekeeper, not a card game. It does not deal cards or play against you. Hazari rules also differ between regions, so the app follows a standard four-player rule set with an adjustable target and round total. If your table plays differently, change the numbers when you start a game." },
+      { t: "p", text: "It is a scorekeeper first. A practice mode lets you play Hazari alone against three computer players, but it does not deal cards for a table of friends and there is no online multiplayer. Hazari rules also differ between regions, so the app follows a standard four-player rule set with an adjustable target and round total. If your table plays differently, change the numbers when you start a game." },
       { t: "h2", text: "Try it" },
       { t: "p", text: "Open the [Hazari scoring app](https://hazari-card-game-scoring.vercel.app/), start a game, and share the link with your table. The site also has short guides on [how to score Hazari](https://hazari-card-game-scoring.vercel.app/how-to-score-hazari) and the [rules of the game](https://hazari-card-game-scoring.vercel.app/hazari-game-rules), in English and Bangla." },
+      { t: "p", text: "Want the details? See [how the computer opponent chooses its cards](/blog/how-the-hazari-computer-opponent-works/), the [design of the live scoreboard](/blog/read-only-live-scoreboard-design/) and the [offline-first notes](/blog/offline-first-scorekeeper-pwa/), or browse all the [Hazari guides](/hazari/)." },
       { t: "note", text: "More card-game scorekeepers may follow. If there is a game you would like scored this way, tell me through the contact page." },
     ],
   },
 ];
 
+export const articles: Article[] = [
+  ...coreArticles,
+  ...numbersArticles,
+  ...strategyArticles,
+  ...scoringArticles,
+  ...buildArticles,
+];
+
 export const articleBySlug = (slug: string) => articles.find((a) => a.slug === slug);
+
+/** Articles that belong to the Hazari hub, in the order they are written. */
+export const hubArticles = (hub: "hazari") => articles.filter((article) => article.hub === hub);

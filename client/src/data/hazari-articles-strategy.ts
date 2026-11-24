@@ -1,0 +1,183 @@
+import type { Article } from "./articles";
+
+/**
+ * Hazari strategy and walkthrough articles. The percentages come from running the app's game
+ * engine over 400 to 1,000 random hands. They describe what that engine's search chooses, and they
+ * are a guide to good arrangements, not a proof that one arrangement always wins.
+ */
+export const strategyArticles: Article[] = [
+  {
+    slug: "how-to-arrange-cards-in-hazari",
+    title: "How to Arrange Your Cards in Hazari: A Practical Guide to 3-3-3-4",
+    summary:
+      "Six practical principles for splitting 13 Hazari cards into groups, backed by what a full search chooses across 400 random hands.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Strategy", "Arranging Cards"],
+    hub: "hazari",
+    topic: "Strategy",
+    blocks: [
+      { t: "p", text: "Hazari is decided before the first round. You have 13 cards, you must split them into groups of 3, 3, 3 and 4, and the groups must run from strongest to weakest with the four-card group the weakest of all. There are [about 200,000 ways to split a hand](/blog/ways-to-arrange-13-cards-hazari/), roughly a tenth of them legal." },
+      { t: "p", text: "These principles cut that down to a handful. To check them, I had the game engine search every legal split of 400 random hands and looked at what the best ones have in common." },
+      { t: "h2", text: "1. Aim for no weak groups" },
+      { t: "p", text: "The weakest hand in Hazari is an Indi, a group with no pair, colour or run. In a random arrangement most groups are Indi: across 1,000 random legal arrangements, only about 1.2 of the four groups were a Pair or better on average." },
+      { t: "p", text: "In the best arrangement the search found, all four groups were a Pair or better in every one of the 400 hands. Making sure no group is a plain Indi is the single biggest gain available." },
+      { t: "h2", text: "2. Lift your weakest group before you polish your strongest" },
+      { t: "p", text: "Going from Indi to Pair is a huge step: a Pair beats about three hands in four. Going from a Run to a Colour Run barely matters, as both already beat most hands. [The odds of each three-card hand](/blog/hazari-three-card-hand-odds/) show the returns shrink as hands get stronger. Spend cards where they raise a weak group first." },
+      { t: "h2", text: "3. Do not automatically use a Troy" },
+      { t: "p", text: "A Troy is the strongest group. It also uses three cards of one rank, which may be the cards you needed for a run or a pair elsewhere. In the searched arrangements, the first group was a Troy in about 29% of hands, a Colour Run in about 20% and a Run in about 50%. Holding three of a kind does not always mean using it as a Troy, because spreading those cards around can lift weaker groups instead." },
+      { t: "h2", text: "4. Use the fourth card of the last group as your dump" },
+      { t: "p", text: "The four-card group is judged by its best three cards. The fourth card does not weaken it, so put your awkward card there, the one that fits nowhere else. See [the four-card group in detail](/blog/hazari-four-card-group/)." },
+      { t: "h2", text: "5. Get the ace right" },
+      { t: "p", text: "An ace is high in A-K-Q, which is the highest run, and low in A-2-3, which is the second highest. A run like 2-A-K does not count. A sequence of three cards that wraps around the ace is not a run, so do not build one." },
+      { t: "h2", text: "6. Check the order before you reveal" },
+      { t: "p", text: "Read your groups from first to last and ask: is each one at least as strong as the next? Is the four-card group the weakest, judging it by its best three cards? A wrong order is the most common reason for an invalid arrangement. The [list of beginner mistakes](/blog/hazari-beginner-mistakes/) has more." },
+      { t: "h2", text: "What the best arrangements look like" },
+      {
+        t: "ul",
+        items: [
+          "**Group 1:** a Troy, Colour Run or Run in almost every hand.",
+          "**Group 2:** a Run in about 7 hands in 10, and a Colour in about 2 in 10.",
+          "**Group 3:** a Colour in about two thirds of hands, a Run in about one third.",
+          "**Group 4:** a Colour in about four hands in five, and a Pair in about one in six.",
+        ],
+      },
+      { t: "p", text: "That is a model, not a promise. It values a group by how many random three-card hands it beats, and it treats opponents as unknown. Real players are not random, so use these as a starting point and adjust when you know how your table plays." },
+      { t: "note", text: "You can test your own arrangements against computer players in the free scorekeeper, which also checks that your order is legal before you press Up!" },
+    ],
+  },
+  {
+    slug: "hazari-four-card-group",
+    title: "The Four-Card Group in Hazari: Weakest by Rule, Biggest Prize in the Deal",
+    summary:
+      "The last Hazari group has four cards, must be your weakest, and still carries about 31% of the deal's points. Here is how to use it well.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Strategy", "Scoring"],
+    hub: "hazari",
+    topic: "Strategy",
+    blocks: [
+      { t: "p", text: "Hazari has an odd rule. Your last group has four cards, not three, and it has to be the weakest of the four. Yet it is the group that can win the biggest pile of cards in the deal." },
+      { t: "h2", text: "How a four-card group is judged" },
+      { t: "p", text: "A four-card group is compared by its best three cards, using the same order of Troy, Colour Run, Run, Colour, Pair and Indi. The fourth card does not strengthen the group, and it does not weaken it. It just comes along for the ride." },
+      { t: "p", text: "The group must also not be stronger than any of your other three groups. If it is, your arrangement is out of order." },
+      { t: "h2", text: "Why it matters more than it looks" },
+      { t: "p", text: "Rounds one to three each contain 12 cards, because four players put down three cards each. The last round contains 16 cards, because each player puts down four. That is 16 of the 52 cards, about 31% of the deal. On average the four-card round holds about 111 points, against about 83 in each earlier round." },
+      { t: "p", text: "So you are dealing with a weaker group and a bigger prize. If your opponents' fourth groups are also weak, a Pair or a Colour in this spot can win a lot of points. The [arithmetic of the 360-point deal](/blog/why-hazari-deal-is-360-points/) explains where those averages come from." },
+      { t: "h2", text: "What a careful search chooses" },
+      { t: "p", text: "Across 400 random hands, the best arrangement found by exhaustive search never left the four-card group as an Indi. It was:" },
+      {
+        t: "ul",
+        items: [
+          "a **Colour** in about 79% of hands,",
+          "a **Pair** in about 16% of hands,",
+          "a **Run** in about 4%,",
+          "a Colour Run in a fraction of a percent.",
+        ],
+      },
+      { t: "p", text: "When the cards allow it, the search prefers a decent four-card group over a slightly stronger first group, because the fourth round is worth more than the others." },
+      { t: "h2", text: "A simple way to build it" },
+      {
+        t: "ol",
+        items: [
+          "Arrange the other nine cards into the three best groups of three you can.",
+          "Look at the four cards left. Do any three of them make a Pair, Colour or Run?",
+          "If not, swap a card between groups until the four-card group improves without making one of the others weaker than it.",
+          "Check the order once more. Your fourth group must not beat your third.",
+        ],
+      },
+      { t: "h2", text: "A real example" },
+      { t: "p", text: "In the [worked deal](/blog/hazari-worked-deal-example/), a Pair of Queens in the four-card group won the last round and 125 points, more than the first three rounds put together for that player." },
+      { t: "p", text: "Rules differ by region on what happens when two groups are equal. Agree on that first, as the [house rules checklist](/blog/hazari-house-rules-checklist/) suggests." },
+    ],
+  },
+  {
+    slug: "hazari-beginner-mistakes",
+    title: "7 Mistakes New Hazari Players Make When Arranging Cards",
+    summary:
+      "Seven common errors when arranging Hazari cards, from putting the groups in the wrong order to getting the ace wrong, with how to avoid each.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Beginners", "Rules"],
+    hub: "hazari",
+    topic: "Strategy",
+    blocks: [
+      { t: "p", text: "Hazari rules are simple to state and easy to slip on. These are the seven mistakes that cost new players rounds, or cause an argument at the reveal." },
+      { t: "h2", text: "1. Putting the groups in the wrong order" },
+      { t: "p", text: "The groups must run from strongest to weakest. If your third group is stronger than your second, the arrangement is not legal. Read your groups from left to right before you reveal." },
+      { t: "h2", text: "2. Making the four-card group too strong" },
+      { t: "p", text: "The four-card group has to be the weakest of the four. Find its best three cards and compare them with your third group. If the four-card group wins that comparison, move cards around." },
+      { t: "h2", text: "3. Thinking all four cards count" },
+      { t: "p", text: "The four-card group is judged by its best three cards. The fourth card is a spare. It is a handy place for a card that fits nowhere else, and it can make the last pile contain more points without changing the strength." },
+      { t: "h2", text: "4. Getting the ace wrong" },
+      { t: "p", text: "An ace is high in A-K-Q, the highest run, and low in A-2-3, the second highest. A hand such as 2-A-K is not a run, because the sequence does not wrap around the ace." },
+      { t: "h2", text: "5. Mixing up Colour and Run" },
+      {
+        t: "ul",
+        items: [
+          "A **Colour** is three cards of one suit that are not in sequence.",
+          "A **Run** is three cards in sequence, in mixed suits.",
+          "A **Colour Run** is both: a sequence in one suit, and it beats a plain Run.",
+        ],
+      },
+      { t: "p", text: "A Colour is weaker than a Run, which surprises people who play poker, where a flush beats a straight in many versions." },
+      { t: "h2", text: "6. Putting everything into one group" },
+      { t: "p", text: "A monster first group with three Indi groups behind it looks strong and usually isn't. In 1,000 random legal arrangements, only 1.7% had all four groups at Pair or better, while a careful search reached that in every hand tested. Spread your strength: [see why](/blog/how-to-arrange-cards-in-hazari/)." },
+      { t: "h2", text: "7. Counting the points wrongly" },
+      { t: "p", text: "The ace, king, queen, jack and ten are worth 10 points each. The 2 through the 9 are worth 5 each. A round winner takes every card in that round, not just their own. After the deal, all points collected must total 360. If they do not, recount. The [360-point check](/blog/why-hazari-deal-is-360-points/) explains the rule." },
+      { t: "h2", text: "Settle the rest before you play" },
+      { t: "p", text: "Direction of play, who leads, and what happens when two groups tie differ between tables. Agree on them before the first deal. The [house rules checklist](/blog/hazari-house-rules-checklist/) lists them all, and the [Hazari rules guide](https://hazari-card-game-scoring.vercel.app/hazari-game-rules) has the standard version." },
+    ],
+  },
+  {
+    slug: "hazari-worked-deal-example",
+    title: "One Hazari Deal, Round by Round: A Worked Example with Real Cards",
+    summary:
+      "A full four-player Hazari deal with every hand, every group and every round shown, so you can see how groups are compared and how 360 points get split.",
+    date: "2026-11-24",
+    tags: ["Hazari", "Card Games", "Worked Example", "Beginners"],
+    hub: "hazari",
+    topic: "Strategy",
+    blocks: [
+      { t: "p", text: "The easiest way to learn Hazari is to watch a deal played through. I generated this one with the game engine, using four medium-strength computer players, and checked that the points add up to 360." },
+      { t: "h2", text: "The four arrangements" },
+      { t: "p", text: "Each player's 13 cards, split into groups of 3, 3, 3 and 4, strongest first:" },
+      {
+        t: "ul",
+        items: [
+          "**Player 1:** J♦ 10♣ 9♦ (Run) · 10♠ 6♠ 2♠ (Colour) · K♥ K♦ 8♦ (Pair) · Q♠ Q♣ J♣ 4♥ (Pair of Queens)",
+          "**Player 2:** A♦ Q♦ 5♦ (Colour) · K♣ 7♦ 7♣ (Pair) · 9♠ 4♠ 4♣ (Pair) · 10♥ 5♣ 3♠ 3♥ (Pair of 3s)",
+          "**Player 3:** K♠ 8♠ 7♠ (Colour) · 8♣ 6♣ 2♣ (Colour) · 7♥ 6♥ 2♥ (Colour) · A♠ J♠ J♥ 9♣ (Pair of Jacks)",
+          "**Player 4:** A♥ 8♥ 5♥ (Colour) · 10♦ 6♦ 4♦ (Colour) · 9♥ 3♦ 3♣ (Pair) · A♣ Q♥ 5♠ 2♦ (Indi)",
+        ],
+      },
+      { t: "p", text: "Check one: Player 4's last group is A♣ Q♥ 5♠ 2♦. Its best three cards are A, Q and 5, an Indi, and it is the weakest group in that hand, so the arrangement is legal. Play goes in order from Player 2, who leads the first round in this simulation." },
+      { t: "h2", text: "Round 1: a Run beats three Colours" },
+      { t: "p", text: "Players compare their first groups. Players 2, 3 and 4 all show a Colour, but Player 1 shows a Run (J-10-9), and a Run beats a Colour. Player 1 wins all 12 cards, worth **90 points**." },
+      { t: "h2", text: "Round 2: the higher Colour wins" },
+      { t: "p", text: "Three players show a Colour. Player 4's 10-6-4 of diamonds beats Player 1's 10-6-2 of spades, because the first two cards tie and the 4 is higher than the 2. Player 2's Pair loses to any Colour. Player 4 wins **75 points**." },
+      { t: "h2", text: "Round 3: one Colour among Pairs" },
+      { t: "p", text: "Player 3's Colour (7-6-2 of hearts) beats three Pairs, the Kings of Player 1, the 4s of Player 2 and the 3s of Player 4. Player 3 wins **70 points**." },
+      { t: "h2", text: "Round 4: the big pile" },
+      { t: "p", text: "Everyone shows four cards, and the best three decide. Player 1 has a Pair of Queens, Player 3 a Pair of Jacks, Player 2 a Pair of 3s, and Player 4 has no Pair. Queens win. This round holds 16 cards, so Player 1 collects **125 points**." },
+      { t: "h2", text: "The result" },
+      {
+        t: "ul",
+        items: [
+          "Player 1: 90 + 125 = **215**",
+          "Player 4: **75**",
+          "Player 3: **70**",
+          "Player 2: **0**",
+        ],
+      },
+      { t: "p", text: "215 + 75 + 70 + 0 = 360, as it must. Player 2 had a respectable hand and still won nothing: a Pair or a Colour was always beaten by something stronger in the same round." },
+      { t: "h2", text: "What to take from it" },
+      {
+        t: "ul",
+        items: [
+          "Rounds are won by comparing groups in the same position, not by comparing whole hands.",
+          "A single Run or Colour in the right position can win a whole round.",
+          "The four-card group decided the biggest pile, as the [article on the four-card group](/blog/hazari-four-card-group/) describes.",
+        ],
+      },
+      { t: "p", text: "The next step is to add these deal totals to a running score. The [scoring example](/blog/hazari-scoring-worked-example/) follows a full game to 1,000." },
+    ],
+  },
+];
