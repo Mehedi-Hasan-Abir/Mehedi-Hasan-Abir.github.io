@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
+    <title>200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks | Mehedi Hasan Abir</title>
+    <meta name="description" content="A 13-card Hazari hand can be split into groups in 200,200 ways. About a tenth are legal. Here is the counting, and why arranging is the real skill." />
+    <meta property="og:title" content="200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks | Mehedi Hasan Abir" />
+    <meta property="og:description" content="A 13-card Hazari hand can be split into groups in 200,200 ways. About a tenth are legal. Here is the counting, and why arranging is the real skill." />
+    <meta property="og:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <meta property="og:url" content="https://mhabir.dev/blog/ways-to-arrange-13-cards-hazari/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mehedi Hasan Abir — Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks | Mehedi Hasan Abir" />
+    <meta name="twitter:description" content="A 13-card Hazari hand can be split into groups in 200,200 ways. About a tenth are legal. Here is the counting, and why arranging is the real skill." />
+    <meta name="twitter:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <link rel="canonical" href="https://mhabir.dev/blog/ways-to-arrange-13-cards-hazari/" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="font" href="/fonts/ArchivoVariable.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/JetBrainsMonoVariable.woff2" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://mhabir.dev/#person",
+      "name": "Mehedi Hasan Abir",
+      "alternateName": "Mehedi Hasan",
+      "givenName": "Mehedi",
+      "jobTitle": "Senior Software Engineer (AI/ML)",
+      "description": "AI/ML Engineer specializing in LLMs, Document AI, and production-ready ML systems",
+      "url": "https://mhabir.dev/",
+      "image": "https://mhabir.dev/images/profile_re.webp",
+      "email": "hello@mhabir.dev",
+      "telephone": "(+880) 1521323549",
+      "address": { "@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "Ahsanullah University of Science and Technology (AUST)" },
+        { "@type": "CollegeOrUniversity", "name": "Hermann Gmeiner School, Mirpur" }
+      ],
+      "worksFor": { "@type": "Organization", "name": "Technonext" },
+      "knowsAbout": ["Large Language Models", "Retrieval-Augmented Generation", "Document AI", "Computer Vision", "Search Systems", "Machine Learning", "MLOps"],
+      "sameAs": [
+        "https://github.com/Mehedi-Hasan-Abir",
+        "https://linkedin.com/in/mehedihasan102",
+        "https://medium.com/@mhabir102",
+        "https://mhabir.substack.com",
+        "https://www.facebook.com/mehedihasan.abir.7/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mehedi Hasan Abir — Portfolio",
+      "url": "https://mhabir.dev/",
+      "description": "Building production-grade LLM systems and resilient AI pipelines. Specializing in Document AI, RAG, and high-throughput ML inference.",
+      "author": { "@id": "https://mhabir.dev/#person" }
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-CD7lj_N0.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-core-N--QU9DW.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-CnDHW2dc.js">
+    <link rel="modulepreload" crossorigin href="/assets/radix-BcK-Cui3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D0YSF5oS.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks","description":"A 13-card Hazari hand can be split into groups in 200,200 ways. About a tenth are legal. Here is the counting, and why arranging is the real skill.","datePublished":"2026-11-24","dateModified":"2026-11-24","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https://mhabir.dev/blog/ways-to-arrange-13-cards-hazari/"},"author":{"@id":"https://mhabir.dev/#person"},"publisher":{"@id":"https://mhabir.dev/#person"},"image":"https://mhabir.dev/images/og-image.jpg","keywords":"Hazari, Card Games, Combinatorics, Strategy"}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://mhabir.dev/"},{"@type":"ListItem","position":2,"name":"Hazari","item":"https://mhabir.dev/hazari/"},{"@type":"ListItem","position":3,"name":"200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks","item":"https://mhabir.dev/blog/ways-to-arrange-13-cards-hazari/"}]}</script></head>
+  <body>
+    <div id="root"><main id="static-fallback" class="min-h-screen bg-background text-foreground"><div class="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24"><nav aria-label="Breadcrumb" class="mono-label text-muted-foreground mb-10"><a href="/">Home</a> / 200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks</nav><p class="mono-label text-accent mb-4">ARTICLE</p><h1 class="display-lg max-w-[26ch]">200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks</h1><div class="mt-7"><p>A 13-card Hazari hand can be split into groups in 200,200 ways. About a tenth are legal. Here is the counting, and why arranging is the real skill.</p><h2>Tags</h2><ul><li>Hazari</li><li>Card Games</li><li>Combinatorics</li><li>Strategy</li></ul><p>Published November 24, 2026.</p><p>In Hazari nobody plays a card from the hand one by one. You arrange all 13 cards into groups before the first round begins, and the arrangement is hidden until the groups are compared. Everything depends on that one decision, so it is worth knowing how large the decision is.</p><h2>Counting the splits</h2><p>The groups are three, three, three and four cards. To count the ways to split 13 cards:</p><ol><li>Choose the four cards for the last group: 13 choose 4, which is <strong>715</strong> ways.</li><li>Split the other nine cards into three groups of three. The order of those groups does not matter yet, which gives <strong>280</strong> ways.</li><li>Multiply: 715 × 280 = <strong>200,200</strong> different splits.</li></ol><p>That is the number of ways to divide any 13-card hand. It is a little over two hundred thousand.</p><h2>Most of them are not allowed</h2><p>The rules say the groups must go from strongest to weakest, with the four-card group last and the weakest of all. The four-card group is judged by its best three cards. A split where the four-card group beats any of the other groups is illegal.</p><p>I counted the legal splits for twelve random hands. The numbers ranged from 14,153 to 25,622, and the average was about 20,650. So roughly one split in ten is legal.</p><p>Once a split is legal, the strongest-first order is settled, because you simply sort the three groups of three by strength.</p><h2>What that means for a player</h2><ul><li>Nobody can check 20,000 arrangements by eye, so human arranging is a matter of principles and pattern spotting.</li><li>A computer can check them all. The scorekeeper&#39;s hardest computer opponent does exactly that.</li><li>The choice matters a great deal. In simulation, a player who picked the best arrangement beat three players who arranged at random in every game I ran.</li></ul><p>You do not need to count to play well. A few principles remove most of the choices, and the <a href="/blog/how-to-arrange-cards-in-hazari/">practical guide to arranging your cards</a> lists them.</p><p>To see what a computer does with all of them, read <a href="/blog/how-the-hazari-computer-opponent-works/">how the Hazari computer opponent chooses its cards</a>. To see how strong a single group is, check the <a href="/blog/hazari-three-card-hand-odds/">odds of every three-card hand</a>.</p><p>For the rules that decide which splits are legal, see the <a href="https://hazari-card-game-scoring.vercel.app/hazari-game-rules" target="_blank" rel="noopener noreferrer">Hazari rules guide</a>.</p><section aria-labelledby="hazari-cta-heading" class="mt-14 border border-primary/40 bg-primary/5 rounded-xl p-6 md:p-8"><h2 id="hazari-cta-heading" class="text-2xl font-extrabold">Play it or score it</h2><p class="mt-3 text-muted-foreground leading-relaxed max-w-[60ch]">Play Hazari alone against the computer, or keep score and share the banter with your friends. It is free and works offline.</p><div class="mt-6 flex flex-wrap gap-3"><a href="https://hazari-card-game-scoring.vercel.app/play" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm">Play against the computer</a><a href="https://hazari-card-game-scoring.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm">Keep score and share live</a></div></section><h2>More Hazari guides</h2><p><a href="/hazari/">All Hazari guides</a></p><h2>Odds and numbers</h2><ul><li><a href="/blog/hazari-three-card-hand-odds/">How Rare Is a Troy? The Odds of Every Three-Card Hand in Hazari</a></li><li><a href="/blog/why-hazari-deal-is-360-points/">Why Every Hazari Deal Is Worth Exactly 360 Points</a></li><li><a href="/blog/how-many-deals-in-a-game-of-hazari/">How Many Deals Does a Game of Hazari to 1,000 Take?</a></li></ul><h2>Strategy</h2><ul><li><a href="/blog/how-to-arrange-cards-in-hazari/">How to Arrange Your Cards in Hazari: A Practical Guide to 3-3-3-4</a></li><li><a href="/blog/hazari-four-card-group/">The Four-Card Group in Hazari: Weakest by Rule, Biggest Prize in the Deal</a></li><li><a href="/blog/hazari-beginner-mistakes/">7 Mistakes New Hazari Players Make When Arranging Cards</a></li><li><a href="/blog/hazari-worked-deal-example/">One Hazari Deal, Round by Round: A Worked Example with Real Cards</a></li></ul><h2>Scoring and house rules</h2><ul><li><a href="/blog/hazari-scoring-worked-example/">Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through</a></li><li><a href="/blog/settle-hazari-scoring-disputes/">How to Settle a Hazari Scoring Argument in Two Minutes</a></li><li><a href="/blog/hazari-house-rules-checklist/">Hazari House Rules Checklist: Agree These 8 Things Before the First Deal</a></li><li><a href="/blog/paper-or-app-hazari-scorekeeping/">Paper or App? How to Keep Hazari Score Without Arguments</a></li></ul><h2>Playing with friends</h2><ul><li><a href="/blog/hazari-banter-and-funny-tags/">Roasting Your Friends at the Hazari Table: Funny Leaderboard Tags</a></li><li><a href="/blog/share-hazari-scoreboard-live/">Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard</a></li><li><a href="/blog/play-hazari-against-the-computer/">Play Hazari Alone: Practise Against Three Computer Players</a></li></ul><h2>Behind the app</h2><ul><li><a href="/blog/hazari-scoring-app/">How I Built an Offline Hazari Scoring App Friends Can Watch Live</a></li><li><a href="/blog/how-the-hazari-computer-opponent-works/">How the Hazari Computer Opponent Chooses Its Cards</a></li><li><a href="/blog/offline-first-scorekeeper-pwa/">Building an Offline-First Scorekeeper: IndexedDB, a Service Worker and No Backend</a></li><li><a href="/blog/read-only-live-scoreboard-design/">Designing a Read-Only Live Scoreboard With Guest Sharing</a></li><li><a href="/blog/bangla-card-names-hazari-app/">টেক্কা, সাহেব, বিবি, গোলাম: Making a Card Game App Natural in Bangla</a></li><li><a href="/blog/real-html-for-a-react-app-seo/">Making a React App Findable: Real HTML Pages Before JavaScript Runs</a></li></ul></div></div></main></div>
+  </body>
+</html>

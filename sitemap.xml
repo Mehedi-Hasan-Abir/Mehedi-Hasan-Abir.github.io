@@ -7,6 +7,9 @@
     <loc>https://mhabir.dev/blog/</loc>
   </url>
   <url>
+    <loc>https://mhabir.dev/hazari/</loc>
+  </url>
+  <url>
     <loc>https://mhabir.dev/works/</loc>
   </url>
   <url>
@@ -22,18 +25,78 @@
     <loc>https://mhabir.dev/projects/outlet-fraud-detection/</loc>
   </url>
   <url>
-    <loc>https://mhabir.dev/blog/llm-in-production/</loc>
+    <loc>https://mhabir.dev/projects/hazari-card-game-scoring/</loc>
   </url>
   <url>
     <loc>https://mhabir.dev/blog/ai-coding-harness/</loc>
   </url>
   <url>
-    <loc>https://mhabir.dev/demos/bd-union-explorer/</loc>
-  </url>
-  <url>
-    <loc>https://mhabir.dev/projects/hazari-card-game-scoring/</loc>
+    <loc>https://mhabir.dev/blog/llm-in-production/</loc>
   </url>
   <url>
     <loc>https://mhabir.dev/blog/hazari-scoring-app/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/hazari-three-card-hand-odds/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/why-hazari-deal-is-360-points/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/how-many-deals-in-a-game-of-hazari/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/ways-to-arrange-13-cards-hazari/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/how-to-arrange-cards-in-hazari/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/hazari-four-card-group/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/hazari-beginner-mistakes/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/hazari-worked-deal-example/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/hazari-scoring-worked-example/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/settle-hazari-scoring-disputes/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/hazari-house-rules-checklist/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/paper-or-app-hazari-scorekeeping/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/hazari-banter-and-funny-tags/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/share-hazari-scoreboard-live/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/play-hazari-against-the-computer/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/how-the-hazari-computer-opponent-works/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/offline-first-scorekeeper-pwa/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/read-only-live-scoreboard-design/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/bangla-card-names-hazari-app/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/blog/real-html-for-a-react-app-seo/</loc>
+  </url>
+  <url>
+    <loc>https://mhabir.dev/demos/bd-union-explorer/</loc>
   </url>
 </urlset>

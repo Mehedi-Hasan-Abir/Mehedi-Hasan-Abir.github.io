@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
+    <title>Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through | Mehedi Hasan Abir</title>
+    <meta name="description" content="A complete eight-deal Hazari game added up deal by deal, with every running total, so you can see how scores build and how the game ends." />
+    <meta property="og:title" content="Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through | Mehedi Hasan Abir" />
+    <meta property="og:description" content="A complete eight-deal Hazari game added up deal by deal, with every running total, so you can see how scores build and how the game ends." />
+    <meta property="og:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <meta property="og:url" content="https://mhabir.dev/blog/hazari-scoring-worked-example/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mehedi Hasan Abir — Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through | Mehedi Hasan Abir" />
+    <meta name="twitter:description" content="A complete eight-deal Hazari game added up deal by deal, with every running total, so you can see how scores build and how the game ends." />
+    <meta name="twitter:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <link rel="canonical" href="https://mhabir.dev/blog/hazari-scoring-worked-example/" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="font" href="/fonts/ArchivoVariable.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/JetBrainsMonoVariable.woff2" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://mhabir.dev/#person",
+      "name": "Mehedi Hasan Abir",
+      "alternateName": "Mehedi Hasan",
+      "givenName": "Mehedi",
+      "jobTitle": "Senior Software Engineer (AI/ML)",
+      "description": "AI/ML Engineer specializing in LLMs, Document AI, and production-ready ML systems",
+      "url": "https://mhabir.dev/",
+      "image": "https://mhabir.dev/images/profile_re.webp",
+      "email": "hello@mhabir.dev",
+      "telephone": "(+880) 1521323549",
+      "address": { "@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "Ahsanullah University of Science and Technology (AUST)" },
+        { "@type": "CollegeOrUniversity", "name": "Hermann Gmeiner School, Mirpur" }
+      ],
+      "worksFor": { "@type": "Organization", "name": "Technonext" },
+      "knowsAbout": ["Large Language Models", "Retrieval-Augmented Generation", "Document AI", "Computer Vision", "Search Systems", "Machine Learning", "MLOps"],
+      "sameAs": [
+        "https://github.com/Mehedi-Hasan-Abir",
+        "https://linkedin.com/in/mehedihasan102",
+        "https://medium.com/@mhabir102",
+        "https://mhabir.substack.com",
+        "https://www.facebook.com/mehedihasan.abir.7/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mehedi Hasan Abir — Portfolio",
+      "url": "https://mhabir.dev/",
+      "description": "Building production-grade LLM systems and resilient AI pipelines. Specializing in Document AI, RAG, and high-throughput ML inference.",
+      "author": { "@id": "https://mhabir.dev/#person" }
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-CD7lj_N0.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-core-N--QU9DW.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-CnDHW2dc.js">
+    <link rel="modulepreload" crossorigin href="/assets/radix-BcK-Cui3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D0YSF5oS.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through","description":"A complete eight-deal Hazari game added up deal by deal, with every running total, so you can see how scores build and how the game ends.","datePublished":"2026-11-24","dateModified":"2026-11-24","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https://mhabir.dev/blog/hazari-scoring-worked-example/"},"author":{"@id":"https://mhabir.dev/#person"},"publisher":{"@id":"https://mhabir.dev/#person"},"image":"https://mhabir.dev/images/og-image.jpg","keywords":"Hazari, Card Games, Scoring, Worked Example"}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://mhabir.dev/"},{"@type":"ListItem","position":2,"name":"Hazari","item":"https://mhabir.dev/hazari/"},{"@type":"ListItem","position":3,"name":"Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through","item":"https://mhabir.dev/blog/hazari-scoring-worked-example/"}]}</script></head>
+  <body>
+    <div id="root"><main id="static-fallback" class="min-h-screen bg-background text-foreground"><div class="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24"><nav aria-label="Breadcrumb" class="mono-label text-muted-foreground mb-10"><a href="/">Home</a> / Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through</nav><p class="mono-label text-accent mb-4">ARTICLE</p><h1 class="display-lg max-w-[26ch]">Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through</h1><div class="mt-7"><p>A complete eight-deal Hazari game added up deal by deal, with every running total, so you can see how scores build and how the game ends.</p><h2>Tags</h2><ul><li>Hazari</li><li>Card Games</li><li>Scoring</li><li>Worked Example</li></ul><p>Published November 24, 2026.</p><p>Hazari scores are easy to understand and easy to get wrong over an evening. This is one complete game, every deal added up, so you can follow the numbers from the first deal to the winning total.</p><p>I generated the game with the Hazari engine, with four computer players. Each deal&#39;s points are what each player collected, and every deal adds up to 360.</p><h2>The game, deal by deal</h2><p>Each line shows the points collected in that deal, then the running totals for Players A, B, C and D.</p><ol><li><strong>Deal 1:</strong> 185, 0, 0, 175. Totals: <strong>185, 0, 0, 175</strong>.</li><li><strong>Deal 2:</strong> 270, 90, 0, 0. Totals: <strong>455, 90, 0, 175</strong>.</li><li><strong>Deal 3:</strong> 0, 0, 265, 95. Totals: <strong>455, 90, 265, 270</strong>.</li><li><strong>Deal 4:</strong> 280, 0, 80, 0. Totals: <strong>735, 90, 345, 270</strong>.</li><li><strong>Deal 5:</strong> 0, 80, 85, 195. Totals: <strong>735, 170, 430, 465</strong>.</li><li><strong>Deal 6:</strong> 180, 0, 90, 90. Totals: <strong>915, 170, 520, 555</strong>.</li><li><strong>Deal 7:</strong> 0, 0, 85, 275. Totals: <strong>915, 170, 605, 830</strong>.</li><li><strong>Deal 8:</strong> 175, 0, 185, 0. Totals: <strong>1,090, 170, 790, 830</strong>.</li></ol><p>Player A reached 1,090 in Deal 8 and won. Notice what happened along the way.</p><h2>What the numbers show</h2><ul><li><strong>Every row adds up to 360.</strong> Deal 5, for example, is 0 + 80 + 85 + 195 = 360. If a row does not, someone miscounted.</li><li><strong>Points come in lumps.</strong> A round winner takes every card in the round, so a player often collects 0 or 85 or 270 and rarely a number in between.</li><li><strong>The leader can lose it.</strong> After Deal 6, Player A was on 915 and Player D on 555. After Deal 7 Player D had 830, and Player A, who scored nothing in Deal 7, still led by 85.</li><li><strong>You can finish above 1,000.</strong> Player A won with 1,090 because the last deal added 175, not just the 85 needed.</li></ul><h2>What if two players pass 1,000 together?</h2><p>Two players can pass the target in the same deal. The usual way to settle it is that the higher total wins. Agree on this before you play, because tables differ. The <a href="/blog/hazari-house-rules-checklist/">house rules checklist</a> covers it.</p><h2>Keeping the running score</h2><ol><li>After each deal, write each player&#39;s points on one row.</li><li>Add the row. It must be 360.</li><li>Add each player&#39;s points to their previous total, in a separate row, and check that the totals add up to 360 times the number of deals. After Deal 8 the totals add to 2,880.</li><li>Stop when a total reaches 1,000.</li></ol><p>That last check is a good one. In this game the four totals after eight deals are 1,090 + 170 + 790 + 830 = 2,880, which is 8 × 360, so nothing went missing along the way.</p><p>For the arithmetic behind each row, see <a href="/blog/why-hazari-deal-is-360-points/">why every deal is worth 360 points</a>. If your own totals ever disagree, <a href="/blog/settle-hazari-scoring-disputes/">settle the argument in two minutes</a>. And to know how long a game like this should take, read <a href="/blog/how-many-deals-in-a-game-of-hazari/">how many deals a game to 1,000 lasts</a>.</p><p>The scorekeeper does these additions for you and flags a round that does not add up. The <a href="https://hazari-card-game-scoring.vercel.app/how-to-score-hazari" target="_blank" rel="noopener noreferrer">guide to scoring Hazari</a> walks through it screen by screen.</p><section aria-labelledby="hazari-cta-heading" class="mt-14 border border-primary/40 bg-primary/5 rounded-xl p-6 md:p-8"><h2 id="hazari-cta-heading" class="text-2xl font-extrabold">Play it or score it</h2><p class="mt-3 text-muted-foreground leading-relaxed max-w-[60ch]">Play Hazari alone against the computer, or keep score and share the banter with your friends. It is free and works offline.</p><div class="mt-6 flex flex-wrap gap-3"><a href="https://hazari-card-game-scoring.vercel.app/play" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm">Play against the computer</a><a href="https://hazari-card-game-scoring.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm">Keep score and share live</a></div></section><h2>More Hazari guides</h2><p><a href="/hazari/">All Hazari guides</a></p><h2>Odds and numbers</h2><ul><li><a href="/blog/hazari-three-card-hand-odds/">How Rare Is a Troy? The Odds of Every Three-Card Hand in Hazari</a></li><li><a href="/blog/why-hazari-deal-is-360-points/">Why Every Hazari Deal Is Worth Exactly 360 Points</a></li><li><a href="/blog/how-many-deals-in-a-game-of-hazari/">How Many Deals Does a Game of Hazari to 1,000 Take?</a></li><li><a href="/blog/ways-to-arrange-13-cards-hazari/">200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks</a></li></ul><h2>Strategy</h2><ul><li><a href="/blog/how-to-arrange-cards-in-hazari/">How to Arrange Your Cards in Hazari: A Practical Guide to 3-3-3-4</a></li><li><a href="/blog/hazari-four-card-group/">The Four-Card Group in Hazari: Weakest by Rule, Biggest Prize in the Deal</a></li><li><a href="/blog/hazari-beginner-mistakes/">7 Mistakes New Hazari Players Make When Arranging Cards</a></li><li><a href="/blog/hazari-worked-deal-example/">One Hazari Deal, Round by Round: A Worked Example with Real Cards</a></li></ul><h2>Scoring and house rules</h2><ul><li><a href="/blog/settle-hazari-scoring-disputes/">How to Settle a Hazari Scoring Argument in Two Minutes</a></li><li><a href="/blog/hazari-house-rules-checklist/">Hazari House Rules Checklist: Agree These 8 Things Before the First Deal</a></li><li><a href="/blog/paper-or-app-hazari-scorekeeping/">Paper or App? How to Keep Hazari Score Without Arguments</a></li></ul><h2>Playing with friends</h2><ul><li><a href="/blog/hazari-banter-and-funny-tags/">Roasting Your Friends at the Hazari Table: Funny Leaderboard Tags</a></li><li><a href="/blog/share-hazari-scoreboard-live/">Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard</a></li><li><a href="/blog/play-hazari-against-the-computer/">Play Hazari Alone: Practise Against Three Computer Players</a></li></ul><h2>Behind the app</h2><ul><li><a href="/blog/hazari-scoring-app/">How I Built an Offline Hazari Scoring App Friends Can Watch Live</a></li><li><a href="/blog/how-the-hazari-computer-opponent-works/">How the Hazari Computer Opponent Chooses Its Cards</a></li><li><a href="/blog/offline-first-scorekeeper-pwa/">Building an Offline-First Scorekeeper: IndexedDB, a Service Worker and No Backend</a></li><li><a href="/blog/read-only-live-scoreboard-design/">Designing a Read-Only Live Scoreboard With Guest Sharing</a></li><li><a href="/blog/bangla-card-names-hazari-app/">টেক্কা, সাহেব, বিবি, গোলাম: Making a Card Game App Natural in Bangla</a></li><li><a href="/blog/real-html-for-a-react-app-seo/">Making a React App Findable: Real HTML Pages Before JavaScript Runs</a></li></ul></div></div></main></div>
+  </body>
+</html>

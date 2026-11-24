@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
+    <title>Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard | Mehedi Hasan Abir</title>
+    <meta name="description" content="How to share a live, read-only Hazari scoreboard by link so friends and family who are not at the table can follow every round." />
+    <meta property="og:title" content="Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard | Mehedi Hasan Abir" />
+    <meta property="og:description" content="How to share a live, read-only Hazari scoreboard by link so friends and family who are not at the table can follow every round." />
+    <meta property="og:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <meta property="og:url" content="https://mhabir.dev/blog/share-hazari-scoreboard-live/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mehedi Hasan Abir — Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard | Mehedi Hasan Abir" />
+    <meta name="twitter:description" content="How to share a live, read-only Hazari scoreboard by link so friends and family who are not at the table can follow every round." />
+    <meta name="twitter:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <link rel="canonical" href="https://mhabir.dev/blog/share-hazari-scoreboard-live/" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="font" href="/fonts/ArchivoVariable.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/JetBrainsMonoVariable.woff2" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://mhabir.dev/#person",
+      "name": "Mehedi Hasan Abir",
+      "alternateName": "Mehedi Hasan",
+      "givenName": "Mehedi",
+      "jobTitle": "Senior Software Engineer (AI/ML)",
+      "description": "AI/ML Engineer specializing in LLMs, Document AI, and production-ready ML systems",
+      "url": "https://mhabir.dev/",
+      "image": "https://mhabir.dev/images/profile_re.webp",
+      "email": "hello@mhabir.dev",
+      "telephone": "(+880) 1521323549",
+      "address": { "@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "Ahsanullah University of Science and Technology (AUST)" },
+        { "@type": "CollegeOrUniversity", "name": "Hermann Gmeiner School, Mirpur" }
+      ],
+      "worksFor": { "@type": "Organization", "name": "Technonext" },
+      "knowsAbout": ["Large Language Models", "Retrieval-Augmented Generation", "Document AI", "Computer Vision", "Search Systems", "Machine Learning", "MLOps"],
+      "sameAs": [
+        "https://github.com/Mehedi-Hasan-Abir",
+        "https://linkedin.com/in/mehedihasan102",
+        "https://medium.com/@mhabir102",
+        "https://mhabir.substack.com",
+        "https://www.facebook.com/mehedihasan.abir.7/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mehedi Hasan Abir — Portfolio",
+      "url": "https://mhabir.dev/",
+      "description": "Building production-grade LLM systems and resilient AI pipelines. Specializing in Document AI, RAG, and high-throughput ML inference.",
+      "author": { "@id": "https://mhabir.dev/#person" }
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-CD7lj_N0.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-core-N--QU9DW.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-CnDHW2dc.js">
+    <link rel="modulepreload" crossorigin href="/assets/radix-BcK-Cui3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D0YSF5oS.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard","description":"How to share a live, read-only Hazari scoreboard by link so friends and family who are not at the table can follow every round.","datePublished":"2026-11-24","dateModified":"2026-11-24","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https://mhabir.dev/blog/share-hazari-scoreboard-live/"},"author":{"@id":"https://mhabir.dev/#person"},"publisher":{"@id":"https://mhabir.dev/#person"},"image":"https://mhabir.dev/images/og-image.jpg","keywords":"Hazari, Card Games, Live Scoreboard, Sharing"}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://mhabir.dev/"},{"@type":"ListItem","position":2,"name":"Hazari","item":"https://mhabir.dev/hazari/"},{"@type":"ListItem","position":3,"name":"Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard","item":"https://mhabir.dev/blog/share-hazari-scoreboard-live/"}]}</script></head>
+  <body>
+    <div id="root"><main id="static-fallback" class="min-h-screen bg-background text-foreground"><div class="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24"><nav aria-label="Breadcrumb" class="mono-label text-muted-foreground mb-10"><a href="/">Home</a> / Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard</nav><p class="mono-label text-accent mb-4">ARTICLE</p><h1 class="display-lg max-w-[26ch]">Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard</h1><div class="mt-7"><p>How to share a live, read-only Hazari scoreboard by link so friends and family who are not at the table can follow every round.</p><h2>Tags</h2><ul><li>Hazari</li><li>Card Games</li><li>Live Scoreboard</li><li>Sharing</li></ul><p>Published November 24, 2026.</p><p>Some of the best fans of a Hazari game are not at the table. A cousin abroad, a friend who is running late, the family in the next room. A read-only live scoreboard lets them all follow the game from their own phones.</p><h2>How to share</h2><ol><li>One person at the table keeps score in the scorekeeper.</li><li>Open the game, choose <strong>Share live scoreboard</strong>, then <strong>Start sharing</strong>.</li><li>Send the link, or let people scan the QR code on your screen.</li><li>Everyone who opens it sees the leaderboard update as each round is saved.</li></ol><p>You do not need an account to start. Sharing starts as a guest by default, and signing in with Google is optional.</p><h2>What viewers see</h2><ul><li>The ranked leaderboard, with who is leading and who deals next.</li><li>A table of the rounds so far.</li><li>Small highlights, such as a winning streak, and the funny tags that go with the standings.</li></ul><p>Viewers cannot change a score, and they do not see the scorer&#39;s drafts, other games or sign-in details. The scorer&#39;s phone stays the single source of truth.</p><h2>One link for the whole evening</h2><p>When a game ends and you press Play again, the link stays the same, so friends keep watching without a new link. Viewers follow the current game automatically and can look back at earlier games from the same session.</p><h2>Limits worth knowing</h2><ul><li>The scorer&#39;s browser has to stay open while the game is running, because it is the scorer&#39;s phone that sends the updates.</li><li>Shared links expire on their own, and the scorer can stop sharing at any time. Stopping closes the link.</li><li>Scoring itself works without a connection. Only the live view needs the internet.</li></ul><p>If you want the leaders teased while everyone watches, read about <a href="/blog/hazari-banter-and-funny-tags/">funny leaderboard tags</a>. If you are still deciding how to keep score, <a href="/blog/paper-or-app-hazari-scorekeeping/">paper or an app?</a> compares the options.</p><p>A short <a href="https://hazari-card-game-scoring.vercel.app/share-live-scoreboard" target="_blank" rel="noopener noreferrer">guide to sharing a live scoreboard</a> is on the app&#39;s site, and the <a href="/blog/read-only-live-scoreboard-design/">design of the live scoreboard</a> is explained here for the curious.</p><section aria-labelledby="hazari-cta-heading" class="mt-14 border border-primary/40 bg-primary/5 rounded-xl p-6 md:p-8"><h2 id="hazari-cta-heading" class="text-2xl font-extrabold">Play it or score it</h2><p class="mt-3 text-muted-foreground leading-relaxed max-w-[60ch]">Play Hazari alone against the computer, or keep score and share the banter with your friends. It is free and works offline.</p><div class="mt-6 flex flex-wrap gap-3"><a href="https://hazari-card-game-scoring.vercel.app/play" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm">Play against the computer</a><a href="https://hazari-card-game-scoring.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm">Keep score and share live</a></div></section><h2>More Hazari guides</h2><p><a href="/hazari/">All Hazari guides</a></p><h2>Odds and numbers</h2><ul><li><a href="/blog/hazari-three-card-hand-odds/">How Rare Is a Troy? The Odds of Every Three-Card Hand in Hazari</a></li><li><a href="/blog/why-hazari-deal-is-360-points/">Why Every Hazari Deal Is Worth Exactly 360 Points</a></li><li><a href="/blog/how-many-deals-in-a-game-of-hazari/">How Many Deals Does a Game of Hazari to 1,000 Take?</a></li><li><a href="/blog/ways-to-arrange-13-cards-hazari/">200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks</a></li></ul><h2>Strategy</h2><ul><li><a href="/blog/how-to-arrange-cards-in-hazari/">How to Arrange Your Cards in Hazari: A Practical Guide to 3-3-3-4</a></li><li><a href="/blog/hazari-four-card-group/">The Four-Card Group in Hazari: Weakest by Rule, Biggest Prize in the Deal</a></li><li><a href="/blog/hazari-beginner-mistakes/">7 Mistakes New Hazari Players Make When Arranging Cards</a></li><li><a href="/blog/hazari-worked-deal-example/">One Hazari Deal, Round by Round: A Worked Example with Real Cards</a></li></ul><h2>Scoring and house rules</h2><ul><li><a href="/blog/hazari-scoring-worked-example/">Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through</a></li><li><a href="/blog/settle-hazari-scoring-disputes/">How to Settle a Hazari Scoring Argument in Two Minutes</a></li><li><a href="/blog/hazari-house-rules-checklist/">Hazari House Rules Checklist: Agree These 8 Things Before the First Deal</a></li><li><a href="/blog/paper-or-app-hazari-scorekeeping/">Paper or App? How to Keep Hazari Score Without Arguments</a></li></ul><h2>Playing with friends</h2><ul><li><a href="/blog/hazari-banter-and-funny-tags/">Roasting Your Friends at the Hazari Table: Funny Leaderboard Tags</a></li><li><a href="/blog/play-hazari-against-the-computer/">Play Hazari Alone: Practise Against Three Computer Players</a></li></ul><h2>Behind the app</h2><ul><li><a href="/blog/hazari-scoring-app/">How I Built an Offline Hazari Scoring App Friends Can Watch Live</a></li><li><a href="/blog/how-the-hazari-computer-opponent-works/">How the Hazari Computer Opponent Chooses Its Cards</a></li><li><a href="/blog/offline-first-scorekeeper-pwa/">Building an Offline-First Scorekeeper: IndexedDB, a Service Worker and No Backend</a></li><li><a href="/blog/read-only-live-scoreboard-design/">Designing a Read-Only Live Scoreboard With Guest Sharing</a></li><li><a href="/blog/bangla-card-names-hazari-app/">টেক্কা, সাহেব, বিবি, গোলাম: Making a Card Game App Natural in Bangla</a></li><li><a href="/blog/real-html-for-a-react-app-seo/">Making a React App Findable: Real HTML Pages Before JavaScript Runs</a></li></ul></div></div></main></div>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
+    <title>One Hazari Deal, Round by Round: A Worked Example with Real Cards | Mehedi Hasan Abir</title>
+    <meta name="description" content="A full four-player Hazari deal with every hand, every group and every round shown, so you can see how groups are compared and how 360 points get split." />
+    <meta property="og:title" content="One Hazari Deal, Round by Round: A Worked Example with Real Cards | Mehedi Hasan Abir" />
+    <meta property="og:description" content="A full four-player Hazari deal with every hand, every group and every round shown, so you can see how groups are compared and how 360 points get split." />
+    <meta property="og:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <meta property="og:url" content="https://mhabir.dev/blog/hazari-worked-deal-example/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mehedi Hasan Abir — Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="One Hazari Deal, Round by Round: A Worked Example with Real Cards | Mehedi Hasan Abir" />
+    <meta name="twitter:description" content="A full four-player Hazari deal with every hand, every group and every round shown, so you can see how groups are compared and how 360 points get split." />
+    <meta name="twitter:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <link rel="canonical" href="https://mhabir.dev/blog/hazari-worked-deal-example/" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="font" href="/fonts/ArchivoVariable.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/JetBrainsMonoVariable.woff2" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://mhabir.dev/#person",
+      "name": "Mehedi Hasan Abir",
+      "alternateName": "Mehedi Hasan",
+      "givenName": "Mehedi",
+      "jobTitle": "Senior Software Engineer (AI/ML)",
+      "description": "AI/ML Engineer specializing in LLMs, Document AI, and production-ready ML systems",
+      "url": "https://mhabir.dev/",
+      "image": "https://mhabir.dev/images/profile_re.webp",
+      "email": "hello@mhabir.dev",
+      "telephone": "(+880) 1521323549",
+      "address": { "@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "Ahsanullah University of Science and Technology (AUST)" },
+        { "@type": "CollegeOrUniversity", "name": "Hermann Gmeiner School, Mirpur" }
+      ],
+      "worksFor": { "@type": "Organization", "name": "Technonext" },
+      "knowsAbout": ["Large Language Models", "Retrieval-Augmented Generation", "Document AI", "Computer Vision", "Search Systems", "Machine Learning", "MLOps"],
+      "sameAs": [
+        "https://github.com/Mehedi-Hasan-Abir",
+        "https://linkedin.com/in/mehedihasan102",
+        "https://medium.com/@mhabir102",
+        "https://mhabir.substack.com",
+        "https://www.facebook.com/mehedihasan.abir.7/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mehedi Hasan Abir — Portfolio",
+      "url": "https://mhabir.dev/",
+      "description": "Building production-grade LLM systems and resilient AI pipelines. Specializing in Document AI, RAG, and high-throughput ML inference.",
+      "author": { "@id": "https://mhabir.dev/#person" }
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-CD7lj_N0.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-core-N--QU9DW.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-CnDHW2dc.js">
+    <link rel="modulepreload" crossorigin href="/assets/radix-BcK-Cui3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D0YSF5oS.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"One Hazari Deal, Round by Round: A Worked Example with Real Cards","description":"A full four-player Hazari deal with every hand, every group and every round shown, so you can see how groups are compared and how 360 points get split.","datePublished":"2026-11-24","dateModified":"2026-11-24","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https://mhabir.dev/blog/hazari-worked-deal-example/"},"author":{"@id":"https://mhabir.dev/#person"},"publisher":{"@id":"https://mhabir.dev/#person"},"image":"https://mhabir.dev/images/og-image.jpg","keywords":"Hazari, Card Games, Worked Example, Beginners"}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://mhabir.dev/"},{"@type":"ListItem","position":2,"name":"Hazari","item":"https://mhabir.dev/hazari/"},{"@type":"ListItem","position":3,"name":"One Hazari Deal, Round by Round: A Worked Example with Real Cards","item":"https://mhabir.dev/blog/hazari-worked-deal-example/"}]}</script></head>
+  <body>
+    <div id="root"><main id="static-fallback" class="min-h-screen bg-background text-foreground"><div class="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24"><nav aria-label="Breadcrumb" class="mono-label text-muted-foreground mb-10"><a href="/">Home</a> / One Hazari Deal, Round by Round: A Worked Example with Real Cards</nav><p class="mono-label text-accent mb-4">ARTICLE</p><h1 class="display-lg max-w-[26ch]">One Hazari Deal, Round by Round: A Worked Example with Real Cards</h1><div class="mt-7"><p>A full four-player Hazari deal with every hand, every group and every round shown, so you can see how groups are compared and how 360 points get split.</p><h2>Tags</h2><ul><li>Hazari</li><li>Card Games</li><li>Worked Example</li><li>Beginners</li></ul><p>Published November 24, 2026.</p><p>The easiest way to learn Hazari is to watch a deal played through. I generated this one with the game engine, using four medium-strength computer players, and checked that the points add up to 360.</p><h2>The four arrangements</h2><p>Each player&#39;s 13 cards, split into groups of 3, 3, 3 and 4, strongest first:</p><ul><li><strong>Player 1:</strong> J♦ 10♣ 9♦ (Run) · 10♠ 6♠ 2♠ (Colour) · K♥ K♦ 8♦ (Pair) · Q♠ Q♣ J♣ 4♥ (Pair of Queens)</li><li><strong>Player 2:</strong> A♦ Q♦ 5♦ (Colour) · K♣ 7♦ 7♣ (Pair) · 9♠ 4♠ 4♣ (Pair) · 10♥ 5♣ 3♠ 3♥ (Pair of 3s)</li><li><strong>Player 3:</strong> K♠ 8♠ 7♠ (Colour) · 8♣ 6♣ 2♣ (Colour) · 7♥ 6♥ 2♥ (Colour) · A♠ J♠ J♥ 9♣ (Pair of Jacks)</li><li><strong>Player 4:</strong> A♥ 8♥ 5♥ (Colour) · 10♦ 6♦ 4♦ (Colour) · 9♥ 3♦ 3♣ (Pair) · A♣ Q♥ 5♠ 2♦ (Indi)</li></ul><p>Check one: Player 4&#39;s last group is A♣ Q♥ 5♠ 2♦. Its best three cards are A, Q and 5, an Indi, and it is the weakest group in that hand, so the arrangement is legal. Play goes in order from Player 2, who leads the first round in this simulation.</p><h2>Round 1: a Run beats three Colours</h2><p>Players compare their first groups. Players 2, 3 and 4 all show a Colour, but Player 1 shows a Run (J-10-9), and a Run beats a Colour. Player 1 wins all 12 cards, worth <strong>90 points</strong>.</p><h2>Round 2: the higher Colour wins</h2><p>Three players show a Colour. Player 4&#39;s 10-6-4 of diamonds beats Player 1&#39;s 10-6-2 of spades, because the first two cards tie and the 4 is higher than the 2. Player 2&#39;s Pair loses to any Colour. Player 4 wins <strong>75 points</strong>.</p><h2>Round 3: one Colour among Pairs</h2><p>Player 3&#39;s Colour (7-6-2 of hearts) beats three Pairs, the Kings of Player 1, the 4s of Player 2 and the 3s of Player 4. Player 3 wins <strong>70 points</strong>.</p><h2>Round 4: the big pile</h2><p>Everyone shows four cards, and the best three decide. Player 1 has a Pair of Queens, Player 3 a Pair of Jacks, Player 2 a Pair of 3s, and Player 4 has no Pair. Queens win. This round holds 16 cards, so Player 1 collects <strong>125 points</strong>.</p><h2>The result</h2><ul><li>Player 1: 90 + 125 = <strong>215</strong></li><li>Player 4: <strong>75</strong></li><li>Player 3: <strong>70</strong></li><li>Player 2: <strong>0</strong></li></ul><p>215 + 75 + 70 + 0 = 360, as it must. Player 2 had a respectable hand and still won nothing: a Pair or a Colour was always beaten by something stronger in the same round.</p><h2>What to take from it</h2><ul><li>Rounds are won by comparing groups in the same position, not by comparing whole hands.</li><li>A single Run or Colour in the right position can win a whole round.</li><li>The four-card group decided the biggest pile, as the <a href="/blog/hazari-four-card-group/">article on the four-card group</a> describes.</li></ul><p>The next step is to add these deal totals to a running score. The <a href="/blog/hazari-scoring-worked-example/">scoring example</a> follows a full game to 1,000.</p><section aria-labelledby="hazari-cta-heading" class="mt-14 border border-primary/40 bg-primary/5 rounded-xl p-6 md:p-8"><h2 id="hazari-cta-heading" class="text-2xl font-extrabold">Play it or score it</h2><p class="mt-3 text-muted-foreground leading-relaxed max-w-[60ch]">Play Hazari alone against the computer, or keep score and share the banter with your friends. It is free and works offline.</p><div class="mt-6 flex flex-wrap gap-3"><a href="https://hazari-card-game-scoring.vercel.app/play" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-full font-semibold text-sm">Play against the computer</a><a href="https://hazari-card-game-scoring.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-push inline-flex items-center gap-2 px-7 py-3.5 border border-border rounded-full font-semibold text-sm">Keep score and share live</a></div></section><h2>More Hazari guides</h2><p><a href="/hazari/">All Hazari guides</a></p><h2>Odds and numbers</h2><ul><li><a href="/blog/hazari-three-card-hand-odds/">How Rare Is a Troy? The Odds of Every Three-Card Hand in Hazari</a></li><li><a href="/blog/why-hazari-deal-is-360-points/">Why Every Hazari Deal Is Worth Exactly 360 Points</a></li><li><a href="/blog/how-many-deals-in-a-game-of-hazari/">How Many Deals Does a Game of Hazari to 1,000 Take?</a></li><li><a href="/blog/ways-to-arrange-13-cards-hazari/">200,200 Ways to Arrange 13 Cards: Why Hazari Is Harder Than It Looks</a></li></ul><h2>Strategy</h2><ul><li><a href="/blog/how-to-arrange-cards-in-hazari/">How to Arrange Your Cards in Hazari: A Practical Guide to 3-3-3-4</a></li><li><a href="/blog/hazari-four-card-group/">The Four-Card Group in Hazari: Weakest by Rule, Biggest Prize in the Deal</a></li><li><a href="/blog/hazari-beginner-mistakes/">7 Mistakes New Hazari Players Make When Arranging Cards</a></li></ul><h2>Scoring and house rules</h2><ul><li><a href="/blog/hazari-scoring-worked-example/">Scoring Hazari Round by Round: One Full Game to 1,000, Worked Through</a></li><li><a href="/blog/settle-hazari-scoring-disputes/">How to Settle a Hazari Scoring Argument in Two Minutes</a></li><li><a href="/blog/hazari-house-rules-checklist/">Hazari House Rules Checklist: Agree These 8 Things Before the First Deal</a></li><li><a href="/blog/paper-or-app-hazari-scorekeeping/">Paper or App? How to Keep Hazari Score Without Arguments</a></li></ul><h2>Playing with friends</h2><ul><li><a href="/blog/hazari-banter-and-funny-tags/">Roasting Your Friends at the Hazari Table: Funny Leaderboard Tags</a></li><li><a href="/blog/share-hazari-scoreboard-live/">Let Friends Watch Your Hazari Game Live: How to Share a Scoreboard</a></li><li><a href="/blog/play-hazari-against-the-computer/">Play Hazari Alone: Practise Against Three Computer Players</a></li></ul><h2>Behind the app</h2><ul><li><a href="/blog/hazari-scoring-app/">How I Built an Offline Hazari Scoring App Friends Can Watch Live</a></li><li><a href="/blog/how-the-hazari-computer-opponent-works/">How the Hazari Computer Opponent Chooses Its Cards</a></li><li><a href="/blog/offline-first-scorekeeper-pwa/">Building an Offline-First Scorekeeper: IndexedDB, a Service Worker and No Backend</a></li><li><a href="/blog/read-only-live-scoreboard-design/">Designing a Read-Only Live Scoreboard With Guest Sharing</a></li><li><a href="/blog/bangla-card-names-hazari-app/">টেক্কা, সাহেব, বিবি, গোলাম: Making a Card Game App Natural in Bangla</a></li><li><a href="/blog/real-html-for-a-react-app-seo/">Making a React App Findable: Real HTML Pages Before JavaScript Runs</a></li></ul></div></div></main></div>
+  </body>
+</html>
