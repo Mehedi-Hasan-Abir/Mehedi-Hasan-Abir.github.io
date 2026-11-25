@@ -43,6 +43,8 @@ const requiredPages = [
   "/demos/bd-union-explorer/",
   "/projects/hazari-card-game-scoring/",
   "/blog/hazari-scoring-app/",
+  "/blog/best-github-repos-claude-code-codex-opencode/",
+  "/blog/claude-skills-for-slides-reports-marketing/",
   "/hazari/",
   "/blog/hazari-three-card-hand-odds/",
   "/blog/how-the-hazari-computer-opponent-works/",

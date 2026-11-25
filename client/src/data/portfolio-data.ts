@@ -426,6 +426,33 @@ export const portfolioData = {
   ],
   blogs: [
     {
+      id: 9,
+      title: "12 GitHub Repos That Turn AI Into Your Slide, Report and Marketing Team (No Coding Needed)",
+      description: "Part 2: free, open-source Claude skills and skill packs that make Claude, Codex and OpenCode build decks, reports, dashboards, SVG graphics, web pages and campaigns from plain-English requests, with no coding.",
+      thumbnail: "/images/blog-ai-team-repos-12.webp",
+      thumbnailWidth: 1200,
+      thumbnailHeight: 670,
+      externalLink: "https://pub.towardsai.net/12-github-repos-that-turn-ai-into-your-slide-report-and-marketing-team-no-coding-needed-35071c96c885",
+      // On-site quick reference; the full article stays on Towards AI.
+      internalPath: "/blog/claude-skills-for-slides-reports-marketing/",
+      platform: "Medium",
+      date: "2026-11-12",
+      tags: ["Claude Skills", "AI Agents", "Productivity", "Digital Marketing", "GitHub"]
+    },
+    {
+      id: 8,
+      title: "15 GitHub Repos That Turn Claude Code, Codex and OpenCode Into a Real Team",
+      description: "Your AI coding agent is only as good as what you plug into it. Fifteen community-starred repos grouped by the job they do, from planning and memory to design, visibility and plumbing, plus the catch nobody puts in the README.",
+      thumbnail: "/images/blog-agent-repos-15.webp",
+      thumbnailWidth: 1200,
+      thumbnailHeight: 670,
+      externalLink: "https://pub.towardsai.net/15-github-repos-that-turn-claude-code-codex-and-opencode-into-a-real-team-fb4b18a99efe",
+      internalPath: "/blog/best-github-repos-claude-code-codex-opencode/",
+      platform: "Medium",
+      date: "2026-11-05",
+      tags: ["Claude Code", "Codex", "OpenCode", "Agent Skills", "GitHub"]
+    },
+    {
       id: 1,
       title: "The System Design Decisions Behind Big Tech Stacks",
       description: "System design lessons from Uber, Netflix, Stripe, and other tech giants. A practical breakdown of distributed systems, cloud-native infrastructure, high-performance backends, and the trade-offs tech leads must understand.",

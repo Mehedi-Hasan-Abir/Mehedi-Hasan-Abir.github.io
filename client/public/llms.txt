@@ -1,0 +1,24 @@
+# Mehedi Hasan Abir
+
+> Mehedi Hasan Abir is a Senior AI/ML Engineer in Dhaka, Bangladesh, with 5+ years of experience building production AI systems: LLM applications, RAG, document intelligence, search, and model inference and serving. He writes about practical AI engineering on mhabir.dev and in Towards AI on Medium (@mhabir102).
+
+## About
+
+- [About Mehedi Hasan Abir](https://mhabir.dev/about/): experience, education and background
+- [Selected work](https://mhabir.dev/works/): AI/ML projects and case studies
+- [Research](https://mhabir.dev/research/): IEEE paper on Bengali intent classification (BNIntent30, GAN-BnBERT) and ECG classification work
+
+## Writing
+
+- [15 Best GitHub Repos for Claude Code, Codex and OpenCode](https://mhabir.dev/blog/best-github-repos-claude-code-codex-opencode/): agent skills and tools for AI coding agents, grouped by job, with install commands
+- [12 Claude Skills for Slides, Reports and Marketing](https://mhabir.dev/blog/claude-skills-for-slides-reports-marketing/): open-source skills that build decks, reports, landing pages, videos and marketing copy with no coding
+- [The AI Coding Harness I Reuse on Every Project](https://mhabir.dev/blog/ai-coding-harness/): AGENTS.md, SESSION.md, CHECKLIST.md and HANDOFF.md for Claude Code and OpenCode
+- [How to Use, Optimize, and Serve an LLM in Your Production System](https://mhabir.dev/blog/llm-in-production/): model-level optimization, serving for P95/P99 latency, and choosing an inference engine
+- [How I Built an Offline Hazari Scoring App](https://mhabir.dev/blog/hazari-scoring-app/): an offline-first PWA scorekeeper with a live scoreboard
+- [All writing](https://mhabir.dev/blog/)
+
+## Elsewhere
+
+- [Medium](https://medium.com/@mhabir102)
+- [GitHub](https://github.com/Mehedi-Hasan-Abir)
+- [LinkedIn](https://linkedin.com/in/mehedihasan102)

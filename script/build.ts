@@ -11,7 +11,7 @@ import { HAZARI_CTA, HAZARI_HUB, HAZARI_TOPICS } from "../client/src/data/hazari
 const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
 const clientOutputDirectory = path.resolve("dist/public");
 const BLOG_TITLE = "AI/ML Engineering Writing | Mehedi Hasan Abir";
-const BLOG_DESCRIPTION = "Articles on LLM systems, inference, search, and practical AI engineering by Mehedi Hasan Abir.";
+const BLOG_DESCRIPTION = "Articles on LLM inference and serving, AI coding agents like Claude Code, Codex and OpenCode, agent skills, and practical AI engineering by Mehedi Hasan Abir.";
 const BLOG_URL = "https://mhabir.dev/blog/";
 const WORKS_TITLE = "Selected AI/ML Work | Mehedi Hasan Abir";
 const WORKS_DESCRIPTION = "Explore AI/ML projects by Mehedi Hasan Abir, including search infrastructure, retrieval systems, computer vision, and production engineering.";
@@ -411,7 +411,33 @@ async function createStaticRouteFallbacks() {
   );
   const routes: Array<{ file: string; page: StaticPage; html: string }> = [
     { file: "index.html", page: "home", html: homeHtml },
-    { file: "blog/index.html", page: "blog", html: createBlogHtml(homeHtml) },
+    {
+      file: "blog/index.html",
+      page: "blog",
+      html: addSchema(createBlogHtml(homeHtml), {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: BLOG_TITLE,
+        description: BLOG_DESCRIPTION,
+        url: BLOG_URL,
+        inLanguage: "en",
+        author: { "@id": `${SITE}/#person` },
+        mainEntity: {
+          "@type": "ItemList",
+          // Same href rule as the static fallback list: the on-site copy when one
+          // exists, otherwise the cross-post.
+          itemListElement: portfolioData.blogs.map((post, index) => {
+            const article = articles.find((item) => item.blogId === post.id);
+            return {
+              "@type": "ListItem",
+              position: index + 1,
+              url: article ? `${SITE}/blog/${article.slug}/` : post.externalLink,
+              name: post.title,
+            };
+          }),
+        },
+      }),
+    },
     {
       file: "hazari/index.html",
       page: "hazari-hub",
