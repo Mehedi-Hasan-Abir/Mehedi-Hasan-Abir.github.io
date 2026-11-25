@@ -43,9 +43,9 @@ export interface Article {
 const coreArticles: Article[] = [
   {
     slug: "ai-coding-harness",
-    title: "The AI Coding Harness I Reuse on Every Project (4 Files + Skills)",
+    title: "AI Coding Harness: 4 Files That Give Claude Code and OpenCode Memory",
     summary:
-      "How I set up Claude Code and OpenCode before writing any code: 4 Markdown files plus the right skills. Copy the prompt, ship your MVP.",
+      "Stop re-explaining your project every session. AGENTS.md, SESSION.md, CHECKLIST.md and HANDOFF.md give Claude Code or OpenCode memory. Prompt included.",
     date: "2026-10-03",
     tags: ["AI", "Programming", "Claude", "Software Development", "Productivity"],
     // Cross-post to Medium is in preparation; externalLink is added then.

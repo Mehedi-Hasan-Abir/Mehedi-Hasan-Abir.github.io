@@ -517,7 +517,7 @@ export const portfolioData = {
     },
     {
       id: 6,
-      title: "The AI Coding Harness I Reuse on Every Project (4 Files + Skills)",
+      title: "AI Coding Harness: 4 Files That Give Claude Code and OpenCode Memory",
       description: "How to set up Claude Code and OpenCode before writing any code: four plain Markdown files plus the right skills. What belongs in AGENTS.md, SESSION.md, CHECKLIST.md, and HANDOFF.md, and the one prompt that starts your MVP.",
       thumbnail: "/images/blog-coding-harness.webp",
       thumbnailWidth: 1200,
