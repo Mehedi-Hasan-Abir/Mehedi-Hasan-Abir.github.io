@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Emergency-only fallback control. The build writes a styled copy of the
+         page into #root so a visitor whose bundle never loads still sees the
+         content. Hiding it up front keeps normal visitors from ever seeing that
+         copy, but doing so naively would leave a blank page when the bundle
+         fails - the exact case the fallback exists for. So the class is added
+         now, and a watchdog withdraws it again if the app has not mounted in
+         time, which can only happen when the bundle failed to arrive. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        setTimeout(function () {
+          var app = document.getElementById("root");
+          if (app && app.firstElementChild && app.firstElementChild.id !== "static-fallback") return;
+          root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
+    <title>15 Best GitHub Repos for Claude Code, Codex and OpenCode | Mehedi Hasan Abir</title>
+    <meta name="description" content="A quick reference to 15 popular GitHub repos and agent skills for Claude Code, Codex and OpenCode: what each does, how to install it, and which three to start with." />
+    <meta property="og:title" content="15 Best GitHub Repos for Claude Code, Codex and OpenCode | Mehedi Hasan Abir" />
+    <meta property="og:description" content="A quick reference to 15 popular GitHub repos and agent skills for Claude Code, Codex and OpenCode: what each does, how to install it, and which three to start with." />
+    <meta property="og:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <meta property="og:url" content="https://mhabir.dev/blog/best-github-repos-claude-code-codex-opencode/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mehedi Hasan Abir — Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="15 Best GitHub Repos for Claude Code, Codex and OpenCode | Mehedi Hasan Abir" />
+    <meta name="twitter:description" content="A quick reference to 15 popular GitHub repos and agent skills for Claude Code, Codex and OpenCode: what each does, how to install it, and which three to start with." />
+    <meta name="twitter:image" content="https://mhabir.dev/images/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Mehedi Hasan Abir - AI/ML Engineer in Dhaka, working on LLM systems, document intelligence, and production ML infrastructure" />
+    <link rel="canonical" href="https://mhabir.dev/blog/best-github-repos-claude-code-codex-opencode/" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="font" href="/fonts/ArchivoVariable.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/JetBrainsMonoVariable.woff2" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://mhabir.dev/#person",
+      "name": "Mehedi Hasan Abir",
+      "alternateName": "Mehedi Hasan",
+      "givenName": "Mehedi",
+      "jobTitle": "Senior Software Engineer (AI/ML)",
+      "description": "AI/ML Engineer specializing in LLMs, Document AI, and production-ready ML systems",
+      "url": "https://mhabir.dev/",
+      "image": "https://mhabir.dev/images/profile_re.webp",
+      "email": "hello@mhabir.dev",
+      "telephone": "(+880) 1521323549",
+      "address": { "@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "Ahsanullah University of Science and Technology (AUST)" },
+        { "@type": "CollegeOrUniversity", "name": "Hermann Gmeiner School, Mirpur" }
+      ],
+      "worksFor": { "@type": "Organization", "name": "Technonext" },
+      "knowsAbout": ["Large Language Models", "Retrieval-Augmented Generation", "Document AI", "Computer Vision", "Search Systems", "Machine Learning", "MLOps"],
+      "sameAs": [
+        "https://github.com/Mehedi-Hasan-Abir",
+        "https://linkedin.com/in/mehedihasan102",
+        "https://medium.com/@mhabir102",
+        "https://mhabir.substack.com",
+        "https://www.facebook.com/mehedihasan.abir.7/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mehedi Hasan Abir — Portfolio",
+      "url": "https://mhabir.dev/",
+      "description": "Building production-grade LLM systems and resilient AI pipelines. Specializing in Document AI, RAG, and high-throughput ML inference.",
+      "author": { "@id": "https://mhabir.dev/#person" }
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-Cq7Q9_wN.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-core-N--QU9DW.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-CnDHW2dc.js">
+    <link rel="modulepreload" crossorigin href="/assets/radix-BcK-Cui3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-D0YSF5oS.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"15 Best GitHub Repos for Claude Code, Codex and OpenCode","description":"A quick reference to 15 popular GitHub repos and agent skills for Claude Code, Codex and OpenCode: what each does, how to install it, and which three to start with.","datePublished":"2026-11-05","dateModified":"2026-11-25","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https://mhabir.dev/blog/best-github-repos-claude-code-codex-opencode/"},"author":{"@id":"https://mhabir.dev/#person"},"publisher":{"@id":"https://mhabir.dev/#person"},"image":"https://mhabir.dev/images/og-image.jpg","keywords":"Claude Code, Codex, OpenCode, Agent Skills, GitHub, AI Coding Agents"}</script></head>
+  <body>
+    <div id="root"><main id="static-fallback" class="min-h-screen bg-background text-foreground"><div class="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-24"><nav aria-label="Breadcrumb" class="mono-label text-muted-foreground mb-10"><a href="/">Home</a> / 15 Best GitHub Repos for Claude Code, Codex and OpenCode</nav><p class="mono-label text-accent mb-4">ARTICLE</p><h1 class="display-lg max-w-[26ch]">15 Best GitHub Repos for Claude Code, Codex and OpenCode</h1><div class="mt-7"><p>A quick reference to 15 popular GitHub repos and agent skills for Claude Code, Codex and OpenCode: what each does, how to install it, and which three to start with.</p><h2>Tags</h2><ul><li>Claude Code</li><li>Codex</li><li>OpenCode</li><li>Agent Skills</li><li>GitHub</li><li>AI Coding Agents</li></ul><p>Published November 5, 2026.</p><p>This is my quick reference for the 15 repos in <a href="https://pub.towardsai.net/15-github-repos-that-turn-claude-code-codex-and-opencode-into-a-real-team-fb4b18a99efe" target="_blank" rel="noopener noreferrer">15 GitHub Repos That Turn Claude Code, Codex and OpenCode Into a Real Team</a>, which I published in Towards AI. The full article explains each repo and its catch. This page is the short version: what each one does, which agents it supports, and the install command.</p><p>The surprising part is that most of these are not software. They are folders of plain Markdown that tell a coding agent how to work, and they now sit among the most-starred projects on GitHub.</p><h2>What an agent skill is</h2><p>A skill is a folder with one instruction file, <code>SKILL.md</code>. The agent reads only its short description at startup and loads the full instructions when a task matches. The format is open, so the same skill usually works in Claude Code, OpenAI&#39;s Codex CLI and OpenCode. Most install with one line, <code>npx skills add owner/repo</code>, and Claude Code also has its own plugin marketplace.</p><h2>The 15 repos at a glance</h2><h3>Planning: make the agent think before it types</h3><ul><li><strong>obra/superpowers</strong> (about 310K stars): a strict workflow of design first, small tasks, tests before code and proof before &quot;done&quot;. Install in Claude Code with <code>/plugin install superpowers@claude-plugins-official</code>.</li><li><strong>mattpocock/skills</strong> (about 308K): <code>grill-me</code> questions your plan until it is clear, and <code>handoff</code> compresses a session so a fresh session or another agent can continue. Install with <code>npx skills@latest add mattpocock/skills</code>.</li><li><strong>multica-ai/andrej-karpathy-skills</strong> (about 228K): a single <code>CLAUDE.md</code> with four rules against silent guessing, over-building and editing code you never asked about.</li></ul><h3>Memory and token cost</h3><ul><li><strong>affaan-m/ECC</strong>, formerly everything-claude-code (about 294K): agents, skills, hooks, rules, memory and security scanning in one kit for Claude Code, Codex, OpenCode and Cursor. Take the parts you need.</li><li><strong>thedotmack/claude-mem</strong> (about 108K): summarises what the agent did and feeds the relevant parts into later sessions. Install with <code>npx claude-mem install</code>.</li><li><strong>JuliusBrussee/caveman</strong> (about 117K): makes the agent answer in fewer words. Its README reports about 65% fewer output tokens on average. Install with <code>npx skills add JuliusBrussee/caveman</code>.</li></ul><h3>Design</h3><ul><li><strong>nextlevelbuilder/ui-ux-pro-max-skill</strong> (about 143K): styles, colour palettes and UX rules the agent consults before it writes CSS. Use one design skill per project.</li></ul><h3>Diagrams and code understanding</h3><ul><li><strong>tt-a1i/archify</strong> (about 92K): architecture, sequence and data-flow diagrams as one HTML file, with PNG and SVG export. Install with <code>npx skills add tt-a1i/archify -g</code>.</li><li><strong>Egonex-AI/Understand-Anything</strong> (about 89K): turns a codebase into an interactive knowledge graph you can search and question. On Codex the command is <code>$understand</code>.</li><li><strong>cathrynlavery/diagram-design</strong> (about 64K): publication-style HTML and SVG diagrams that can match your brand. Install with <code>npx skills add cathrynlavery/diagram-design</code>.</li></ul><h3>Plumbing and directories</h3><ul><li><strong>farion1231/cc-switch</strong> (about 152K): a desktop app that switches API providers and manages MCP servers, skills and prompts across agents.</li><li><strong>code-yeongyu/oh-my-openagent</strong> (about 71K): turns OpenCode into an orchestrator with parallel specialist agents.</li><li><strong>vercel-labs/skills</strong> (about 37K): the <code>npx skills</code> installer itself. Run it with <code>--list</code> to preview a repo first.</li><li><strong>anthropics/skills</strong> (about 186K): Anthropic&#39;s official skills, the best example of what a well-made skill looks like.</li><li><strong>hesreallyhim/awesome-claude-code</strong> (about 57K): a curated directory of skills, agents and plugins for further reading.</li></ul><blockquote><p>Star counts are a snapshot from around 1 November 2026. Stars measure popularity, not quality or safety.</p></blockquote><h2>Which three to install first</h2><ul><li><strong>Starting out:</strong> the Karpathy rules, Matt Pocock&#39;s skills and the <code>npx skills</code> installer.</li><li><strong>Long sessions:</strong> Superpowers, claude-mem and caveman.</li><li><strong>Explaining code to people:</strong> archify, Understand-Anything and diagram-design.</li></ul><h2>Check a skill before you install it</h2><ul><li>Read the <code>SKILL.md</code>. A skill is an instruction your agent will follow.</li><li>Open any bundled scripts and look for network calls.</li><li>Prefer pinned versions over the latest commit.</li><li>Install a few skills you understand rather than dozens. In one Vercel test, an available skill went unused in 56% of default cases.</li></ul><h2>The takeaway</h2><p>The most-starred AI tools this year are habits written in plain text: plan first, remember what happened, say less and show your work. You can adopt those habits even without installing a single package.</p><p>Part 2 covers <a href="/blog/claude-skills-for-slides-reports-marketing/">Claude skills for slides, reports and marketing</a>, for people who do not write code. To see how I set up a project before adding any skill, read <a href="/blog/ai-coding-harness/">the AI coding harness I reuse on every project</a>. The full article, with the catch for every repo, is on <a href="https://pub.towardsai.net/15-github-repos-that-turn-claude-code-codex-and-opencode-into-a-real-team-fb4b18a99efe" target="_blank" rel="noopener noreferrer">Towards AI</a>.</p><h2>More writing</h2><ul><li><a href="/blog/ai-coding-harness/">The AI Coding Harness I Reuse on Every Project (4 Files + Skills)</a></li><li><a href="/blog/llm-in-production/">How to Use, Optimize, and Serve an LLM in Your Production System</a></li><li><a href="/blog/claude-skills-for-slides-reports-marketing/">12 Claude Skills for Slides, Reports and Marketing</a></li></ul></div></div></main></div>
+  </body>
+</html>
